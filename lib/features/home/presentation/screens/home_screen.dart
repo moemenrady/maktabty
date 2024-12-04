@@ -46,7 +46,7 @@ class _HomeContent extends ConsumerWidget {
                   Text("data"),
                 ],
               ),
-        Text("data"),
+        const Text("data"),
         if (categories != null) _CategoryList(categories: categories),
       ],
     );
