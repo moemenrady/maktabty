@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../../core/erorr/exception.dart';
-import '../model/item_model.dart';
+import '../../../../core/utils/try_and_catch.dart';
 
 final supabaseClientProvider =
     Provider.autoDispose<SupabaseClient>((ref) => Supabase.instance.client);
@@ -12,12 +11,20 @@ final adminRemoteDataSourceProvider =
         (ref) => AdminRemoteDataSourceImpl(ref.watch(supabaseClientProvider)));
 
 abstract interface class AdminRemoteDataSource {
-  Future<ItemModel> uploadItem(ItemModel item);
+  Future<Map<String, dynamic>> uploadItem(Map<String, dynamic> item);
   Future<String> uploadItemImage({
     required File image,
-    required ItemModel item,
+    required String itemId,
   });
-  Future<List<ItemModel>> getAllItems();
+  Future<List<Map<String, dynamic>>> getAllItems();
+  Future<void> deleteItem(String itemId);
+  Future<Map<String, dynamic>> addCategory(String name);
+  Future<List<Map<String, dynamic>>> getAllCategories();
+  Future<void> deleteCategory(int categoryId);
+  Future<Map<String, dynamic>> updateCategory(
+      {required int id, required String name});
+  Future<Map<String, dynamic>> updateItem(Map<String, dynamic> item);
+  Future<void> deleteItemImage(String imageUrl);
 }
 
 class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
@@ -25,53 +32,120 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
   AdminRemoteDataSourceImpl(this.supabaseClient);
 
   @override
-  Future<ItemModel> uploadItem(ItemModel item) async {
-    try {
+  Future<Map<String, dynamic>> uploadItem(Map<String, dynamic> item) async {
+    return executeTryAndCatchForDataLayer(() async {
       final itemData =
-          await supabaseClient.from('items').insert(item.toMap()).select();
-
-      return ItemModel.fromMap(itemData.first);
-    } on PostgrestException catch (e) {
-      throw ServerException(e.message);
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+          await supabaseClient.from('items').insert(item).select().single();
+      return itemData;
+    });
   }
 
   @override
   Future<String> uploadItemImage({
     required File image,
-    required ItemModel item,
+    required String itemId,
   }) async {
-    try {
+    return executeTryAndCatchForDataLayer(() async {
+      // First try to delete any existing image with this ID
+      try {
+        await supabaseClient.storage.from('item_images').remove([itemId]);
+      } catch (_) {
+        // Ignore error if no existing image found
+      }
+
+      // Upload the new image
       await supabaseClient.storage.from('item_images').upload(
-            item.id.toString(),
+            itemId,
             image,
           );
 
-      return supabaseClient.storage.from('item_images').getPublicUrl(
-            item.id.toString(),
-          );
-    } on StorageException catch (e) {
-      throw ServerException(e.message);
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+      return supabaseClient.storage.from('item_images').getPublicUrl(itemId);
+    });
   }
 
   @override
-  Future<List<ItemModel>> getAllItems() async {
-    try {
+  Future<List<Map<String, dynamic>>> getAllItems() async {
+    return executeTryAndCatchForDataLayer(() async {
       final items = await supabaseClient.from('items').select('*');
-      return items
-          .map(
-            (item) => ItemModel.fromMap(item),
-          )
-          .toList();
-    } on PostgrestException catch (e) {
-      throw ServerException(e.message);
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
+      return List<Map<String, dynamic>>.from(items);
+    });
+  }
+
+  @override
+  Future<void> deleteItem(String itemId) async {
+    return executeTryAndCatchForDataLayer(() async {
+      await supabaseClient.storage.from('item_images').remove([itemId]);
+      await supabaseClient.from('items').delete().match({'id': itemId});
+    });
+  }
+
+  @override
+  Future<Map<String, dynamic>> addCategory(String name) async {
+    return executeTryAndCatchForDataLayer(() async {
+      final categoryData = await supabaseClient
+          .from('categories')
+          .insert({'name': name})
+          .select()
+          .single();
+
+      return categoryData;
+    });
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAllCategories() async {
+    return executeTryAndCatchForDataLayer(() async {
+      final categories = await supabaseClient.from('categories').select('*');
+      return List<Map<String, dynamic>>.from(categories);
+    });
+  }
+
+  @override
+  Future<void> deleteCategory(int categoryId) async {
+    return executeTryAndCatchForDataLayer(() async {
+      await supabaseClient
+          .from('categories')
+          .delete()
+          .match({'id': categoryId});
+    });
+  }
+
+  @override
+  Future<Map<String, dynamic>> updateCategory({
+    required int id,
+    required String name,
+  }) async {
+    return executeTryAndCatchForDataLayer(() async {
+      final updatedCategory = await supabaseClient
+          .from('categories')
+          .update({'name': name})
+          .match({'id': id})
+          .select()
+          .single();
+
+      return updatedCategory;
+    });
+  }
+
+  @override
+  Future<Map<String, dynamic>> updateItem(Map<String, dynamic> item) async {
+    return executeTryAndCatchForDataLayer(() async {
+      final updatedItem = await supabaseClient
+          .from('items')
+          .update(item)
+          .match({'id': item['id']})
+          .select()
+          .single();
+      return updatedItem;
+    });
+  }
+
+  @override
+  Future<void> deleteItemImage(String imageUrl) async {
+    return executeTryAndCatchForDataLayer(() async {
+      // Extract file name from URL
+      final fileName = imageUrl.split('/').last;
+      await supabaseClient.storage.from('item_images').remove([fileName]);
+    });
   }
 }

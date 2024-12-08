@@ -1,22 +1,29 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mktabte/features/admin/presentation/riverpods/add_item_cubit/add_item_state.dart';
-
 import '../../../../../core/utils/pick_image.dart';
 import '../../../data/model/item_model.dart';
 import '../../../data/repository/admin_repository.dart';
+import 'add_item_state.dart';
+import 'add_item_view_model.dart';
+
+final addItemViewModelProvider = Provider.autoDispose<AddItemViewModel>((ref) {
+  final viewModel = AddItemViewModel();
+  ref.onDispose(() => viewModel.dispose());
+  return viewModel;
+});
 
 final addItemRiverpodProvider =
     StateNotifierProvider.autoDispose<AddItemRiverpod, AddItemRiverpodState>(
-        (ref) {
-  final riverpod =
-      AddItemRiverpod(repository: ref.watch(adminRepositoryProvider));
-  return riverpod;
-});
+  (ref) => AddItemRiverpod(
+    repository: ref.watch(adminRepositoryProvider),
+  ),
+);
 
 class AddItemRiverpod extends StateNotifier<AddItemRiverpodState> {
-  AdminRepository repository;
+  final AdminRepository repository;
+
   AddItemRiverpod({required this.repository})
       : super(AddItemRiverpodState(state: AddItemState.initial, items: []));
 
@@ -24,14 +31,14 @@ class AddItemRiverpod extends StateNotifier<AddItemRiverpodState> {
     state = state.copyWith(state: AddItemState.loading);
     final response = await repository.uploadItem(itemModel, image);
     response.fold(
-      (l) {
-        state = state.copyWith(state: AddItemState.failure, error: l.message);
-        print('Item upload failed: ${l.message}');
-      },
-      (r) {
-        state = state.copyWith(state: AddItemState.success, items: [r]);
-        print('Item uploaded successfully');
-      },
+      (l) => state = state.copyWith(
+        state: AddItemState.failure,
+        error: l.message,
+      ),
+      (r) => state = state.copyWith(
+        state: AddItemState.success,
+        items: [r],
+      ),
     );
   }
 
@@ -42,5 +49,15 @@ class AddItemRiverpod extends StateNotifier<AddItemRiverpodState> {
       state = state.copyWith(image: pickedImage);
     }
     state = state.copyWith(state: AddItemState.imageSelected);
+  }
+
+  void updateSelectedTopics(String topic) {
+    final currentTopics = List<String>.from(state.selectedTopics);
+    if (currentTopics.contains(topic)) {
+      currentTopics.remove(topic);
+    } else {
+      currentTopics.add(topic);
+    }
+    state = state.copyWith(selectedTopics: currentTopics);
   }
 }

@@ -10,11 +10,12 @@ import '../../../../core/erorr/failure.dart';
 import '../../../../core/network/connction_checker.dart';
 import '../data_source/admin_remote_data_source.dart';
 import '../model/item_model.dart';
+import '../../../../core/comman/entitys/categories.dart';
+import '../../../../core/utils/try_and_catch.dart';
 
 final adminRepositoryProvider = Provider.autoDispose<AdminRepository>(
   (ref) => AdminRepository(
     adminRemoteDataSource: ref.watch(adminRemoteDataSourceProvider),
-    connectionChecker: ref.watch(connectionCheckerProvider),
   ),
 );
 
@@ -26,46 +27,96 @@ final internetConnectionProvider =
 
 class AdminRepository {
   final AdminRemoteDataSource adminRemoteDataSource;
-  final ConnectionChecker connectionChecker;
+
   AdminRepository({
     required this.adminRemoteDataSource,
-    required this.connectionChecker,
   });
 
+  //TODO:Separate the uploadItemImage and  item upload
   Future<Either<Failure, ItemModel>> uploadItem(
       ItemModel itemModel, File image) async {
-    try {
-      if (!await (connectionChecker.isConnected)) {
-        return left(Failure(Constants.noConnectionErrorMessage));
-      }
+    return executeTryAndCatchForRepository(() async {
       final imageUrl = await adminRemoteDataSource.uploadItemImage(
         image: image,
-        item: itemModel,
-      );
-      print('Image URL: $imageUrl');
-
-      itemModel = itemModel.copyWith(
-        imageUrl: imageUrl,
+        itemId: itemModel.id,
       );
 
-      final uploadedItem = await adminRemoteDataSource.uploadItem(itemModel);
-      print('Uploaded item: $uploadedItem');
-      return right(uploadedItem);
-    } on ServerException catch (e) {
-      return left(Failure(e.message));
-    }
+      itemModel = itemModel.copyWith(imageUrl: imageUrl);
+      final itemData =
+          await adminRemoteDataSource.uploadItem(itemModel.toMap());
+      return ItemModel.fromMap(itemData);
+    });
   }
 
   Future<Either<Failure, List<ItemModel>>> getAllItems() async {
-    try {
-      if (!await (connectionChecker.isConnected)) {
-        final items = await adminRemoteDataSource.getAllItems();
-        return right(items);
-      }
+    return executeTryAndCatchForRepository(() async {
       final items = await adminRemoteDataSource.getAllItems();
-      return right(items);
-    } on ServerException catch (e) {
-      return left(Failure(e.message));
-    }
+      return items.map((item) => ItemModel.fromMap(item)).toList();
+    });
+  }
+
+  Future<Either<Failure, Categories>> addCategory(String name) async {
+    return executeTryAndCatchForRepository(() async {
+      final categoryData = await adminRemoteDataSource.addCategory(name);
+      return Categories.fromMap(categoryData);
+    });
+  }
+
+  Future<Either<Failure, List<Categories>>> getAllCategories() async {
+    return executeTryAndCatchForRepository(() async {
+      final categories = await adminRemoteDataSource.getAllCategories();
+      return categories
+          .map((category) => Categories.fromMap(category))
+          .toList();
+    });
+  }
+
+  Future<Either<Failure, void>> deleteCategory(int categoryId) async {
+    return executeTryAndCatchForRepository(() async {
+      await adminRemoteDataSource.deleteCategory(categoryId);
+    });
+  }
+
+  Future<Either<Failure, Categories>> updateCategory(
+      Categories category) async {
+    return executeTryAndCatchForRepository(() async {
+      final updatedData = await adminRemoteDataSource.updateCategory(
+        id: category.id,
+        name: category.name,
+      );
+      return Categories.fromMap(updatedData);
+    });
+  }
+
+  Future<Either<Failure, void>> deleteItem(String itemId) async {
+    return executeTryAndCatchForRepository(() async {
+      await adminRemoteDataSource.deleteItem(itemId);
+    });
+  }
+
+  Future<Either<Failure, ItemModel>> updateItem(ItemModel item) async {
+    return executeTryAndCatchForRepository(() async {
+      final updatedData = await adminRemoteDataSource.updateItem(item.toMap());
+      return ItemModel.fromMap(updatedData);
+    });
+  }
+
+  Future<Either<Failure, void>> deleteItemImage(String imageUrl) async {
+    return executeTryAndCatchForRepository(() async {
+      await adminRemoteDataSource.deleteItemImage(imageUrl);
+    });
+  }
+
+  Future<Either<Failure, String>> uploadItemImage({
+    required File image,
+    required String itemId,
+  }) async {
+    return executeTryAndCatchForRepository(() async {
+      final imageUrl = await adminRemoteDataSource.uploadItemImage(
+        image: image,
+        itemId: itemId,
+      );
+      return imageUrl;
+    });
   }
 }

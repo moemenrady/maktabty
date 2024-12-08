@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class BlogEditor extends StatelessWidget {
+class AdminTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
-  const BlogEditor({
+  const AdminTextField({
     super.key,
     required this.controller,
     required this.hintText,
@@ -17,6 +17,7 @@ class BlogEditor extends StatelessWidget {
         hintText: hintText,
       ),
       maxLines: null,
+      //TODO:Add validator Regexs
       validator: (value) {
         if (value!.isEmpty) {
           return '$hintText is missing!';

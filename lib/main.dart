@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktabte/features/admin/presentation/screens/add_category.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/utils/custom_error_screen.dart';
 import 'features/admin/presentation/screens/add_items.dart';
+import 'features/admin/presentation/screens/category_page.dart';
+import 'features/admin/presentation/screens/item_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +16,15 @@ void main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3enZwbmV0eGxwcXBqc2VtdHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE1NDMyNDMsImV4cCI6MjA0NzExOTI0M30.M_gXPVEvhH0z69l1VxMt7VwuybOZqQ2gAAnHC1ZMBn0',
   );
+
+  customErorrScreen();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -42,7 +56,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AddNewBlogPage(),
+      home: const ItemPage(),
     );
   }
 }

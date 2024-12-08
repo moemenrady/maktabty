@@ -13,8 +13,8 @@ enum AddItemState {
   initial,
   loading,
   success,
-  imageSelected,
   failure,
+  imageSelected,
 }
 
 extension AddItemStateX on AddItemRiverpodState {
@@ -27,33 +27,42 @@ extension AddItemStateX on AddItemRiverpodState {
 
 class AddItemRiverpodState {
   final AddItemState state;
-  final File? image;
-  final List<ItemModel>? items;
   final String? error;
+  final List<dynamic> items;
+  final File? image;
+  final List<String> selectedTopics;
+
   AddItemRiverpodState({
     required this.state,
-    this.image,
-    this.items,
+    required this.items,
     this.error,
-  });
+    this.image,
+    List<String>? selectedTopics,
+  }) : selectedTopics = selectedTopics ?? [];
+
+  bool isLoading() => state == AddItemState.loading;
+  bool isSuccess() => state == AddItemState.success;
+  bool isError() => state == AddItemState.failure;
 
   AddItemRiverpodState copyWith({
     AddItemState? state,
-    File? image,
-    List<ItemModel>? items,
     String? error,
+    List<dynamic>? items,
+    File? image,
+    List<String>? selectedTopics,
   }) {
     return AddItemRiverpodState(
       state: state ?? this.state,
-      image: image ?? this.image,
-      items: items ?? this.items,
       error: error ?? this.error,
+      items: items ?? this.items,
+      image: image ?? this.image,
+      selectedTopics: selectedTopics ?? this.selectedTopics,
     );
   }
 
   @override
   String toString() {
-    return 'AddItemRiverpodState(state: $state, image: $image, items: $items, error: $error)';
+    return 'AddItemRiverpodState(state: $state, error: $error, items: $items, image: $image, selectedTopics: $selectedTopics)';
   }
 
   @override
@@ -61,13 +70,18 @@ class AddItemRiverpodState {
     if (identical(this, other)) return true;
 
     return other.state == state &&
-        other.image == image &&
+        other.error == error &&
         listEquals(other.items, items) &&
-        other.error == error;
+        other.image == image &&
+        listEquals(other.selectedTopics, selectedTopics);
   }
 
   @override
   int get hashCode {
-    return state.hashCode ^ image.hashCode ^ items.hashCode ^ error.hashCode;
+    return state.hashCode ^
+        error.hashCode ^
+        items.hashCode ^
+        image.hashCode ^
+        selectedTopics.hashCode;
   }
 }

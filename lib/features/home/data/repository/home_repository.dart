@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/features/home/data/data_source/home_remote_data_source.dart';
-import 'package:mktabte/features/home/data/model/categories.dart';
+import 'package:mktabte/core/comman/entitys/categories.dart';
 
 final homeRepositoryProvider = Provider.autoDispose<HomeRepository>((ref) =>
     HomeRepository(remoteDataSource: ref.watch(homeRemoteDataSourceProvider)));

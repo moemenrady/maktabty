@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mktabte/features/home/data/model/categories.dart';
+import 'package:mktabte/core/comman/entitys/categories.dart';
 import 'package:mktabte/features/home/presentation/riverpods/home_riverpod.dart';
 import 'package:mktabte/features/home/presentation/riverpods/home_riverpod_state.dart';
 
