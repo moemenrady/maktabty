@@ -76,4 +76,6 @@ class CategoryListState {
         isDeleting.hashCode ^
         isUpdating.hashCode;
   }
+
+  get length => null;
 }

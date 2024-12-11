@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/comman/entitys/categories.dart';
-import '../riverpods/category_riverpod.dart';
+import '../riverpods/category_riverpod/category_riverpod.dart';
 import '../riverpods/category_riverpod/update_category_view_model.dart';
 
 class UpdateCategoryPage extends ConsumerWidget {

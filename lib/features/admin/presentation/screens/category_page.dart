@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/features/admin/presentation/screens/update_category_page.dart';
 import '../../../../core/utils/show_dialog.dart';
-import '../riverpods/category_riverpod.dart';
+import '../riverpods/category_riverpod/category_riverpod.dart';
 
 class CategoryPage extends ConsumerWidget {
   const CategoryPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categories = ref.watch(categoryListProvider);
+    final categories = ref.watch(categoryListProvider).categories;
 
     void deleteCategory(int categoryId) {
       ref.read(categoryListProvider.notifier).deleteCategory(categoryId);
