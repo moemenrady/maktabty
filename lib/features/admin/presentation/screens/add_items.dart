@@ -108,7 +108,7 @@ class AddNewItemPage extends ConsumerWidget {
             onTap: () =>
                 ref.read(addItemRiverpodProvider.notifier).selectImage(),
             child: DottedBorder(
-              color: AppPallete.borderColor,
+              color: Colors.grey,
               dashPattern: const [10, 4],
               radius: const Radius.circular(10),
               borderType: BorderType.RRect,
@@ -147,11 +147,11 @@ class AddNewItemPage extends ConsumerWidget {
                   child: Chip(
                     label: Text(e),
                     color: controller.selectedTopics.contains(e)
-                        ? const WidgetStatePropertyAll(AppPallete.gradient1)
+                        ? const WidgetStatePropertyAll(Colors.amber)
                         : null,
                     side: controller.selectedTopics.contains(e)
                         ? null
-                        : const BorderSide(color: AppPallete.borderColor),
+                        : const BorderSide(color: Colors.grey),
                   ),
                 ),
               ),
