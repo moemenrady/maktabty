@@ -40,29 +40,23 @@ class CustomCartCard extends StatelessWidget {
             ],
           ),
         ),
-        _buildOutlinedButton(Icons.keyboard_arrow_up_rounded),
+        _buildOutlinedButton("assets/images/arrow_down.png"),
         _buildQtyColumn("1"),
-        _buildOutlinedButton(Icons.keyboard_arrow_down_rounded),
+        _buildOutlinedButton("assets/images/arrow_up.png"),
         _buildPriceColumn("\$100"),
         Padding(
           padding: EdgeInsets.only(bottom: 40.h),
-          child: _buildOutlinedButton(Icons.delete_outline_rounded),
+          child: _buildOutlinedButton("assets/images/delete.png"),
         ),
       ],
     );
   }
 
-  Widget _buildOutlinedButton(IconData icon) {
-    return OutlinedButton(
-      onPressed: () {},
-      style: OutlinedButton.styleFrom(
-        shape: const CircleBorder(),
-        side: const BorderSide(color: AppPallete.lightGrey, width: 0.5),
-      ),
-      child: Icon(
-        icon,
-        color: AppPallete.lightGrey,
-      ),
+  Widget _buildOutlinedButton(String icon) {
+    return Image.asset(
+      icon,
+      width: 19.w,
+      height: 19.h,
     );
   }
 
