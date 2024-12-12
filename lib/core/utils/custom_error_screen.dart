@@ -8,7 +8,7 @@ customErorrScreen() {
         color: Colors.black87,
         child: Column(
           children: [
-            Image.asset("assets/image/lock-removebg-preview.png"),
+            Image.asset("assets/images/arrow_down.png"),
             Text(
               details.exception.toString(),
               style: const TextStyle(

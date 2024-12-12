@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/filtersbtns.dart';
 import '../widgets/mainapppbar.dart';
+import 'productscreen.dart';
 
 List offers = [
   "assets/images/offer2.jpg",
@@ -15,7 +16,7 @@ class HomePpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(false, "HOME"),
+      appBar: MainAppBar(context,false, "HOME"),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -82,16 +83,24 @@ class HomePpage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: offers.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 8,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
-                        offers[index],
-                        fit: BoxFit.cover,
+                  return InkWell(onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                          builder: (context) =>
+                              const Product(),
+                        )
+                      );
+                  },
+                    child: Card(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.asset(
+                          offers[index],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   );
