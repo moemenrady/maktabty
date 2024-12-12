@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mktabte/features/home/presentation/widgets/mainbar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/auth/presentation/screens/onboarding.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/utils/custom_error_screen.dart';
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MainBar(),
+      home: const Onboard(),
       //home: const ItemPage(),
     );
   }
