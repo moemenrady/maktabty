@@ -38,7 +38,7 @@ class CategryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(false, "All categories"),
+      appBar: MainAppBar(context,false, "All categories"),
       body: Column(
         children: [
           const Padding(

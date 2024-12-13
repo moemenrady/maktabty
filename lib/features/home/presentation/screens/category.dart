@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mktabte/features/home/presentation/screens/productscreen.dart';
 
 import '../widgets/mainapppbar.dart';
 
@@ -64,7 +65,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(true, "category1"),
+      appBar: MainAppBar(context,true, "category1"),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
@@ -157,16 +158,23 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 padding: const EdgeInsets.all(10.0),
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Number of columns
-                    crossAxisSpacing: 8.0, // Horizontal space between items
-                    mainAxisSpacing: 8.0, // Vertical space between items
-                    childAspectRatio:0.7, // Aspect ratio of each grid item
+                    crossAxisCount: 2, 
+                    crossAxisSpacing: 8.0, 
+                    mainAxisSpacing: 8.0, 
+                    childAspectRatio:0.7, 
                   ),
                   itemCount: productsimgs.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
                         print("${productsimgs[index]}");
+                          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const Product(),
+                        ),
+                      );
                       },
                       child: AspectRatio(
                         aspectRatio: 3 / 4,

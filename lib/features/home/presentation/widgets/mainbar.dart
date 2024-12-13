@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
 import 'package:mktabte/features/home/presentation/screens/userwishlistscreen.dart';
 
 import '../screens/allcategriesscreen.dart';
@@ -30,7 +31,7 @@ class _MainBarState extends State<MainBar> {
       activeScreen = const CategryScreen();
     }
     if (_selectedScreenIndex == 2) {
-      activeScreen = const CartScreen();
+      activeScreen = const CartPage();
     }
     if (_selectedScreenIndex == 3) {
       activeScreen =  UserWishlist();
