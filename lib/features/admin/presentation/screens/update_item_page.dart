@@ -24,7 +24,7 @@ class UpdateItemPage extends ConsumerWidget {
 
       final result = await ref.read(itemListProvider.notifier).uploadItemImage(
             image: image,
-            itemId: item.id,
+            itemId: item.id ?? '',
           );
 
       result.fold(

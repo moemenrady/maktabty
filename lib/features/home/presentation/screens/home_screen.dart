@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/core/comman/entitys/categories.dart';
-import 'package:mktabte/features/home/presentation/riverpods/home_riverpod.dart';
-import 'package:mktabte/features/home/presentation/riverpods/home_riverpod_state.dart';
+import 'package:mktabte/features/home/presentation/riverpods/home_river_pod/home_riverpod.dart';
+import 'package:mktabte/features/home/presentation/riverpods/home_river_pod/home_riverpod_state.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -13,7 +13,7 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Home')),
       body: RefreshIndicator(
         onRefresh: () async {
-          await ref.read(homeRiverpodProvider.notifier).getProducts();
+          await ref.read(homeRiverpodProvider.notifier).getAllCategories();
         },
         child: const _HomeContent(),
       ),

@@ -1,4 +1,4 @@
-import '../../../../core/comman/entitys/categories.dart';
+import '../../../../../core/comman/entitys/categories.dart';
 
 enum HomeState {
   initial,

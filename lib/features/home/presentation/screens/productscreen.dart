@@ -23,7 +23,8 @@ class _ProductState extends State<Product> {
     "assets/images/blackcontroller.png",
     "assets/images/blackcontroller1.png",
   ];
-  String prod_desck = "A sleek black joystick with neon accents and a comfortable grip for precise gaming control...";
+  String prod_desck =
+      "A sleek black joystick with neon accents and a comfortable grip for precise gaming control...";
 
   @override
   void initState() {
@@ -40,7 +41,7 @@ class _ProductState extends State<Product> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(context,true, ""),
+      appBar: MainAppBar(context, true, ""),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -61,14 +62,15 @@ class _ProductState extends State<Product> {
                       productsImgs[index],
                       fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.error, size: 50, color: Colors.red);
+                        return const Icon(Icons.error,
+                            size: 50, color: Colors.red);
                       },
                     );
                   },
                 ),
               ),
             ),
-            
+
             // Product title and price
             Text(
               "Nike Sportswear Club Fleece",
@@ -81,22 +83,21 @@ class _ProductState extends State<Product> {
                 style: TextStyles.Roboto20mediumBlack,
               ),
             ),
-            
-            SizedBox(height: 5,),
+
+            const SizedBox(
+              height: 5,
+            ),
             Row(
               children: [
                 RoundedContainer(
                   "4.0",
-                  const Icon(Icons.star_rounded, size: 20, color: Colors.yellow),
+                  const Icon(Icons.star_rounded,
+                      size: 20, color: Colors.yellow),
                   null,
                   const Color.fromARGB(71, 255, 128, 55),
                 ),
-                RoundedContainer(
-                  "3.9",
-                  null,
-                  "assets/images/like_icon.png",
-                  const Color.fromARGB(104, 31, 124, 253),
-                ),
+                RoundedContainer("3.9", null, "assets/images/like_icon.png",
+                    const Color.fromARGB(255, 201, 117, 53)),
                 const SizedBox(width: 5),
                 const SizedBox(width: 5),
                 Text(
@@ -105,9 +106,11 @@ class _ProductState extends State<Product> {
                 ),
               ],
             ),
-            SizedBox(height: 5,),
-            
-             Text("Size", style: TextStyles.Inter18SemiBoldlightBlack),
+            const SizedBox(
+              height: 5,
+            ),
+
+            Text("Size", style: TextStyles.Inter18SemiBoldlightBlack),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -117,21 +120,29 @@ class _ProductState extends State<Product> {
                 CustomTxtBtn(str: 'XXXL'),
               ],
             ),
-            SizedBox(height: 7,),
+            const SizedBox(
+              height: 7,
+            ),
             // Product description
-             Text("Description", style: TextStyles.Blinker20semiBoldBlack),
-             SizedBox(height: 5,),
+            Text("Description", style: TextStyles.Blinker20semiBoldBlack),
+            const SizedBox(
+              height: 5,
+            ),
             Text(prod_desck, style: TextStyles.Blinker16regularlightBlack),
-            SizedBox(height: 7,),
-             Text("Reviews", style: TextStyles.Blinker20semiBoldBlack),
-            SizedBox(height: 5,),
+            const SizedBox(
+              height: 7,
+            ),
+            Text("Reviews", style: TextStyles.Blinker20semiBoldBlack),
+            const SizedBox(
+              height: 5,
+            ),
             // Review card
             Row(
-              children:  [
+              children: [
                 Expanded(child: ReviewCard()),
               ],
             ),
-            
+
             // ProductBar widget in the bottom
             const Expanded(
               child: Align(

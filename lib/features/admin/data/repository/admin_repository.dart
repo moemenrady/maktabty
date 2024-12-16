@@ -38,7 +38,7 @@ class AdminRepository {
     return executeTryAndCatchForRepository(() async {
       final imageUrl = await adminRemoteDataSource.uploadItemImage(
         image: image,
-        itemId: itemModel.id,
+        itemId: itemModel.id!,
       );
 
       itemModel = itemModel.copyWith(imageUrl: imageUrl);

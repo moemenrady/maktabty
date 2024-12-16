@@ -22,22 +22,25 @@ class CustomCartCard extends StatelessWidget {
           ),
         ),
         SizedBox(width: 16.w),
-        ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 80.w, maxHeight: 50.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Product Names",
-                style: TextStyles.blinker20SemiBoldBlack,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                "Product Description",
-                style: TextStyles.blinker14RegularDarkGrey,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+        Padding(
+          padding: EdgeInsets.all(10.h),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 133.w, maxHeight: 42.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Product Names",
+                  style: TextStyles.blinker20SemiBoldBlack,
+                  overflow: TextOverflow.fade,
+                ),
+                Text(
+                  "Product Description",
+                  style: TextStyles.blinker14RegularDarkGrey,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
           ),
         ),
         _buildOutlinedButton("assets/images/arrow_down.png"),

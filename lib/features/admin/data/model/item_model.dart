@@ -2,19 +2,19 @@
 import 'dart:convert';
 
 class ItemModel {
-  final String id;
-  final String name;
-  final int categoryId;
-  final String imageUrl;
-  final int quantity;
-  final String createdAt;
+  final String? id;
+  final String? name;
+  final int? categoryId;
+  final String? imageUrl;
+  final int? quantity;
+  final String? createdAt;
   ItemModel({
-    required this.id,
-    required this.name,
-    required this.categoryId,
-    required this.imageUrl,
-    required this.quantity,
-    required this.createdAt,
+    this.id,
+    this.name,
+    this.categoryId,
+    this.imageUrl,
+    this.quantity,
+    this.createdAt,
   });
 
   ItemModel copyWith({
@@ -37,23 +37,23 @@ class ItemModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
-      'name': name,
-      'category_id': categoryId,
-      'image_url': imageUrl,
-      'quantity': quantity,
-      'updated_at': createdAt
+      'id': id ?? '',
+      'name': name ?? '',
+      'category_id': categoryId ?? 0,
+      'image_url': imageUrl ?? '',
+      'quantity': quantity ?? 0,
+      'updated_at': createdAt ?? ''
     };
   }
 
   factory ItemModel.fromMap(Map<String, dynamic> map) {
     return ItemModel(
-      id: map['id'] as String,
-      name: map['name'] as String,
-      categoryId: map['category_id'] as int,
-      imageUrl: map['image_url'] as String,
-      quantity: map['quantity'] as int,
-      createdAt: map['updated_at'] as String,
+      id: map['id'] as String?,
+      name: map['name'] as String?,
+      categoryId: map['category_id'] as int?,
+      imageUrl: map['image_url'] as String?,
+      quantity: map['quantity'] as int?,
+      createdAt: map['updated_at'] as String?,
     );
   }
 

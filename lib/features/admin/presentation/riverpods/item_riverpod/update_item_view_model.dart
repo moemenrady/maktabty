@@ -14,7 +14,7 @@ class UpdateItemViewModel {
             TextEditingController(text: item.quantity.toString()),
         categoryIdController =
             TextEditingController(text: item.categoryId.toString()),
-        imageUrl = item.imageUrl;
+        imageUrl = item.imageUrl ?? '';
 
   void dispose() {
     nameController.dispose();

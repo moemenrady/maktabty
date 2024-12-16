@@ -53,7 +53,7 @@ class ItemPage extends ConsumerWidget {
                     child: AspectRatio(
                       aspectRatio: 1,
                       child: Image.network(
-                        item.imageUrl,
+                        item.imageUrl ?? '',
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
@@ -73,7 +73,7 @@ class ItemPage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.name,
+                          item.name ?? '',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -105,7 +105,7 @@ class ItemPage extends ConsumerWidget {
                       onPressed: () => showDeleteConfirmationDialog(
                         context,
                         ref,
-                        () => deleteItem(item.id),
+                        () => deleteItem(item.id ?? ''),
                       ),
                     ),
                   ),

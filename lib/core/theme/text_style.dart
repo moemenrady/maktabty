@@ -34,49 +34,49 @@ class TextStyles {
       fontFamily: "Blinker",
       color: AppPallete.lightBlack);
 
-      static TextStyle Inter18SemiBoldlightBlack = TextStyle(
+  static TextStyle Inter18SemiBoldlightBlack = const TextStyle(
       fontSize: 18,
       fontWeight: FontWeightHelper.semiBold,
       fontFamily: "Inter",
       color: AppPallete.lightBlack);
 
-      static TextStyle Roboto20mediumBlack = TextStyle(
+  static TextStyle Roboto20mediumBlack = const TextStyle(
       fontSize: 20,
       fontWeight: FontWeightHelper.medium,
       fontFamily: "Roboto",
       color: AppPallete.blackForText);
 
-      static TextStyle Roboto15regularlightBlack = TextStyle(
+  static TextStyle Roboto15regularlightBlack = const TextStyle(
       fontSize: 15,
       fontWeight: FontWeightHelper.regular,
       fontFamily: "Roboto",
       color: AppPallete.lightBlack);
 
-      static TextStyle Blinker20semiBoldBlack = TextStyle(
+  static TextStyle Blinker20semiBoldBlack = const TextStyle(
       fontSize: 20,
       fontWeight: FontWeightHelper.semiBold,
       fontFamily: "Blinker",
       color: AppPallete.blackForText);
 
-      static TextStyle Blinker16regularlightBlack = TextStyle(
+  static TextStyle Blinker16regularlightBlack = const TextStyle(
       fontSize: 16,
       fontWeight: FontWeightHelper.regular,
       fontFamily: "Blinker",
       color: AppPallete.lightBlack);
 
-      static TextStyle Raleway14mediuBlack = TextStyle(
+  static TextStyle Raleway14mediuBlack = const TextStyle(
       fontSize: 14,
       fontWeight: FontWeightHelper.medium,
       fontFamily: "Raleway",
       color: AppPallete.blackForText);
 
-      static TextStyle Blinker12regularlightBlack = TextStyle(
+  static TextStyle Blinker12regularlightBlack = const TextStyle(
       fontSize: 12,
       fontWeight: FontWeightHelper.regular,
       fontFamily: "Blinker",
       color: AppPallete.lightBlack);
 
-      static TextStyle Blinker14semiBoldBlack = TextStyle(
+  static TextStyle Blinker14semiBoldBlack = const TextStyle(
       fontSize: 12,
       fontWeight: FontWeightHelper.semiBold,
       fontFamily: "Blinker",

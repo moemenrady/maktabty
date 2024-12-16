@@ -5,7 +5,6 @@ class CustomTxtBtn extends StatefulWidget {
   final String str;
 
   const CustomTxtBtn({Key? key, required this.str}) : super(key: key);
-
   @override
   _CustomTxtBtnState createState() => _CustomTxtBtnState();
 }

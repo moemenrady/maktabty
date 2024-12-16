@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mktabte/features/home/presentation/riverpods/home_riverpod_state.dart';
+import 'package:mktabte/features/home/presentation/riverpods/home_river_pod/home_riverpod_state.dart';
 
-import '../../data/repository/home_repository.dart';
+import '../../../data/repository/home_repository.dart';
 
 final homeRiverpodProvider =
     StateNotifierProvider.autoDispose<HomeRiverpod, HomeRiverpodState>((ref) {
   final riverpod = HomeRiverpod(repository: ref.watch(homeRepositoryProvider));
-  riverpod.getProducts();
+  riverpod.getAllCategories();
   return riverpod;
 });
 
@@ -21,10 +21,19 @@ class HomeRiverpod extends StateNotifier<HomeRiverpodState> {
   HomeRiverpod({required this.repository})
       : super(HomeRiverpodState(state: HomeState.initial));
 
-  Future<void> getProducts() async {
+  Future<void> getAllCategories() async {
     state = state.copyWith(state: HomeState.loading);
     await Future.delayed(const Duration(seconds: 3));
-    final response = await repository.getProducts();
-    state = state.copyWith(state: HomeState.success, categories: response);
+    final response = await repository.getAllCategories();
+    response.fold(
+      (failure) => state = state.copyWith(
+        state: HomeState.error,
+        errorMessage: failure.message,
+      ),
+      (categories) => state = state.copyWith(
+        state: HomeState.success,
+        categories: categories,
+      ),
+    );
   }
 }
