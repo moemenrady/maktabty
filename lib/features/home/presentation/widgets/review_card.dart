@@ -15,8 +15,12 @@ List names = [
   "OSOS",
 ];
 
-Widget ReviewCard() {
-  return SizedBox(
+class ReviewCard extends StatelessWidget {
+  const ReviewCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
     height: 101.h,
     child: ListView.builder(
         itemCount: reviews.length,
@@ -44,9 +48,19 @@ Widget ReviewCard() {
                       SizedBox(
                         height: 3.h,
                       ),
-                      Text(
-                        names[index],
-                        style: TextStyles.Blinker14semiBoldBlack,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0,0,0,1),
+                        child: Row(
+                          children: [
+                            Image.asset("assets/images/user1.png"),
+                            Spacer(),
+                            Text(
+                              names[index],
+                              style: TextStyles.Blinker14semiBoldBlack,
+                            ),
+                            Spacer(),
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -54,6 +68,8 @@ Widget ReviewCard() {
               ));
         }),
   );
+  }
+}
 
   // return Padding(
   //   padding: const EdgeInsets.all(8.0),
@@ -73,4 +89,4 @@ Widget ReviewCard() {
   //     ),
   //   ),
   // );
-}
+

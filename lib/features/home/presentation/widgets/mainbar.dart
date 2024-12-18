@@ -3,10 +3,8 @@ import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
 import 'package:mktabte/features/home/presentation/screens/userwishlistscreen.dart';
 
 import '../screens/allcategriesscreen.dart';
-import '../screens/cartscreen.dart';
 import '../screens/home.dart';
 import '../screens/profilescreen.dart';
-
 
 class MainBar extends StatefulWidget {
   const MainBar({super.key});
@@ -34,7 +32,7 @@ class _MainBarState extends State<MainBar> {
       activeScreen = const CartPage();
     }
     if (_selectedScreenIndex == 3) {
-      activeScreen =  UserWishlist();
+      activeScreen = const UserWishlist();
     }
     if (_selectedScreenIndex == 4) {
       activeScreen = const ProfileScreen();
@@ -58,7 +56,7 @@ class _MainBarState extends State<MainBar> {
                     color: Colors.black.withOpacity(0.2),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: const Offset(0, 3), // Shadow position
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
@@ -70,25 +68,55 @@ class _MainBarState extends State<MainBar> {
                   unselectedItemColor: const Color.fromARGB(255, 141, 141, 141),
                   selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
                   backgroundColor: Colors.transparent,
-                  items: const [
+                  items: [
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.home_outlined),
+                      icon: Image.asset(
+                        _selectedScreenIndex == 0
+                            ? "assets/images/btns/selected_home_btn_img.png"
+                            : "assets/images/btns/home_btn_img.png",
+                        height: 20,
+                        width: 20,
+                      ),
                       label: 'Home',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.grid_view),
+                      icon: Image.asset(
+                        _selectedScreenIndex == 1
+                            ? "assets/images/btns/selected_category_btn_img.png"
+                            : "assets/images/btns/category_btn_img.png",
+                        height: 30,
+                        width: 30,
+                      ),
                       label: 'Categories',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.shopping_cart_outlined),
+                      icon: Image.asset(
+                        _selectedScreenIndex == 2
+                            ? "assets/images/btns/selected_cart_btn_img.png"
+                            : "assets/images/btns/cart_btn_img.png",
+                        height: 20,
+                        width: 20,
+                      ),
                       label: 'Cart',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.favorite_border),
+                      icon: Image.asset(
+                        _selectedScreenIndex == 3
+                            ? "assets/images/btns/selected_favorite_btn_img.png"
+                            : "assets/images/btns/favorite_btn_img.png",
+                        height: 30,
+                        width: 30,
+                      ),
                       label: 'Wishlist',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.person_outline),
+                      icon: Image.asset(
+                        _selectedScreenIndex == 4
+                            ? "assets/images/btns/selected_person_btn_img.png"
+                            : "assets/images/btns/person_btn_img.png",
+                        height: 20,
+                        width: 20,
+                      ),
                       label: 'Profile',
                     ),
                   ],

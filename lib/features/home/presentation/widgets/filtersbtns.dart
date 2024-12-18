@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mktabte/core/theme/text_style.dart';
 
 class FiltersBTNS extends StatefulWidget {
   const FiltersBTNS({super.key});
@@ -28,12 +29,12 @@ class _FiltersBTNSState extends State<FiltersBTNS> {
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 foregroundColor: isSelected ? const Color.fromARGB(255, 255, 255, 255) : const Color.fromARGB(255, 0, 0, 0),
-                backgroundColor: isSelected ? const Color.fromARGB(255, 226, 133, 27) : const Color.fromARGB(188, 211, 211, 211),
+                backgroundColor: isSelected ? const Color.fromARGB(255, 246, 140, 59) : const Color.fromARGB(188, 211, 211, 211),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 ),
               ),
-              child: Text(filtername),
+              child: Text(filtername,style: TextStyles.Blinker14regular,),
             ),
           );
         }).toList(),
