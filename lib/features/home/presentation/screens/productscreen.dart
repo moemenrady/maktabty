@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mktabte/features/home/presentation/widgets/customtxtbtn.dart';
+import 'package:mktabte/features/home/presentation/widgets/customtxtbtnsize.dart';
 import 'package:mktabte/features/home/presentation/widgets/mainapppbar.dart';
 import 'package:mktabte/features/home/presentation/widgets/product_bar.dart';
 import 'package:mktabte/features/home/presentation/widgets/review_card.dart';
@@ -114,10 +114,10 @@ class _ProductState extends State<Product> {
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomTxtBtn(str: 'L'),
-                CustomTxtBtn(str: 'XL'),
-                CustomTxtBtn(str: 'XXL'),
-                CustomTxtBtn(str: 'XXXL'),
+                CustomTxtBtnSize(str: 'L'),
+                CustomTxtBtnSize(str: 'XL'),
+                CustomTxtBtnSize(str: 'XXL'),
+                CustomTxtBtnSize(str: 'XXXL'),
               ],
             ),
             const SizedBox(

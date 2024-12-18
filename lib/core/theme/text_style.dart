@@ -81,4 +81,28 @@ class TextStyles {
       fontWeight: FontWeightHelper.semiBold,
       fontFamily: "Blinker",
       color: AppPallete.blackForText);
+
+  static TextStyle Lato16extraBoldBlack = const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeightHelper.extraBold,
+      fontFamily: "Lato",
+      color: AppPallete.blackForText);
+
+      static TextStyle Lato14extraBoldBlack = const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeightHelper.extraBold,
+      fontFamily: "Lato",
+      color: AppPallete.blackForText);
+
+      static TextStyle Lato12extraBoldBlack = const TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeightHelper.extraBold,
+      fontFamily: "Lato",
+      color: AppPallete.blackForText);
+
+            static TextStyle Lato16regularBlack = const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeightHelper.regular,
+      fontFamily: "Lato",
+      color: AppPallete.blackForText);
 }
