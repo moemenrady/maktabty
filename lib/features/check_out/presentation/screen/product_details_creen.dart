@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mktabte/features/home/presentation/widgets/customtxtbtn.dart';
 import 'package:mktabte/features/home/presentation/widgets/mainapppbar.dart';
 import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/product_bar.dart';
 import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/review_card.dart';
@@ -137,7 +136,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             //   height: 5,
             // ),
             // // Review card
-            Row(
+            const Row(
               children: [
                 Expanded(child: ReviewCard()),
               ],

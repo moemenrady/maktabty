@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:mktabte/features/home/presentation/widgets/customtxtbtnsize.dart';
-import 'package:mktabte/features/home/presentation/widgets/product_bar.dart';
-import 'package:mktabte/features/home/presentation/widgets/review_card.dart';
-
 import '../../../../core/theme/text_style.dart';
+import '../../../check_out/presentation/widget/product_details_screen/product_bar.dart';
+import '../../../check_out/presentation/widget/product_details_screen/review_card.dart';
 import '../widgets/custom_product_rate.dart';
 
 class Product extends StatefulWidget {
@@ -119,7 +118,7 @@ class _ProductState extends State<Product> {
                   height: 5,
                 ),
                 // Review card
-                Row(
+                const Row(
                   children: [
                     Expanded(child: ReviewCard()),
                   ],
@@ -129,7 +128,7 @@ class _ProductState extends State<Product> {
                 Center(
                   child: ConstrainedBox(
                     constraints: BoxConstraints.tight(const Size(296, 60)),
-                    child: ProductBar(),
+                    child: const ProductBar(),
                   ),
                 )
               ],
