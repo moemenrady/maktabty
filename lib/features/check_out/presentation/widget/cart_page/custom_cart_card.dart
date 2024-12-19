@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/core/theme/app_pallete.dart';
 
 import '../../../../../core/theme/text_style.dart';
+import '../../../model/cart_items_model.dart';
+import '../../riverpods/check_out/check_out_riverpod.dart';
 
-class CustomCartCard extends StatelessWidget {
-  const CustomCartCard({super.key});
+class CustomCartCard extends ConsumerWidget {
+  final CartItemsModel cartItemsModel;
+  const CustomCartCard({
+    super.key,
+    required this.cartItemsModel,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final checkOutRiverpod = ref.read(checkOutRiverpodProvider.notifier);
     return Row(
       children: [
         Container(
@@ -30,7 +38,7 @@ class CustomCartCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Product Names",
+                  cartItemsModel.itemName,
                   style: TextStyles.blinker20SemiBoldBlack,
                   overflow: TextOverflow.fade,
                 ),
@@ -43,23 +51,35 @@ class CustomCartCard extends StatelessWidget {
             ),
           ),
         ),
-        _buildOutlinedButton("assets/images/arrow_down.png"),
-        _buildQtyColumn("1"),
-        _buildOutlinedButton("assets/images/arrow_up.png"),
-        _buildPriceColumn("\$100"),
+        _buildOutlinedButton("assets/images/arrow_down.png", () {
+          checkOutRiverpod.removeOneItemFromCart(
+              "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
+        }),
+        _buildQtyColumn("${cartItemsModel.itemCount}"),
+        _buildOutlinedButton("assets/images/arrow_up.png", () {
+          checkOutRiverpod.addItemToCart(
+              "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
+        }),
+        _buildPriceColumn("\$${cartItemsModel.totalPricePerItem}"),
         Padding(
           padding: EdgeInsets.only(bottom: 40.h),
-          child: _buildOutlinedButton("assets/images/delete.png"),
+          child: _buildOutlinedButton("assets/images/delete.png", () {
+            checkOutRiverpod.removeItemFromCart(
+                "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
+          }),
         ),
       ],
     );
   }
 
-  Widget _buildOutlinedButton(String icon) {
-    return Image.asset(
-      icon,
-      width: 19.w,
-      height: 19.h,
+  Widget _buildOutlinedButton(String icon, Function() onPressed) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: Image.asset(
+        icon,
+        width: 19.w,
+        height: 19.h,
+      ),
     );
   }
 

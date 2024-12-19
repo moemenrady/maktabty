@@ -8,4 +8,7 @@ class AppPallete {
   static const Color lightGrey = Color(0xFF8F959E);
   static const Color lightBlack = Color(0xFF434242);
   static const Color lightOrange = Color(0xFFF68B3B);
+  static const Color primaryColor = Color(0xFF004CFF);
+  static const Color borderColor = Color(0xFFE8ECF4);
+  static const Color white = Colors.white;
 }

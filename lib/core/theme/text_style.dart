@@ -81,4 +81,11 @@ class TextStyles {
       fontWeight: FontWeightHelper.semiBold,
       fontFamily: "Blinker",
       color: AppPallete.blackForText);
+
+  static TextStyle blinker16SemiBoldWhite = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.semiBold,
+    fontFamily: "Blinker",
+    color: AppPallete.white,
+  );
 }

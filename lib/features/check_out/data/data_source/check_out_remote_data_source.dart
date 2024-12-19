@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/core/utils/try_and_catch.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../model/adress_model.dart';
+
 final supabaseClientProvider =
     Provider<SupabaseClient>((ref) => Supabase.instance.client);
 
@@ -13,8 +15,11 @@ final checkOutRemoteDataSourceProvider =
 abstract interface class CheckOutRemoteDataSource {
   Future<void> addItemToCart(String itemId, int userId);
   Future<void> removeItemFromCart(String itemId, int userId);
+  Future<void> removeOneItemFromCart(String itemId, int userId);
   Future<List<Map<String, dynamic>>> getCartItems(int userId);
   Future<void> clearCart(int userId);
+  Future<void> addAddress(AddressModel address);
+  Future<List<Map<String, dynamic>>> getAddress(int userId);
 }
 
 class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
@@ -43,14 +48,54 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
   }
 
   @override
+  Future<void> removeOneItemFromCart(String itemId, int userId) async {
+    return executeTryAndCatchForDataLayer(() async {
+      // Get the first occurrence of the item in cart
+      final itemToDelete = await supabaseClient
+          .from("cart")
+          .select()
+          .eq("item_id", itemId)
+          .eq("user_id", userId)
+          .limit(1)
+          .single();
+
+      // Delete that specific item using its primary key
+      await supabaseClient.from("cart").delete().eq("id", itemToDelete['id']);
+
+      return;
+    });
+  }
+
+  @override
   Future<void> clearCart(int userId) {
     // TODO: implement clearCart
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getCartItems(int userId) {
-    // TODO: implement getCartItems
-    throw UnimplementedError();
+  Future<List<Map<String, dynamic>>> getCartItems(int userId) async {
+    return executeTryAndCatchForDataLayer(() async {
+      return await supabaseClient
+          .from("user_cart_summary")
+          .select()
+          .eq("user_id", userId);
+    });
+  }
+
+  @override
+  Future<void> addAddress(AddressModel address) async {
+    return executeTryAndCatchForDataLayer(() async {
+      return await supabaseClient.from("address").insert(address.toMap());
+    });
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getAddress(int userId) async {
+    return executeTryAndCatchForDataLayer(() async {
+      return await supabaseClient
+          .from("address")
+          .select()
+          .eq("user_id", userId);
+    });
   }
 }

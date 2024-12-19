@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const ProductDetailsScreen(),
+          home: const CartPage(),
         );
       },
     );
