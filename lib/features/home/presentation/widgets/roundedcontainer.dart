@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mktabte/core/theme/text_style.dart';
 
-Widget RoundedContainer(String num, Icon? ico, String? img ,Color clr) {
-  return Padding(
+import '../../../../core/theme/text_style.dart';
+
+class Roundedcontainer extends StatelessWidget {
+ final String img;
+ final String num;
+ final Color clr;
+   Roundedcontainer({super.key, required this.img, required this.clr, required this.num});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
       height: 28,
@@ -13,18 +21,11 @@ Widget RoundedContainer(String num, Icon? ico, String? img ,Color clr) {
       ),
       child: Row(
         children: [
-          if (img != null) 
             Image.asset(
               img,
               height: 20,
               width: 20,
               fit: BoxFit.contain,
-            ),
-          if (img == null && ico != null) 
-            Icon(
-              ico.icon, 
-              color: ico.color,
-              size: ico.size ?? 20,
             ),
           const SizedBox(width: 5),
           Text(
@@ -35,4 +36,5 @@ Widget RoundedContainer(String num, Icon? ico, String? img ,Color clr) {
       ),
     ),
   );
+  }
 }

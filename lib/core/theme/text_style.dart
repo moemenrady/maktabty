@@ -82,6 +82,60 @@ class TextStyles {
       fontFamily: "Blinker",
       color: AppPallete.blackForText);
 
+  static TextStyle Lato16extraBoldBlack = const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeightHelper.extraBold,
+      fontFamily: "Lato",
+      color: AppPallete.blackForText);
+
+  static TextStyle Lato14extraBoldBlack = const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeightHelper.extraBold,
+      fontFamily: "Lato",
+      color: AppPallete.blackForText);
+
+  static TextStyle Lato12extraBoldBlack = const TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeightHelper.extraBold,
+      fontFamily: "Lato",
+      color: AppPallete.blackForText);
+
+  static TextStyle Lato16regularBlack = const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeightHelper.regular,
+      fontFamily: "Lato",
+      color: AppPallete.blackForText);
+
+  static TextStyle DMSans20mediumBlack = const TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeightHelper.medium,
+      fontFamily: "DM Sans",
+      color: AppPallete.blackForText);
+
+  static TextStyle Blinker18semiBoldBlack = const TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeightHelper.semiBold,
+      fontFamily: "Blinker",
+      color: AppPallete.blackForText);
+
+  static TextStyle Blinker16regularlightOrange = const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeightHelper.regular,
+      fontFamily: "Blinker",
+      color: AppPallete.lightOrange);
+
+  static TextStyle Blinker14regular = const TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Blinker",
+  );
+
+  static TextStyle Roboto14mediumblack = const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeightHelper.medium,
+      fontFamily: "Roboto",
+      color: AppPallete.blackForText);
+
   static TextStyle blinker16SemiBoldWhite = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeightHelper.semiBold,

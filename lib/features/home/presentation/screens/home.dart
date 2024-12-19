@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/text_style.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_home_products.dart';
+import '../widgets/custom_offers_widget.dart';
 import '../widgets/filtersbtns.dart';
 import '../widgets/mainapppbar.dart';
 import '../../../check_out/presentation/screen/product_details_creen.dart';
@@ -22,12 +26,17 @@ class HomePpage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(10.0),
+            CustomAppBar(
+              hasArrow: false,
+              txt: "",
+              hasIcons: true,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
               child: SearchBar(
                 autoFocus: false,
                 hintText: 'Search',
-                leading: Icon(Icons.search_outlined),
+                leading: Image.asset("assets/images/Search-Magnifier.png"),
               ),
             ),
             const SizedBox(
@@ -73,9 +82,12 @@ class HomePpage extends StatelessWidget {
             ),
             Row(
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text("Best Seller"),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    "Best Seller",
+                    style: TextStyles.Blinker18semiBoldBlack,
+                  ),
                 ),
                 const Spacer(),
                 TextButton(onPressed: () {}, child: const Text("see all"))

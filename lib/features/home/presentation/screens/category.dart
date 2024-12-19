@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import '../../../admin/data/model/item_model.dart';
 import '../riverpods/items_river_pod/items_riverpod.dart';
 import '../riverpods/items_river_pod/items_riverpod_state.dart';
@@ -33,7 +34,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
     );
 
     return Scaffold(
-      appBar: MainAppBar(context, true, "category1"),
       body: RefreshIndicator(
         onRefresh: () async {
           await ref.read(itemsRiverpodProvider.notifier).getAllItems();
@@ -42,12 +42,13 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+              CustomAppBar(txt: "Categoty1", hasArrow: true, hasIcons: true),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: SearchBar(
                   autoFocus: false,
                   hintText: 'Search',
-                  leading: Icon(Icons.search_outlined),
+                  leading: Image.asset("assets/images/Search-Magnifier.png"),
                 ),
               ),
               const SizedBox(height: 8),
@@ -279,7 +280,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
             });
           },
           child: Image.asset(
-            "assets/images/Heart.png",
+            "assets/images/btns/favorite_btn_img.png",
             width: 20.w,
             height: 19.75.h,
           )),
@@ -298,14 +299,18 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Colors.grey.shade300),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Text(
+            const Text(
               "Sort",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            SizedBox(width: 5),
-            Icon(Icons.sort, size: 20),
+            const SizedBox(width: 5),
+            Image.asset(
+              "assets/images/btns/sort_btn_img.png",
+              height: 20,
+              width: 20,
+            ),
           ],
         ),
       ),
