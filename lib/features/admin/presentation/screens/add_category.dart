@@ -1,7 +1,9 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../riverpods/add_category_riverpod/add_category_riverpod.dart';
+import '../riverpods/add_category_riverpod/add_category_view_model.dart';
 import '../widgets/admin_text_field.dart';
 
 class AddNewCategoryPage extends ConsumerWidget {
@@ -9,7 +11,10 @@ class AddNewCategoryPage extends ConsumerWidget {
 
   void addCategory(WidgetRef ref) {
     final viewModel = ref.read(addCategoryViewModelProvider);
-    if (viewModel.formKey.currentState!.validate()) {
+    final controller = ref.read(addCategoryRiverpodProvider);
+
+    if (viewModel.formKey.currentState!.validate() &&
+        controller.image != null) {
       ref
           .read(addCategoryRiverpodProvider.notifier)
           .addCategory(viewModel.nameController.text.trim());
@@ -50,6 +55,8 @@ class AddNewCategoryPage extends ConsumerWidget {
                 key: viewModel.formKey,
                 child: Column(
                   children: [
+                    _buildImagePicker(ref, controller),
+                    const SizedBox(height: 20),
                     AdminTextField(
                       controller: viewModel.nameController,
                       hintText: 'Category Name',
@@ -59,5 +66,50 @@ class AddNewCategoryPage extends ConsumerWidget {
               ),
             ),
     );
+  }
+
+  Widget _buildImagePicker(WidgetRef ref, dynamic controller) {
+    return controller.image != null
+        ? GestureDetector(
+            onTap: () =>
+                ref.read(addCategoryRiverpodProvider.notifier).selectImage(),
+            child: SizedBox(
+              width: double.infinity,
+              height: 150,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.file(
+                  controller.image!,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          )
+        : GestureDetector(
+            onTap: () =>
+                ref.read(addCategoryRiverpodProvider.notifier).selectImage(),
+            child: DottedBorder(
+              color: Colors.grey,
+              dashPattern: const [10, 4],
+              radius: const Radius.circular(10),
+              borderType: BorderType.RRect,
+              strokeCap: StrokeCap.round,
+              child: const SizedBox(
+                height: 150,
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.folder_open, size: 40),
+                    SizedBox(height: 15),
+                    Text(
+                      'Select category image',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }

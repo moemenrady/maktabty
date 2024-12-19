@@ -18,13 +18,17 @@ abstract interface class AdminRemoteDataSource {
   });
   Future<List<Map<String, dynamic>>> getAllItems();
   Future<void> deleteItem(String itemId);
-  Future<Map<String, dynamic>> addCategory(String name);
+  Future<Map<String, dynamic>> addCategory(String name, String imageUrl);
   Future<List<Map<String, dynamic>>> getAllCategories();
   Future<void> deleteCategory(int categoryId);
   Future<Map<String, dynamic>> updateCategory(
       {required int id, required String name});
   Future<Map<String, dynamic>> updateItem(Map<String, dynamic> item);
   Future<void> deleteItemImage(String imageUrl);
+  Future<String> uploadCategoryImage({
+    required File image,
+    required int categoryId,
+  });
 }
 
 class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
@@ -46,14 +50,8 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
     required String itemId,
   }) async {
     return executeTryAndCatchForDataLayer(() async {
-      // First try to delete any existing image with this ID
-      try {
-        await supabaseClient.storage.from('item_images').remove([itemId]);
-      } catch (_) {
-        // Ignore error if no existing image found
-      }
+      await supabaseClient.storage.from('item_images').remove([itemId]);
 
-      // Upload the new image
       await supabaseClient.storage.from('item_images').upload(
             itemId,
             image,
@@ -76,19 +74,6 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
     return executeTryAndCatchForDataLayer(() async {
       await supabaseClient.storage.from('item_images').remove([itemId]);
       await supabaseClient.from('items').delete().match({'id': itemId});
-    });
-  }
-
-  @override
-  Future<Map<String, dynamic>> addCategory(String name) async {
-    return executeTryAndCatchForDataLayer(() async {
-      final categoryData = await supabaseClient
-          .from('categories')
-          .insert({'name': name})
-          .select()
-          .single();
-
-      return categoryData;
     });
   }
 
@@ -146,6 +131,40 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
       // Extract file name from URL
       final fileName = imageUrl.split('/').last;
       await supabaseClient.storage.from('item_images').remove([fileName]);
+    });
+  }
+
+  @override
+  Future<String> uploadCategoryImage({
+    required File image,
+    required int categoryId,
+  }) async {
+    return executeTryAndCatchForDataLayer(() async {
+      final fileName = 'category_$categoryId';
+      await supabaseClient.storage.from('category_images').upload(
+            fileName,
+            image,
+          );
+
+      return supabaseClient.storage
+          .from('category_images')
+          .getPublicUrl(fileName);
+    });
+  }
+
+  @override
+  Future<Map<String, dynamic>> addCategory(String name, String imageUrl) async {
+    return executeTryAndCatchForDataLayer(() async {
+      final categoryData = await supabaseClient
+          .from('categories')
+          .insert({
+            'name': name,
+            'image_url': imageUrl,
+          })
+          .select()
+          .single();
+
+      return categoryData;
     });
   }
 }

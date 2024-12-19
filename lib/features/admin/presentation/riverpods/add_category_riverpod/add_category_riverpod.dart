@@ -1,41 +1,49 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../data/repository/admin_repository.dart';
 import 'add_category_state.dart';
 import 'add_category_view_model.dart';
 
-final addCategoryViewModelProvider =
-    Provider.autoDispose<AddCategoryViewModel>((ref) {
-  final viewModel = AddCategoryViewModel();
-  ref.onDispose(() => viewModel.dispose());
-  return viewModel;
-});
-
 final addCategoryRiverpodProvider =
-    StateNotifierProvider.autoDispose<AddCategoryController, AddCategoryState>(
-  (ref) => AddCategoryController(
-    repository: ref.watch(adminRepositoryProvider),
+    StateNotifierProvider.autoDispose<AddCategoryNotifier, AddCategoryState>(
+  (ref) => AddCategoryNotifier(
+    ref.watch(adminRepositoryProvider),
   ),
 );
 
-class AddCategoryController extends StateNotifier<AddCategoryState> {
-  final AdminRepository _repository;
+class AddCategoryNotifier extends StateNotifier<AddCategoryState> {
+  final AdminRepository _adminRepository;
 
-  AddCategoryController({
-    required AdminRepository repository,
-  })  : _repository = repository,
-        super(AddCategoryState.initial());
+  AddCategoryNotifier(this._adminRepository)
+      : super(AddCategoryState.initial());
+
+  void selectImage() async {
+    final imagePicker = ImagePicker();
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      state = state.copyWith(image: File(pickedImage.path));
+    }
+  }
 
   Future<void> addCategory(String name) async {
-    state = state.copyWith(isLoading: true, error: '');
-    final result = await _repository.addCategory(name);
+    if (state.image == null) return;
+
+    state = state.copyWith(isLoading: true);
+    final result = await _adminRepository.addCategoryWithImage(
+      name: name,
+      image: state.image!,
+    );
+
     result.fold(
       (failure) => state = state.copyWith(
-        isLoading: false,
         error: failure.message,
-      ),
-      (success) => state = state.copyWith(
         isLoading: false,
+      ),
+      (category) => state = state.copyWith(
         isSuccess: true,
+        isLoading: false,
       ),
     );
   }

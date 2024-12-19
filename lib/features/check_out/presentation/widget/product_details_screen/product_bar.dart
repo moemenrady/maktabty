@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 
-class ProductBar extends StatelessWidget {
+import '../../riverpods/check_out/check_out_riverpod.dart';
+
+class ProductBar extends ConsumerWidget {
   const ProductBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final checkOutState = ref.watch(checkOutRiverpodProvider);
     return Scaffold(
       body: Stack(
         children: [
@@ -39,13 +44,21 @@ class ProductBar extends StatelessWidget {
                           color: Colors.orange,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Add to cart",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
+                        child: checkOutState.isLoading()
+                            ? const Center(child: CircularProgressIndicator())
+                            : TextButton(
+                                onPressed: () {
+                                  ref
+                                      .read(checkOutRiverpodProvider.notifier)
+                                      .addItemToCart(
+                                          "8aad2a80-b210-11ef-a14c-af15a5030040",
+                                          1);
+                                },
+                                child: const Text(
+                                  "Add to cart",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                       ),
                       Container(
                         width: 150,
@@ -56,7 +69,7 @@ class ProductBar extends StatelessWidget {
                         ),
                         child: InkWell(
                           onTap: () {},
-                          child: Row(
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
@@ -86,7 +99,7 @@ class ProductBar extends StatelessWidget {
                             backgroundColor:
                                 const Color.fromARGB(69, 235, 122, 147)
                                     .withOpacity(0.8),
-                            child: Icon(
+                            child: const Icon(
                               Icons.favorite_border_outlined,
                               color: Colors.white,
                               size: 20,

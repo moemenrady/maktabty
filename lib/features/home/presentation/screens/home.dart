@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/filtersbtns.dart';
 import '../widgets/mainapppbar.dart';
-import 'productscreen.dart';
+import '../../../check_out/presentation/screen/product_details_creen.dart';
 
 List offers = [
   "assets/images/offer2.jpg",
@@ -16,7 +16,7 @@ class HomePpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(context,false, "HOME"),
+      appBar: MainAppBar(context, false, "HOME"),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -53,11 +53,13 @@ class HomePpage extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                    width: 300,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.red,image: DecorationImage(image:AssetImage(offers[index]),fit: BoxFit.cover) ),
-                       
-                       
-                        
+                        width: 300,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.red,
+                            image: DecorationImage(
+                                image: AssetImage(offers[index]),
+                                fit: BoxFit.cover)),
                       ),
                     );
                   }),
@@ -83,13 +85,14 @@ class HomePpage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: offers.length,
                 itemBuilder: (context, index) {
-                  return InkWell(onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                              const Product(),
-                        )
-                      );
-                  },
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProductDetailsScreen(),
+                          ));
+                    },
                     child: Card(
                       elevation: 8,
                       shape: RoundedRectangleBorder(

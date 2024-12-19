@@ -55,13 +55,6 @@ class AdminRepository {
     });
   }
 
-  Future<Either<Failure, Categories>> addCategory(String name) async {
-    return executeTryAndCatchForRepository(() async {
-      final categoryData = await adminRemoteDataSource.addCategory(name);
-      return Categories.fromMap(categoryData);
-    });
-  }
-
   Future<Either<Failure, List<Categories>>> getAllCategories() async {
     return executeTryAndCatchForRepository(() async {
       final categories = await adminRemoteDataSource.getAllCategories();
@@ -117,6 +110,37 @@ class AdminRepository {
         itemId: itemId,
       );
       return imageUrl;
+    });
+  }
+
+  Future<Either<Failure, String>> uploadCategoryImage({
+    required File image,
+    required int categoryId,
+  }) async {
+    return executeTryAndCatchForRepository(() async {
+      final imageUrl = await adminRemoteDataSource.uploadCategoryImage(
+        image: image,
+        categoryId: categoryId,
+      );
+      return imageUrl;
+    });
+  }
+
+  Future<Either<Failure, Categories>> addCategoryWithImage({
+    required String name,
+    required File image,
+  }) async {
+    return executeTryAndCatchForRepository(() async {
+      // First upload the image
+      final imageUrl = await adminRemoteDataSource.uploadCategoryImage(
+        image: image,
+        categoryId: DateTime.now().millisecondsSinceEpoch, // temporary ID
+      );
+
+      // Then create the category with the image URL
+      final categoryData =
+          await adminRemoteDataSource.addCategory(name, imageUrl);
+      return Categories.fromMap(categoryData);
     });
   }
 }

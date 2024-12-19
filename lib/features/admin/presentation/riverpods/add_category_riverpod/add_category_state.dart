@@ -1,28 +1,35 @@
+import 'dart:io';
+
 class AddCategoryState {
   final bool isLoading;
-  final bool isSuccess;
   final String error;
+  final bool isSuccess;
+  final File? image;
 
   AddCategoryState({
     required this.isLoading,
-    required this.isSuccess,
     required this.error,
+    required this.isSuccess,
+    this.image,
   });
 
   AddCategoryState.initial()
       : isLoading = false,
+        error = '',
         isSuccess = false,
-        error = '';
+        image = null;
 
   AddCategoryState copyWith({
     bool? isLoading,
-    bool? isSuccess,
     String? error,
+    bool? isSuccess,
+    File? image,
   }) {
     return AddCategoryState(
       isLoading: isLoading ?? this.isLoading,
-      isSuccess: isSuccess ?? this.isSuccess,
       error: error ?? this.error,
+      isSuccess: isSuccess ?? this.isSuccess,
+      image: image ?? this.image,
     );
   }
 }

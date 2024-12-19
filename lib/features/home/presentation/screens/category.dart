@@ -5,7 +5,7 @@ import '../../../admin/data/model/item_model.dart';
 import '../riverpods/items_river_pod/items_riverpod.dart';
 import '../riverpods/items_river_pod/items_riverpod_state.dart';
 import '../widgets/mainapppbar.dart';
-import 'productscreen.dart';
+import '../../../check_out/presentation/screen/product_details_creen.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
   const CategoryScreen({super.key});
@@ -214,7 +214,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const Product(),
+            builder: (context) => const ProductDetailsScreen(),
           ),
         );
       },
@@ -297,7 +297,6 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Colors.grey.shade300),
-          
         ),
         child: const Row(
           children: [

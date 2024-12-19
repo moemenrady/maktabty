@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mktabte/features/auth/presentation/screens/onboarding.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/utils/custom_error_screen.dart';
+import 'features/check_out/presentation/screen/product_details_creen.dart';
+import 'features/home/presentation/screens/allcategriesscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const Onboard(),
+          home: const ProductDetailsScreen(),
         );
       },
     );
