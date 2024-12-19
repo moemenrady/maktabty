@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mktabte/core/theme/text_style.dart';
 
-class CustomTxtBtn extends StatefulWidget {
+class CustomTxtBtnSize extends StatefulWidget {
   final String str;
 
-  const CustomTxtBtn({Key? key, required this.str}) : super(key: key);
+  const CustomTxtBtnSize({Key? key, required this.str}) : super(key: key);
   @override
   _CustomTxtBtnState createState() => _CustomTxtBtnState();
 }
 
-class _CustomTxtBtnState extends State<CustomTxtBtn> {
+class _CustomTxtBtnState extends State<CustomTxtBtnSize> {
   bool _isPressed = false;
 
   @override
