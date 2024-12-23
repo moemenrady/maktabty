@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget {
           child: Center(
             child: Text(
               txt,
-              style: TextStyles.DMSans20mediumBlack,
+              style: TextStyles.DMSans20mediumlightBlack,
             ),
           ),
         ),

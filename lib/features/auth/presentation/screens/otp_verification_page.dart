@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/auth/presentation/riverpod/auth_state.dart';
+import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
+import 'package:mktabte/features/home/presentation/widgets/custom_txt_btn.dart';
+import 'package:mktabte/main.dart';
+import '../../../../core/theme/text_style.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../riverpod/auth_riverpod.dart';
 import '../riverpod/auth_view_model.dart';
@@ -37,15 +42,32 @@ class OTPVerificationPage extends ConsumerWidget {
     final state = ref.watch(authControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Verify OTP')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: viewModel.formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              CustomAppBar(txt: "", hasArrow: true, hasIcons: false),
+              SizedBox(
+              height: 50,
+            ),
+              Text(
+              "Verification Code",
+              style: TextStyles.Inter28SemiBoldBlack,
+            ),
+            SizedBox(
+              height: 10,
+            ),
               Text('Enter the code sent to $phone'),
-              const SizedBox(height: 24),
+              const SizedBox(height: 40),
+            Image.asset(
+              "assets/images/forget_pass_img.png",
+              height: 166.h,
+              width: 225.w,
+            ),
+              const SizedBox(height: 70),
               TextFormField(
                 controller: viewModel.otpController,
                 decoration: const InputDecoration(labelText: 'OTP Code'),
@@ -61,10 +83,18 @@ class OTPVerificationPage extends ConsumerWidget {
               if (state.isLoading())
                 const CircularProgressIndicator()
               else
-                ElevatedButton(
-                  onPressed: () => verifyOTP(context, ref),
-                  child: const Text('Verify'),
+                CustomTxtBtn(txtstyle: TextStyles.Lato16extraBoldBlack,bgclr: Color(0xFFF68B3B),btnHeight: 60,btnWidth: 345,btnradious: 14,
+                btnName: "Confirm Code", onPress: (){verifyOTP(context, ref);}),
+                Row(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Text("Didn’t get OTP? ",style: TextStyles.Lato16regularBlack,),
+            TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Resend OTP",
+                  style: TextStyles.Poppins14regularBlue,
                 ),
+              ),
+            ],)
             ],
           ),
         ),

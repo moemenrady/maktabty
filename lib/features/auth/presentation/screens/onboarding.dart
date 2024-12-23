@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/home/presentation/widgets/custom_guest_wishlist_card.dart';
+import 'package:mktabte/features/home/presentation/widgets/custom_txt_btn.dart';
+import 'package:mktabte/features/home/presentation/widgets/mainbar.dart';
 
 import '../../../../core/functions/navigate.dart';
+import '../../../../core/theme/text_style.dart';
 import 'login.dart';
 
 
@@ -106,10 +111,7 @@ class _OnboardState extends State<Onboard> {
                               color: Colors.grey,
                             ),
                           ),
-                          const Spacer(),
-                          const Spacer(),
-                          const SizedBox(height: 40),
-                          
+                          const Spacer(flex: 3,),
                           if (i == 0 || i == 1)
                             Row(
                               children: [
@@ -135,70 +137,24 @@ class _OnboardState extends State<Onboard> {
                                 const Spacer()
                               ],
                             ),
-                          const Spacer(),
+                          SizedBox(height: 18.h,),
                           if (i == 0 || i == 1)
-                            TextButton(
-                              onPressed: () {
+                          CustomTxtBtn(btnName: "Next", onPress: () {
                                 _pageController.nextPage(
                                     duration: const Duration(milliseconds: 250),
                                     curve: Curves.ease);
-                              },
-                              style: TextButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(246, 231, 100, 7),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 170.0, vertical: 12.0),
-                              ),
-                              child: const Text(
-                                "Next",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 16.0),
-                              ),
-                            ),
+                              }, bgclr: Color(0xFFF68B3B), btnradious: 15, btnWidth: 327, btnHeight: 48, txtstyle: TextStyles.Lato16extraBoldBlack),
+                            
                             if (i == 2)
                             Column(
                               children: [
-                                TextButton(
-                                  onPressed: () {NavigateFN(context, () => const LoginPage());},
-                                  style: TextButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromARGB(246, 231, 100, 7),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 150.0, vertical: 12.0),
-                                  ),
-                                  child: const Text(
-                                    "Sign me up!",
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 16.0),
-                                  ),
-                                ),
-                                const SizedBox(height: 10,),
-                                TextButton(
-                                  onPressed: () {},
-                                  style: TextButton.styleFrom(
-                                    backgroundColor:
-                                        const Color.fromARGB(232, 190, 190, 185),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 150.0, vertical: 12.0),
-                                  ),
-                                  child: const Text(
-                                    "Ask me later",
-                                    style: TextStyle(
-                                        color: Color.fromARGB(172, 0, 0, 0)),
-                                  ),
-                                ),
+                                CustomTxtBtn(btnName: "Sign me up!", onPress: () {NavigateFN(context, () => const LoginPage());}, bgclr: Color(0xFFF68B3B), btnradious: 15, btnWidth: 327, btnHeight: 48, txtstyle: TextStyles.Lato16extraBoldBlack),
+                                
+                                SizedBox(height: 10.h),
+                                CustomTxtBtn(btnName: "Ask me later", onPress: () {NavigateFN(context, () => const MainBar());}, bgclr: Color(0xFFE8E8E8), btnradious: 15, btnWidth: 327, btnHeight: 48, txtstyle: TextStyles.Lato16boldlightBlack),
                               ],
                             ),
-                          const Spacer(),
+                          SizedBox(height: 20.h,),
                         ],
                       );
                     },
@@ -211,6 +167,4 @@ class _OnboardState extends State<Onboard> {
       ),
     );
   }
-
-
 }
