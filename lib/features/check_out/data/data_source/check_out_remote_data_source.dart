@@ -76,7 +76,7 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
   Future<List<Map<String, dynamic>>> getCartItems(int userId) async {
     return executeTryAndCatchForDataLayer(() async {
       return await supabaseClient
-          .from("user_cart_summary")
+          .from("user_cart")
           .select()
           .eq("user_id", userId);
     });
@@ -96,6 +96,12 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
           .from("address")
           .select()
           .eq("user_id", userId);
+    });
+  }
+
+  Future<void> checkOut(String itemId) async {
+    return executeTryAndCatchForDataLayer(() async {
+      return await supabaseClient.from("items").select().eq("id", itemId);
     });
   }
 }

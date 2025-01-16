@@ -2,23 +2,29 @@
 import 'dart:convert';
 
 class CartItemsModel {
-  final String itemId;
-  final int itemCount;
-  final String itemName;
-  final int itemPrice;
-  final int totalPricePerItem;
+  final String? itemId;
+  final int? itemCount;
+  final String? itemName;
+  final String? itemImage;
+  final String? itemQuantity;
+  final int? itemPrice;
+  final int? totalPricePerItem;
   CartItemsModel({
-    required this.itemId,
-    required this.itemCount,
-    required this.itemName,
-    required this.itemPrice,
-    required this.totalPricePerItem,
+    this.itemId,
+    this.itemCount,
+    this.itemName,
+    this.itemImage,
+    this.itemQuantity,
+    this.itemPrice,
+    this.totalPricePerItem,
   });
 
   CartItemsModel copyWith({
     String? itemId,
     int? itemCount,
     String? itemName,
+    String? itemImage,
+    String? itemQuantity,
     int? itemPrice,
     int? totalPricePerItem,
   }) {
@@ -26,6 +32,8 @@ class CartItemsModel {
       itemId: itemId ?? this.itemId,
       itemCount: itemCount ?? this.itemCount,
       itemName: itemName ?? this.itemName,
+      itemImage: itemImage ?? this.itemImage,
+      itemQuantity: itemQuantity ?? this.itemQuantity,
       itemPrice: itemPrice ?? this.itemPrice,
       totalPricePerItem: totalPricePerItem ?? this.totalPricePerItem,
     );
@@ -37,17 +45,21 @@ class CartItemsModel {
       'item_count': itemCount,
       'item_name': itemName,
       'item_price': itemPrice,
+      'item_quantity': itemQuantity,
+      'item_image': itemImage,
       'total_price_per_item': totalPricePerItem,
     };
   }
 
   factory CartItemsModel.fromMap(Map<String, dynamic> map) {
     return CartItemsModel(
-      itemId: map['item_id'] as String,
-      itemCount: map['item_count'] as int,
-      itemName: map['item_name'] as String,
-      itemPrice: map['item_price'] as int,
-      totalPricePerItem: map['total_price_per_item'] as int,
+      itemId: map['item_id'] as String? ?? "",
+      itemCount: map['item_count'] as int? ?? 0,
+      itemName: map['item_name'] as String? ?? "",
+      itemPrice: map['item_price'] as int? ?? 0,
+      itemQuantity: map['item_quantity'] as String? ?? "",
+      itemImage: map['item_image'] as String? ?? "",
+      totalPricePerItem: map['total_price_per_item'] as int? ?? 0,
     );
   }
 
@@ -58,7 +70,7 @@ class CartItemsModel {
 
   @override
   String toString() {
-    return 'CartItemsModel(itemId: $itemId, itemCount: $itemCount, itemName: $itemName, itemPrice: $itemPrice, totalPricePerItem: $totalPricePerItem)';
+    return 'CartItemsModel(itemId: $itemId, itemCount: $itemCount, itemName: $itemName, itemPrice: $itemPrice, itemQuantity: $itemQuantity, itemImage: $itemImage, totalPricePerItem: $totalPricePerItem)';
   }
 
   @override
@@ -69,6 +81,8 @@ class CartItemsModel {
         other.itemCount == itemCount &&
         other.itemName == itemName &&
         other.itemPrice == itemPrice &&
+        other.itemQuantity == itemQuantity &&
+        other.itemImage == itemImage &&
         other.totalPricePerItem == totalPricePerItem;
   }
 
@@ -78,6 +92,8 @@ class CartItemsModel {
         itemCount.hashCode ^
         itemName.hashCode ^
         itemPrice.hashCode ^
+        itemQuantity.hashCode ^
+        itemImage.hashCode ^
         totalPricePerItem.hashCode;
   }
 }

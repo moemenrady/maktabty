@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mktabte/core/theme/app_pallete.dart';
-
 import '../../../../../core/theme/text_style.dart';
 import '../../../model/cart_items_model.dart';
 import '../../riverpods/check_out/check_out_riverpod.dart';
@@ -41,7 +39,7 @@ class CustomCartCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    cartItemsModel.itemName,
+                    cartItemsModel.itemName!,
                     style: TextStyles.blinker20SemiBoldBlack,
                     overflow: TextOverflow.fade,
                   ),
