@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mktabte/main.dart';
 
 import '../../../../core/theme/text_style.dart';
 import '../widgets/custom_WL_header.dart';
-import '../widgets/custom_wishlist_card.dart';
+import '../widgets/custom_guest_trending_WL.dart';
+import '../widgets/custom_guest_wishlist_card.dart';
 
-final List<Map<String, String>> wishListItems = [
+final List<Map<String, String>> guestwishListItems = [
   {
     "image": "assets/images/blackcontroller.png",
     "title": "Black Controller",
@@ -34,8 +34,8 @@ final List<Map<String, String>> wishListItems = [
   },
 ];
 
-class UserWishlist extends StatelessWidget {
-  const UserWishlist({super.key});
+class GuestWifhlistScreen extends StatelessWidget {
+  const GuestWifhlistScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +45,30 @@ class UserWishlist extends StatelessWidget {
         height: double.infinity,
         child: Stack(
           children: [
-            CustomWlHeader(),
-            // Wishlist Items
-            Positioned(
-              top: 188.h,
-              left: (MediaQuery.of(context).size.width - 327.w) / 2,
-              width: 327.w,
-              height: 400.h,
-              child: CustomWishlistCard()
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomWlHeader(),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: Text(
+                    "Trending",
+                    style: TextStyles.Lato12extraboldBlack,
+                  ),
+                ),
+                CustomGuestTrendingWl(),
+                SizedBox(
+                  height: 30.h,
+                )
+              ],
             ),
+            Positioned(
+                top: 170.h,
+                left: (MediaQuery.of(context).size.width - 327.w) / 2,
+                width: 327.w,
+                height: 320.h,
+                child: CustomGuestWishlistCard())
           ],
         ),
       ),

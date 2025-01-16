@@ -106,11 +106,11 @@ class TextStyles {
       fontFamily: "Lato",
       color: AppPallete.blackForText);
 
-  static TextStyle DMSans20mediumBlack = const TextStyle(
+  static TextStyle DMSans20mediumlightBlack = const TextStyle(
       fontSize: 20,
       fontWeight: FontWeightHelper.medium,
       fontFamily: "DM Sans",
-      color: AppPallete.blackForText);
+      color: AppPallete.lightBlack);
 
   static TextStyle Blinker18semiBoldBlack = const TextStyle(
       fontSize: 18,
@@ -130,7 +130,7 @@ class TextStyles {
     fontFamily: "Blinker",
   );
 
-  static TextStyle Roboto14mediumblack = const TextStyle(
+  static TextStyle Roboto14mediumBlack = const TextStyle(
       fontSize: 14,
       fontWeight: FontWeightHelper.medium,
       fontFamily: "Roboto",
@@ -142,4 +142,138 @@ class TextStyles {
     fontFamily: "Blinker",
     color: AppPallete.white,
   );
+
+  static TextStyle Inter28SemiBoldBlack = TextStyle(
+    fontSize: 28.sp,
+    fontWeight: FontWeightHelper.semiBold,
+    fontFamily: "Inter",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Poppins14regularBlue = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Poppins",
+    color: AppPallete.lightBlueForText,
+  );
+
+  static TextStyle Inter19semiBoldBlack = TextStyle(
+    fontSize: 19.sp,
+    fontWeight: FontWeightHelper.semiBold,
+    fontFamily: "Inter",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Inter12regularlightBlack = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Inter",
+    color: AppPallete.lightBlack,
+  );
+
+  static TextStyle Montserrat17mediumBlack = TextStyle(
+    fontSize: 17.sp,
+    fontWeight: FontWeightHelper.medium,
+    fontFamily: "Montserrat",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Montserrat16regularBlack = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Montserrat",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Montserrat16semiBoldBlack = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.semiBold,
+    fontFamily: "Montserrat",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Montserrat14semiBoldbinkForText = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeightHelper.semiBold,
+    fontFamily: "Montserrat",
+    color: AppPallete.binkForText,
+  );
+
+  static TextStyle Inter17mediumBlack = TextStyle(
+    fontSize: 17.sp,
+    fontWeight: FontWeightHelper.medium,
+    fontFamily: "Inter",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Inter15regularBlack = TextStyle(
+    fontSize: 15.sp,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Inter",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Inter15mediumbinkForText = TextStyle(
+    fontSize: 15.sp,
+    fontWeight: FontWeightHelper.medium,
+    fontFamily: "Inter",
+    color: AppPallete.binkForText,
+  );
+
+  static TextStyle Lato28boldlightBlack = TextStyle(
+    fontSize: 28.sp,
+    fontWeight: FontWeightHelper.bold,
+    fontFamily: "Lato",
+    color: AppPallete.lightBlack,
+  );
+
+  static TextStyle Lato20boldBlack = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeightHelper.bold,
+    fontFamily: "Lato",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Lato16boldBlack = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.bold,
+    fontFamily: "Lato",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Lato12extraboldBlack = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeightHelper.extraBold,
+    fontFamily: "Lato",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Lato17regularBlack = TextStyle(
+    fontSize: 17.sp,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Lato",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Lato16regularlightBlack = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Lato",
+    color: AppPallete.lightBlack,
+  );
+
+  static TextStyle Lato16mediumlightBlack = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.medium,
+    fontFamily: "Lato",
+    color: AppPallete.lightBlack,
+  );
+
+  static TextStyle Lato16boldlightBlack = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeightHelper.bold,
+    fontFamily: "Lato",
+    color: AppPallete.lightBlack,
+  );
+
 }

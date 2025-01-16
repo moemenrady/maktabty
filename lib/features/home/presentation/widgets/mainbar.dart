@@ -3,8 +3,10 @@ import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
 import 'package:mktabte/features/home/presentation/screens/userwishlistscreen.dart';
 
 import '../screens/allcategriesscreen.dart';
+import '../screens/guest_profile_screen.dart';
+import '../screens/guest_wifhlist_screen.dart';
 import '../screens/home.dart';
-import '../screens/profilescreen.dart';
+import '../screens/user_profile_screen.dart';
 
 class MainBar extends StatefulWidget {
   const MainBar({super.key});
@@ -32,10 +34,12 @@ class _MainBarState extends State<MainBar> {
       activeScreen = const CartPage();
     }
     if (_selectedScreenIndex == 3) {
-      activeScreen = const UserWishlist();
+      //activeScreen = UserWishlist();
+      activeScreen = GuestWifhlistScreen();
     }
     if (_selectedScreenIndex == 4) {
-      activeScreen = const ProfileScreen();
+      // activeScreen = const UserProfileScreen();
+      activeScreen = const GuestProfileScreen();
     }
 
     return Scaffold(

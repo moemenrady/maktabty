@@ -17,58 +17,62 @@ class CustomCartCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checkOutRiverpod = ref.read(checkOutRiverpodProvider.notifier);
-    return Row(
-      children: [
-        Container(
-          height: 72.h,
-          width: 72.w,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24.r),
-            image: const DecorationImage(
-                image: AssetImage("assets/images/offer2.jpg"),
-                fit: BoxFit.cover),
-          ),
-        ),
-        SizedBox(width: 16.w),
-        Padding(
-          padding: EdgeInsets.all(10.h),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 133.w, maxHeight: 42.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  cartItemsModel.itemName,
-                  style: TextStyles.blinker20SemiBoldBlack,
-                  overflow: TextOverflow.fade,
-                ),
-                Text(
-                  "Product Description",
-                  style: TextStyles.blinker14RegularDarkGrey,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+    return SizedBox(
+      height: 72.h,
+      width: 343.w,
+      child: Row(
+        children: [
+          Container(
+            height: 72.h,
+            width: 72.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24.r),
+              image: const DecorationImage(
+                  image: AssetImage("assets/images/offer2.jpg"),
+                  fit: BoxFit.cover),
             ),
           ),
-        ),
-        _buildOutlinedButton("assets/images/arrow_down.png", () {
-          checkOutRiverpod.removeOneItemFromCart(
-              "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
-        }),
-        _buildQtyColumn("${cartItemsModel.itemCount}"),
-        _buildOutlinedButton("assets/images/arrow_up.png", () {
-          checkOutRiverpod.addItemToCart(
-              "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
-        }),
-        _buildPriceColumn("\$${cartItemsModel.totalPricePerItem}"),
-        Padding(
-          padding: EdgeInsets.only(bottom: 40.h),
-          child: _buildOutlinedButton("assets/images/delete.png", () {
-            checkOutRiverpod.removeItemFromCart(
+          SizedBox(width: 16.w),
+          Padding(
+            padding: EdgeInsets.all(10.h),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 133.w, maxHeight: 42.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    cartItemsModel.itemName,
+                    style: TextStyles.blinker20SemiBoldBlack,
+                    overflow: TextOverflow.fade,
+                  ),
+                  Text(
+                    "Product Description",
+                    style: TextStyles.blinker14RegularDarkGrey,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          _buildOutlinedButton("assets/images/arrow_down.png", () {
+            checkOutRiverpod.removeOneItemFromCart(
                 "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
           }),
-        ),
-      ],
+          _buildQtyColumn("${cartItemsModel.itemCount}"),
+          _buildOutlinedButton("assets/images/arrow_up.png", () {
+            checkOutRiverpod.addItemToCart(
+                "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
+          }),
+          _buildPriceColumn("\$${cartItemsModel.totalPricePerItem}"),
+          Padding(
+            padding: EdgeInsets.only(bottom: 40.h),
+            child: _buildOutlinedButton("assets/images/delete.png", () {
+              checkOutRiverpod.removeItemFromCart(
+                  "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
+            }),
+          ),
+        ],
+      ),
     );
   }
 

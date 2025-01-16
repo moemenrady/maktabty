@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
+import 'package:mktabte/main.dart';
 
 import '../../riverpods/check_out/check_out_riverpod.dart';
 
@@ -39,7 +41,7 @@ class ProductBar extends ConsumerWidget {
                       height: 40,
                       width: 150,
                       decoration: BoxDecoration(
-                        color: Colors.orange,
+                        color: Color(0xFFF68B3B),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: checkOutState.isLoading()
@@ -62,20 +64,17 @@ class ProductBar extends ConsumerWidget {
                       width: 150,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.orange,
+                        color: Color(0xFFF68B3B),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: InkWell(
                         onTap: () {},
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.shopping_cart_outlined,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 5),
-                            Text(
+                            Image.asset("assets/images/btns/cart_btn_img.png",width: 18.w,height: 18.h,),
+                            const SizedBox(width: 5),
+                            const Text(
                               "Buy Now",
                               style: TextStyle(color: Colors.white),
                             ),
@@ -86,7 +85,7 @@ class ProductBar extends ConsumerWidget {
                     Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.red.shade200,
+                        color: Color(0xFFF68B3B),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.grey.shade300),
                       ),

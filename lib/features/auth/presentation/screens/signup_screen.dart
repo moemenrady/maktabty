@@ -44,50 +44,75 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
             ),
             Spacer(),
-            Text(
-              "Name:",
-              style: TextStyles.Lato14extraBoldBlack,
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                "Name:",
+                style: TextStyles.Lato14extraBoldBlack,
+              ),
             ),
-            CustomTextField(
-              hinttxt: 'Enter Your Full Name',
-              mycontroller: Name,
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Text(
-              "Email:",
-              style: TextStyles.Lato14extraBoldBlack,
-            ),
-            CustomTextField(
-              hinttxt: 'Enter your email',
-              mycontroller: Email,
+            Center(
+              child: CustomTextField(
+                hinttxt: 'Enter Your Full Name',
+                mycontroller: Name,
+              ),
             ),
             SizedBox(
               height: 30,
             ),
-            Text(
-              "Password:",
-              style: TextStyles.Lato14extraBoldBlack,
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                "Email:",
+                style: TextStyles.Lato14extraBoldBlack,
+              ),
             ),
-            CustompassTxtFiels(
-              hinttxt: "Enter your password",
-              mycontroller: Pass,
+            Center(
+              child: CustomTextField(
+                hinttxt: 'Enter your email',
+                mycontroller: Email,
+              ),
             ),
             SizedBox(
               height: 30,
             ),
-            Text(
-              "Confirm Password:",
-              style: TextStyles.Lato14extraBoldBlack,
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                "Password:",
+                style: TextStyles.Lato14extraBoldBlack,
+              ),
             ),
-            CustompassTxtFiels(
-              hinttxt: "Confirm password",
-              mycontroller: ConfirmPass,
+            Center(
+              child: CustompassTxtFiels(
+                hinttxt: "Enter your password",
+                mycontroller: Pass,
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                "Confirm Password:",
+                style: TextStyles.Lato14extraBoldBlack,
+              ),
+            ),
+            Center(
+              child: CustompassTxtFiels(
+                hinttxt: "Confirm password",
+                mycontroller: ConfirmPass,
+              ),
             ),
             Spacer(),
             Center(
               child: CustomTxtBtn(
+                  txtstyle: TextStyles.Lato16extraBoldBlack,
+                  bgclr: Color(0xFFF68B3B),
+                  btnWidth: 327,
+                  btnHeight: 48,
+                  btnradious: 10,
                   onPress: () {
                     if (Name.text == "") {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,13 +126,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("Password can't be empty.")));
                       return;
-                    }
-                    else if (ConfirmPass.text == "") {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Confirm Password can't be empty.")));
+                    } else if (ConfirmPass.text == "") {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Confirm Password can't be empty.")));
                       return;
-                    }
-                     else {
+                    } else {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
