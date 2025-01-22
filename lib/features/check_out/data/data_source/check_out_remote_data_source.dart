@@ -103,21 +103,9 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
     });
   }
 
-  @override
-  Future<void> checkOut(
-    int userId,
-    List<Map<String, dynamic>> orderItems,
-    int addressId,
-    String transactionType,
-  ) async {
+  Future<void> checkOut(String itemId) async {
     return executeTryAndCatchForDataLayer(() async {
-      print(orderItems);
-      return await supabaseClient.rpc('place_orderss', params: {
-        'user_id_input': userId,
-        'order_items': orderItems,
-        'address_id': addressId,
-        'transaction_type': transactionType,
-      });
+      return await supabaseClient.from("items").select().eq("id", itemId);
     });
   }
 }
