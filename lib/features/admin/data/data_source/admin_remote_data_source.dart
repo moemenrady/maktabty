@@ -29,6 +29,10 @@ abstract interface class AdminRemoteDataSource {
     required File image,
     required int categoryId,
   });
+  Future<List<Map<String, dynamic>>> fetchOrderSummaryByDateRange({
+    required DateTime startDate,
+    required DateTime endDate,
+  });
 }
 
 class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
@@ -165,6 +169,25 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
           .single();
 
       return categoryData;
+    });
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchOrderSummaryByDateRange({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    return executeTryAndCatchForDataLayer(() async {
+      final response = await supabaseClient
+          .from('order_summary')
+          .select()
+          .gte('order_created_at',
+              startDate.toIso8601String()) // Filter for start date
+          .lte('order_created_at',
+              endDate.toIso8601String()); // Filter for end date
+
+      // Map the response to a list of OrderSummary objects
+      return response;
     });
   }
 }

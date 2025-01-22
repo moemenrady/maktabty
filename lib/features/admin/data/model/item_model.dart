@@ -1,20 +1,26 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class ItemModel {
-  final String? id;
-  final String? name;
-  final int? categoryId;
-  final String? imageUrl;
-  final int? quantity;
-  final String? createdAt;
+  final String id;
+  final String name;
+  final int categoryId;
+  final String imageUrl;
+  final int quantity;
+  final String createdAt;
+  final double wholesalePrice;
+  final double retailPrice;
+  final bool isFavourite;
+
   ItemModel({
-    this.id,
-    this.name,
-    this.categoryId,
-    this.imageUrl,
-    this.quantity,
-    this.createdAt,
+    this.id = '',
+    this.name = '',
+    this.categoryId = 0,
+    this.imageUrl = '',
+    this.quantity = 0,
+    this.createdAt = '',
+    this.wholesalePrice = 0.0,
+    this.retailPrice = 0.0,
+    this.isFavourite = false,
   });
 
   ItemModel copyWith({
@@ -24,6 +30,9 @@ class ItemModel {
     String? imageUrl,
     int? quantity,
     String? createdAt,
+    double? wholesalePrice,
+    double? retailPrice,
+    bool? isFavourite,
   }) {
     return ItemModel(
       id: id ?? this.id,
@@ -32,28 +41,37 @@ class ItemModel {
       imageUrl: imageUrl ?? this.imageUrl,
       quantity: quantity ?? this.quantity,
       createdAt: createdAt ?? this.createdAt,
+      wholesalePrice: wholesalePrice ?? this.wholesalePrice,
+      retailPrice: retailPrice ?? this.retailPrice,
+      isFavourite: isFavourite ?? this.isFavourite,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id ?? '',
-      'name': name ?? '',
-      'category_id': categoryId ?? 0,
-      'image_url': imageUrl ?? '',
-      'quantity': quantity ?? 0,
-      'updated_at': createdAt ?? ''
+    return {
+      'id': id,
+      'name': name,
+      'category_id': categoryId,
+      'image_url': imageUrl,
+      'quantity': quantity,
+      'updated_at': createdAt,
+      'wholesale_price': wholesalePrice,
+      'retail_price': retailPrice,
+      'is_favourite': isFavourite,
     };
   }
 
   factory ItemModel.fromMap(Map<String, dynamic> map) {
     return ItemModel(
-      id: map['id'] as String?,
-      name: map['name'] as String?,
-      categoryId: map['category_id'] as int?,
-      imageUrl: map['image_url'] as String?,
-      quantity: map['quantity'] as int?,
-      createdAt: map['updated_at'] as String?,
+      id: map['id'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+      categoryId: map['category_id'] as int? ?? 0,
+      imageUrl: map['image_url'] as String? ?? '',
+      quantity: map['quantity'] as int? ?? 0,
+      createdAt: map['updated_at'] as String? ?? '',
+      wholesalePrice: (map['wholesale_price'] as num?)?.toDouble() ?? 0.0,
+      retailPrice: (map['retail_price'] as num?)?.toDouble() ?? 0.0,
+      isFavourite: map['is_favourite'] as bool? ?? false,
     );
   }
 
@@ -64,7 +82,7 @@ class ItemModel {
 
   @override
   String toString() {
-    return 'ItemModel(id: $id, name: $name, categoryId: $categoryId, imageUrl: $imageUrl, quantity: $quantity, createdAt: $createdAt)';
+    return 'ItemModel(id: $id, name: $name, categoryId: $categoryId, imageUrl: $imageUrl, quantity: $quantity, createdAt: $createdAt, isFavourite: $isFavourite)';
   }
 
   @override
@@ -76,7 +94,8 @@ class ItemModel {
         other.categoryId == categoryId &&
         other.imageUrl == imageUrl &&
         other.quantity == quantity &&
-        other.createdAt == createdAt;
+        other.createdAt == createdAt &&
+        other.isFavourite == isFavourite;
   }
 
   @override
@@ -86,6 +105,7 @@ class ItemModel {
         categoryId.hashCode ^
         imageUrl.hashCode ^
         quantity.hashCode ^
-        createdAt.hashCode;
+        createdAt.hashCode ^
+        isFavourite.hashCode;
   }
 }

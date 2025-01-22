@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
+import '../../../../../core/comman/entitys/categories.dart';
 import '../../../data/model/item_model.dart';
 
 enum ItemListStateStatus {
@@ -16,26 +17,23 @@ enum ItemListStateStatus {
 
 class ItemListState {
   final ItemListStateStatus status;
-  final List<ItemModel> items;
   final String? error;
-  final File? image;
+  final List<ItemModel> items;
+  final List<Categories> categories;
   final bool isDeleting;
-  final bool isUpdating;
+  final File? image;
 
   ItemListState({
     required this.status,
-    required this.items,
     this.error,
-    this.image,
+    this.items = const [],
+    this.categories = const [],
     this.isDeleting = false,
-    this.isUpdating = false,
+    this.image,
   });
 
   factory ItemListState.initial() {
-    return ItemListState(
-      status: ItemListStateStatus.initial,
-      items: [],
-    );
+    return ItemListState(status: ItemListStateStatus.initial);
   }
 
   bool isLoading() => status == ItemListStateStatus.loading;
@@ -44,25 +42,25 @@ class ItemListState {
 
   ItemListState copyWith({
     ItemListStateStatus? status,
-    List<ItemModel>? items,
     String? error,
-    File? image,
+    List<ItemModel>? items,
+    List<Categories>? categories,
     bool? isDeleting,
-    bool? isUpdating,
+    File? image,
   }) {
     return ItemListState(
       status: status ?? this.status,
-      items: items ?? this.items,
       error: error ?? this.error,
-      image: image ?? this.image,
+      items: items ?? this.items,
+      categories: categories ?? this.categories,
       isDeleting: isDeleting ?? this.isDeleting,
-      isUpdating: isUpdating ?? this.isUpdating,
+      image: image ?? this.image,
     );
   }
 
   @override
   String toString() {
-    return 'ItemListState(status: $status, items: $items, error: $error, image: $image, isDeleting: $isDeleting, isUpdating: $isUpdating)';
+    return 'ItemListState(status: $status, items: $items, error: $error, image: $image, isDeleting: $isDeleting)';
   }
 
   @override
@@ -73,8 +71,7 @@ class ItemListState {
         listEquals(other.items, items) &&
         other.error == error &&
         other.image == image &&
-        other.isDeleting == isDeleting &&
-        other.isUpdating == isUpdating;
+        other.isDeleting == isDeleting;
   }
 
   @override
@@ -83,7 +80,6 @@ class ItemListState {
         items.hashCode ^
         error.hashCode ^
         image.hashCode ^
-        isDeleting.hashCode ^
-        isUpdating.hashCode;
+        isDeleting.hashCode;
   }
 }

@@ -17,12 +17,12 @@ extension CategoriesStateX on CategoriesRiverpodState {
 class CategoriesRiverpodState {
   final CategoriesState state;
   final String? errorMessage;
-  final List<Categories>? categories;
+  final List<Categories> categories;
 
   CategoriesRiverpodState({
     this.state = CategoriesState.initial,
     this.errorMessage,
-    this.categories,
+    this.categories = const [],
   });
 
   CategoriesRiverpodState copyWith({

@@ -21,7 +21,8 @@ class CheckOutRiverpod extends StateNotifier<CheckOutState> {
             address: [],
             status: CheckOutStateStatus.initial,
             cartItems: [],
-            errorMessage: ""));
+            errorMessage: "",
+            totalPrice: 0));
 
   Future<void> addItemToCart(String itemId, int userId) async {
     state = state.copyWith(status: CheckOutStateStatus.loading);
@@ -70,8 +71,12 @@ class CheckOutRiverpod extends StateNotifier<CheckOutState> {
       state = state.copyWith(
           status: CheckOutStateStatus.error, errorMessage: failure.message);
     }, (success) {
+      final totalPrice = success.fold(
+          0.0, (previous, element) => previous + element.totalPricePerItem);
       state = state.copyWith(
-          status: CheckOutStateStatus.success, cartItems: success);
+          status: CheckOutStateStatus.success,
+          cartItems: success,
+          totalPrice: totalPrice);
     });
   }
 
@@ -99,6 +104,21 @@ class CheckOutRiverpod extends StateNotifier<CheckOutState> {
       print(success);
       state =
           state.copyWith(status: CheckOutStateStatus.success, address: success);
+    });
+  }
+
+  Future<void> checkOut(int userId, List<Map<String, dynamic>> orderItems,
+      int addressId, String transactionType) async {
+    state = state.copyWith(status: CheckOutStateStatus.loading);
+    final result = await _checkOutRepository.checkOut(
+        userId, orderItems, addressId, transactionType);
+    result.fold((failure) {
+      print(failure.message);
+      state = state.copyWith(
+          status: CheckOutStateStatus.error, errorMessage: failure.message);
+    }, (success) {
+      print("success");
+      state = state.copyWith(status: CheckOutStateStatus.success);
     });
   }
 }

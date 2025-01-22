@@ -1,13 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:mktabte/core/erorr/failure.dart';
-
-import '../../../data/model/item_model.dart';
+import '../../../../../core/comman/entitys/categories.dart';
 
 enum AddItemState {
   initial,
@@ -28,17 +25,19 @@ extension AddItemStateX on AddItemRiverpodState {
 class AddItemRiverpodState {
   final AddItemState state;
   final String? error;
-  final List<dynamic> items;
+  final List<Categories> categories;
+  final Categories? selectedCategory;
   final File? image;
-  final List<String> selectedTopics;
+  final List<dynamic> items;
 
   AddItemRiverpodState({
     required this.state,
-    required this.items,
     this.error,
+    this.categories = const [],
+    this.selectedCategory,
     this.image,
-    List<String>? selectedTopics,
-  }) : selectedTopics = selectedTopics ?? [];
+    required this.items,
+  });
 
   bool isLoading() => state == AddItemState.loading;
   bool isSuccess() => state == AddItemState.success;
@@ -47,22 +46,24 @@ class AddItemRiverpodState {
   AddItemRiverpodState copyWith({
     AddItemState? state,
     String? error,
-    List<dynamic>? items,
+    List<Categories>? categories,
+    Categories? selectedCategory,
     File? image,
-    List<String>? selectedTopics,
+    List<dynamic>? items,
   }) {
     return AddItemRiverpodState(
       state: state ?? this.state,
       error: error ?? this.error,
-      items: items ?? this.items,
+      categories: categories ?? this.categories,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
       image: image ?? this.image,
-      selectedTopics: selectedTopics ?? this.selectedTopics,
+      items: items ?? this.items,
     );
   }
 
   @override
   String toString() {
-    return 'AddItemRiverpodState(state: $state, error: $error, items: $items, image: $image, selectedTopics: $selectedTopics)';
+    return 'AddItemRiverpodState(state: $state, error: $error, categories: $categories, selectedCategory: $selectedCategory, image: $image, items: $items)';
   }
 
   @override
@@ -71,17 +72,19 @@ class AddItemRiverpodState {
 
     return other.state == state &&
         other.error == error &&
-        listEquals(other.items, items) &&
+        listEquals(other.categories, categories) &&
+        other.selectedCategory == selectedCategory &&
         other.image == image &&
-        listEquals(other.selectedTopics, selectedTopics);
+        listEquals(other.items, items);
   }
 
   @override
   int get hashCode {
     return state.hashCode ^
         error.hashCode ^
-        items.hashCode ^
+        categories.hashCode ^
+        selectedCategory.hashCode ^
         image.hashCode ^
-        selectedTopics.hashCode;
+        items.hashCode;
   }
 }

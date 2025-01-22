@@ -1,42 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
+import 'package:tuple/tuple.dart';
 import '../../../admin/data/model/item_model.dart';
 import '../riverpods/items_river_pod/items_riverpod.dart';
 import '../riverpods/items_river_pod/items_riverpod_state.dart';
-import '../widgets/mainapppbar.dart';
-import '../../../check_out/presentation/screen/product_details_creen.dart';
+import '../widgets/category/custom_category_card.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
-  const CategoryScreen({super.key});
+  final int categoryId;
+  const CategoryScreen({super.key, required this.categoryId});
 
   @override
   ConsumerState<CategoryScreen> createState() => _CategoryScreenState();
 }
 
 class _CategoryScreenState extends ConsumerState<CategoryScreen> {
-  List<bool> isFavoritedList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    isFavoritedList =
-        List<bool>.filled(12, false); // Initialize with a default size
-  }
-
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(itemsRiverpodProvider);
-
-    final items = ref.watch(
-      itemsRiverpodProvider.select((state) => state.items),
-    );
-
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          await ref.read(itemsRiverpodProvider.notifier).getAllItems();
+          await ref
+              .read(
+                  itemsRiverpodProvider(Tuple2(widget.categoryId, 1)).notifier)
+              .getItemsWithFavoritesForCategory(widget.categoryId, 1);
         },
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -52,30 +40,63 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              if (items != null) ...[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        "${items.length} Items",
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w600,
+              Consumer(
+                builder: (context, ref, child) {
+                  final state = ref.watch(
+                      itemsRiverpodProvider(Tuple2(widget.categoryId, 1)));
+                  final items = ref.watch(
+                    itemsRiverpodProvider(Tuple2(widget.categoryId, 1))
+                        .select((state) => state.items),
+                  );
+                  final controller = ref.read(
+                      itemsRiverpodProvider(Tuple2(widget.categoryId, 1))
+                          .notifier);
+                  return Expanded(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "${items.length} Items",
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const Spacer(),
+                              child!
+                            ],
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      _buildSortButton(),
-                      _buildFilterButton(),
-                    ],
-                  ),
+                        Expanded(
+                          child: _buildContent(
+                            state.isLoading(),
+                            state.isError(),
+                            state.errorMessage,
+                            items,
+                            (index) {
+                              controller.addToFavorites(
+                                  1, items[index].id, widget.categoryId);
+                            },
+                            (index) {
+                              controller.removeFromFavorites(
+                                  1, items[index].id, widget.categoryId);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    _buildSortButton(),
+                    _buildFilterButton(),
+                  ],
                 ),
-              ],
-              const SizedBox(height: 12),
-              Expanded(
-                child: _buildContent(state.isLoading(), state.isError(),
-                    state.errorMessage, items),
               ),
             ],
           ),
@@ -84,8 +105,13 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
     );
   }
 
-  Widget _buildContent(bool isLoading, bool isError, String? errorMessage,
-      List<ItemModel>? items) {
+  Widget _buildContent(
+      bool isLoading,
+      bool isError,
+      String? errorMessage,
+      List<ItemModel>? items,
+      void Function(int index) onAddToFavourite,
+      void Function(int index) onRemoveFromFavourite) {
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -98,192 +124,23 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
       return const Center(child: Text('No items found'));
     }
 
-    // Create a combined list of items plus special case
-    final displayItems = List<ItemModel>.from(items);
-    if (displayItems.length >= 2) {
-      // Insert special item at index 2
-      displayItems.insert(
-          2,
-          ItemModel(
-            name: "Nike Shose Fuck Mafed And all Mena",
-            imageUrl: "assets/images/cool boy.png",
-            quantity: 99,
-            categoryId: 0,
-            id: "special",
-          ));
-    }
-    if (displayItems.length >= 3) {
-      // Insert special item at index 2
-      displayItems.insert(
-          3,
-          ItemModel(
-            name: "Nike Shose Fuck Mafed And all Mena",
-            imageUrl: "assets/images/cool boy.png",
-            quantity: 99,
-            categoryId: 0,
-            id: "special",
-          ));
-    }
-    if (displayItems.length >= 4) {
-      // Insert special item at index 2
-      displayItems.insert(
-          4,
-          ItemModel(
-            name: "Nike Shose Fuck Mafed And all Mena",
-            imageUrl: "assets/images/cool boy.png",
-            quantity: 99,
-            categoryId: 0,
-            id: "special",
-          ));
-    }
-
-    return Padding(
+    return GridView.builder(
       padding: const EdgeInsets.all(10.0),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-          childAspectRatio: 0.7,
-        ),
-        itemCount: displayItems.length,
-        itemBuilder: (context, index) {
-          final item = displayItems[index];
-
-          if (item.id == "special") {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15.r),
-              ),
-              child: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage("assets/images/cool boy.png"),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(15.r),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          item.name ?? '',
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 11.h,
-                              fontFamily: "Inter"),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          '\$99',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: "Inter",
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                    ],
-                  ),
-                  _buildFavoriteButton(index),
-                ],
-              ),
-            );
-          }
-          return _buildItemCard(item, index);
-        },
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 8.0,
+        childAspectRatio: 0.7,
       ),
-    );
-  }
-
-  Widget _buildItemCard(ItemModel item, int index) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const ProductDetailsScreen(),
-          ),
-        );
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return CustomCategoryCard(
+            item: item,
+            index: index,
+            onAddToFavourite: () => onAddToFavourite(index),
+            onRemoveFromFavourite: () => onRemoveFromFavourite(index));
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(item.imageUrl ?? ''),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    maxLines: 2,
-                    item.name ?? '',
-                    style: const TextStyle(fontSize: 18, fontFamily: "Inter"),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    '\$99',
-                    // '\$${item.quantity}2',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Inter"),
-                  ),
-                ),
-                const SizedBox(height: 8),
-              ],
-            ),
-            _buildFavoriteButton(index),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFavoriteButton(int index) {
-    return Positioned(
-      top: 8,
-      right: 8,
-      child: InkWell(
-          onTap: () {
-            setState(() {
-              isFavoritedList[index] = !isFavoritedList[index];
-            });
-          },
-          child: Image.asset(
-            "assets/images/btns/favorite_btn_img.png",
-            width: 20.w,
-            height: 19.75.h,
-          )),
     );
   }
 

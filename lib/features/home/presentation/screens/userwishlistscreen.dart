@@ -1,58 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mktabte/main.dart';
-
 import '../../../../core/theme/text_style.dart';
+import '../riverpods/wishlist_riverpod/wishlist_riverpod.dart';
 import '../widgets/custom_WL_header.dart';
 import '../widgets/custom_wishlist_card.dart';
 
-final List<Map<String, String>> wishListItems = [
-  {
-    "image": "assets/images/blackcontroller.png",
-    "title": "Black Controller",
-    "price": "\$150"
-  },
-  {
-    "image": "assets/images/blackcontroller1.png",
-    "title": "Black Controller",
-    "price": "\$120"
-  },
-  {
-    "image": "assets/images/whitecontroller.png",
-    "title": "White Controller",
-    "price": "\$200"
-  },
-  {
-    "image": "assets/images/whitecontroller.png",
-    "title": "White Controller",
-    "price": "\$200"
-  },
-  {
-    "image": "assets/images/whitecontroller.png",
-    "title": "White Controller",
-    "price": "\$200"
-  },
-];
-
-class UserWishlist extends StatelessWidget {
-  const UserWishlist({super.key});
+class UserWishlistScreen extends ConsumerWidget {
+  const UserWishlistScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final wishlistState = ref.watch(wishlistProvider);
+
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: Stack(
           children: [
-            CustomWlHeader(),
-            // Wishlist Items
+            const CustomWlHeader(),
             Positioned(
               top: 188.h,
               left: (MediaQuery.of(context).size.width - 327.w) / 2,
               width: 327.w,
               height: 400.h,
-              child: CustomWishlistCard()
+              child: wishlistState.isLoading()
+                  ? const Center(child: CircularProgressIndicator())
+                  : wishlistState.isError()
+                      ? Center(
+                          child: Text(
+                            wishlistState.errorMessage ?? 'An error occurred',
+                            style: TextStyles.Blinker16regularlightBlack,
+                          ),
+                        )
+                      : wishlistState.items.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No items in wishlist',
+                                style: TextStyles.Blinker16regularlightBlack,
+                              ),
+                            )
+                          : CustomWishlistCard(
+                              wishListItems: wishlistState.items),
             ),
           ],
         ),

@@ -8,7 +8,7 @@ class Categories {
   Categories({
     required this.id,
     required this.name,
-    required this.imageUrl,
+    this.imageUrl = '',
   });
 
   Categories copyWith({
@@ -25,9 +25,9 @@ class Categories {
 
   factory Categories.fromMap(Map<String, dynamic> map) {
     return Categories(
-      id: map['id'],
-      name: map['name'],
-      imageUrl: map['image_url'],
+      id: map['id'] as int,
+      name: map['name'] as String,
+      imageUrl: map['image_url'] as String? ?? '',
     );
   }
 

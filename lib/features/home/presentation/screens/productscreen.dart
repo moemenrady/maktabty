@@ -124,13 +124,13 @@ class _ProductState extends State<Product> {
                   ],
                 ),
 
-                // ProductBar widget in the bottom
-                Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints.tight(const Size(296, 60)),
-                    child: const ProductBar(),
-                  ),
-                )
+                // // ProductBar widget in the bottom
+                // Center(
+                //   child: ConstrainedBox(
+                //     constraints: BoxConstraints.tight(const Size(296, 60)),
+                //     child: const ProductBar(),
+                //   ),
+                // )
               ],
             ),
           ),

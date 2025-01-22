@@ -1,9 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-
-import '../../../../admin/data/model/item_model.dart';
 import '../../../model/adress_model.dart';
 import '../../../model/cart_items_model.dart';
 
@@ -29,11 +25,13 @@ extension CheckOutStateStatusX on CheckOutState {
 
 class CheckOutState {
   final CheckOutStateStatus status;
+  final double totalPrice;
   final List<CartItemsModel> cartItems;
   final List<AddressModel> address;
   final String errorMessage;
   CheckOutState({
     required this.status,
+    required this.totalPrice,
     required this.cartItems,
     required this.address,
     required this.errorMessage,
@@ -44,18 +42,20 @@ class CheckOutState {
     List<CartItemsModel>? cartItems,
     List<AddressModel>? address,
     String? errorMessage,
+    double? totalPrice,
   }) {
     return CheckOutState(
       status: status ?? this.status,
       cartItems: cartItems ?? this.cartItems,
       address: address ?? this.address,
       errorMessage: errorMessage ?? this.errorMessage,
+      totalPrice: totalPrice ?? this.totalPrice,
     );
   }
 
   @override
   String toString() {
-    return 'CheckOutState(status: $status, cartItems: $cartItems, address: $address, errorMessage: $errorMessage)';
+    return 'CheckOutState(status: $status, cartItems: $cartItems, address: $address, errorMessage: $errorMessage, totalPrice: $totalPrice)';
   }
 
   @override
@@ -65,7 +65,8 @@ class CheckOutState {
     return other.status == status &&
         listEquals(other.cartItems, cartItems) &&
         listEquals(other.address, address) &&
-        other.errorMessage == errorMessage;
+        other.errorMessage == errorMessage &&
+        other.totalPrice == totalPrice;
   }
 
   @override
@@ -73,6 +74,7 @@ class CheckOutState {
     return status.hashCode ^
         cartItems.hashCode ^
         address.hashCode ^
-        errorMessage.hashCode;
+        errorMessage.hashCode ^
+        totalPrice.hashCode;
   }
 }

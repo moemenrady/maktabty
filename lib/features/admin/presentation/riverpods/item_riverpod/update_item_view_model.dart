@@ -6,31 +6,39 @@ class UpdateItemViewModel {
   final TextEditingController nameController;
   final TextEditingController quantityController;
   final TextEditingController categoryIdController;
+  final TextEditingController wholesalePriceController;
+  final TextEditingController retailPriceController;
   String imageUrl;
 
-  UpdateItemViewModel({required ItemModel item})
+  UpdateItemViewModel(ItemModel item)
       : nameController = TextEditingController(text: item.name),
         quantityController =
             TextEditingController(text: item.quantity.toString()),
         categoryIdController =
             TextEditingController(text: item.categoryId.toString()),
-        imageUrl = item.imageUrl ?? '';
+        wholesalePriceController =
+            TextEditingController(text: item.wholesalePrice.toString()),
+        retailPriceController =
+            TextEditingController(text: item.retailPrice.toString()),
+        imageUrl = item.imageUrl;
+
+  void updateImageUrl(String url) {
+    imageUrl = url;
+  }
 
   void dispose() {
     nameController.dispose();
     quantityController.dispose();
     categoryIdController.dispose();
-  }
-
-  void updateImageUrl(String url) {
-    imageUrl = url;
+    wholesalePriceController.dispose();
+    retailPriceController.dispose();
   }
 }
 
 final updateItemViewModelProvider =
     Provider.autoDispose.family<UpdateItemViewModel, ItemModel>(
   (ref, item) {
-    final viewModel = UpdateItemViewModel(item: item);
+    final viewModel = UpdateItemViewModel(item);
     ref.onDispose(() => viewModel.dispose());
     return viewModel;
   },

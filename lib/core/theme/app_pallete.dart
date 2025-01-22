@@ -12,4 +12,7 @@ class AppPallete {
   static const Color primaryColor = Color(0xFF004CFF);
   static const Color borderColor = Color(0xFFE8ECF4);
   static const Color white = Colors.white;
+  static const Color blueColor = Colors.blue;
+  static const Color orangeColor = Colors.orange;
+  static const Color greenColor = Colors.green;
 }

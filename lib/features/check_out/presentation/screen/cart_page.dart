@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_riverpod.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
+import 'package:mktabte/features/check_out/presentation/screen/check_out_screen.dart';
 import 'package:mktabte/features/check_out/presentation/widget/cart_page/custom_cart_button.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import '../../../../core/theme/text_style.dart';
@@ -59,7 +60,7 @@ class CartPage extends ConsumerWidget {
                           height: 318.h,
                           width: 343.w,
                           child: ListView.builder(
-                            itemCount: 1,
+                            itemCount: state.cartItems.length,
                             itemBuilder: (context, index) {
                               return CustomCartCard(
                                 cartItemsModel: state.cartItems[index],
@@ -136,7 +137,7 @@ class CartPage extends ConsumerWidget {
                       ),
                       const Spacer(),
                       Text(
-                        "\$2809",
+                        "\$ ${state.totalPrice}",
                         style: TextStyles.Montserrat16semiBoldBlack,
                       )
                     ],
@@ -172,7 +173,7 @@ class CartPage extends ConsumerWidget {
                       ),
                       const Spacer(),
                       Text(
-                        "\$2809",
+                        "\$ ${state.totalPrice}",
                         style: TextStyles.Montserrat16semiBoldBlack,
                       )
                     ],
@@ -182,10 +183,11 @@ class CartPage extends ConsumerWidget {
                   ),
 
                   CustomCartButton(
-                    onpressed: () => ref
-                        .read(checkOutRiverpodProvider.notifier)
-                        .getAddress(1),
-                  ),
+                      onpressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CheckOutScreen(cartItems: state.cartItems)))),
                   // CustomCartButton(
                   //   onpressed: () =>
                   //       _showAddressBottomSheet(context, checkOutController),

@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/core/utils/try_and_catch.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:convert';
 
+import '../../../admin/data/model/oders_summary_model.dart';
 import '../../model/adress_model.dart';
 
 final supabaseClientProvider =
@@ -20,6 +22,8 @@ abstract interface class CheckOutRemoteDataSource {
   Future<void> clearCart(int userId);
   Future<void> addAddress(AddressModel address);
   Future<List<Map<String, dynamic>>> getAddress(int userId);
+  Future<void> checkOut(int userId, List<Map<String, dynamic>> orderItems,
+      int addressId, String transactionType);
 }
 
 class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
@@ -99,9 +103,21 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
     });
   }
 
-  Future<void> checkOut(String itemId) async {
+  @override
+  Future<void> checkOut(
+    int userId,
+    List<Map<String, dynamic>> orderItems,
+    int addressId,
+    String transactionType,
+  ) async {
     return executeTryAndCatchForDataLayer(() async {
-      return await supabaseClient.from("items").select().eq("id", itemId);
+      print(orderItems);
+      return await supabaseClient.rpc('place_orderss', params: {
+        'user_id_input': userId,
+        'order_items': orderItems,
+        'address_id': addressId,
+        'transaction_type': transactionType,
+      });
     });
   }
 }

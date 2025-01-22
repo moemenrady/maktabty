@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-
 import '../../model/cart_items_model.dart';
+import '../riverpods/check_out/check_out_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CheckoutPage extends StatelessWidget {
+class CheckOutScreen extends ConsumerWidget {
   final List<CartItemsModel> cartItems;
-  const CheckoutPage({super.key, required this.cartItems});
+  const CheckOutScreen({super.key, required this.cartItems});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final checkOutState = ref.read(checkOutRiverpodProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
@@ -28,9 +30,9 @@ class CheckoutPage extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: Colors.grey),
             ),
             const SizedBox(height: 8),
-            const Text(
-              '\$430',
-              style: TextStyle(fontSize: 18),
+            Text(
+              '\$ ${checkOutState.state.totalPrice}',
+              style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -48,9 +50,9 @@ class CheckoutPage extends StatelessWidget {
               style: TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 8),
-            const Text(
-              '\$430',
-              style: TextStyle(fontSize: 18),
+            Text(
+              '\$ ${checkOutState.state.totalPrice}',
+              style: const TextStyle(fontSize: 18),
             ),
             const Divider(height: 32),
             const Text(
@@ -71,7 +73,13 @@ class CheckoutPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle continue action
+                  ref.read(checkOutRiverpodProvider.notifier).checkOut(
+                      1,
+                      checkOutState.state.cartItems
+                          .map((e) => e.toMap())
+                          .toList(),
+                      1,
+                      "Purches");
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,

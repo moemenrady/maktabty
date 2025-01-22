@@ -2,21 +2,21 @@
 import 'dart:convert';
 
 class CartItemsModel {
-  final String? itemId;
-  final int? itemCount;
-  final String? itemName;
-  final String? itemImage;
-  final String? itemQuantity;
-  final int? itemPrice;
-  final int? totalPricePerItem;
+  final String itemId;
+  final int itemCount;
+  final String itemName;
+  final String itemImage;
+  final int itemQuantity;
+  final double itemPrice;
+  final double totalPricePerItem;
   CartItemsModel({
-    this.itemId,
-    this.itemCount,
-    this.itemName,
-    this.itemImage,
-    this.itemQuantity,
-    this.itemPrice,
-    this.totalPricePerItem,
+    this.itemId = "",
+    this.itemCount = 0,
+    this.itemName = "",
+    this.itemImage = "",
+    this.itemQuantity = 0,
+    this.itemPrice = 0,
+    this.totalPricePerItem = 0,
   });
 
   CartItemsModel copyWith({
@@ -24,9 +24,9 @@ class CartItemsModel {
     int? itemCount,
     String? itemName,
     String? itemImage,
-    String? itemQuantity,
-    int? itemPrice,
-    int? totalPricePerItem,
+    int? itemQuantity,
+    double? itemPrice,
+    double? totalPricePerItem,
   }) {
     return CartItemsModel(
       itemId: itemId ?? this.itemId,
@@ -56,10 +56,10 @@ class CartItemsModel {
       itemId: map['item_id'] as String? ?? "",
       itemCount: map['item_count'] as int? ?? 0,
       itemName: map['item_name'] as String? ?? "",
-      itemPrice: map['item_price'] as int? ?? 0,
-      itemQuantity: map['item_quantity'] as String? ?? "",
+      itemPrice: map['item_price'] as double? ?? 0,
+      itemQuantity: map['item_quantity'] as int? ?? 0,
       itemImage: map['item_image'] as String? ?? "",
-      totalPricePerItem: map['total_price_per_item'] as int? ?? 0,
+      totalPricePerItem: map['total_price_per_item'] as double? ?? 0,
     );
   }
 

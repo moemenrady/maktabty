@@ -57,4 +57,15 @@ class CheckOutRepository {
       return data;
     });
   }
+
+  Future<Either<Failure, void>> checkOut(
+      int userId,
+      List<Map<String, dynamic>> orderItems,
+      int addressId,
+      String transactionType) async {
+    return executeTryAndCatchForRepository(() async {
+      return await _checkOutRemoteDataSource.checkOut(
+          userId, orderItems, addressId, transactionType);
+    });
+  }
 }

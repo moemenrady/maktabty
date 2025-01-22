@@ -25,9 +25,9 @@ class CustomCartCard extends ConsumerWidget {
             width: 72.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24.r),
-              image: const DecorationImage(
-                  image: AssetImage("assets/images/offer2.jpg"),
-                  fit: BoxFit.cover),
+              image: DecorationImage(
+                  image: NetworkImage(cartItemsModel.itemImage),
+                  fit: BoxFit.fill),
             ),
           ),
           SizedBox(width: 16.w),
@@ -39,7 +39,7 @@ class CustomCartCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    cartItemsModel.itemName!,
+                    cartItemsModel.itemName,
                     style: TextStyles.blinker20SemiBoldBlack,
                     overflow: TextOverflow.fade,
                   ),

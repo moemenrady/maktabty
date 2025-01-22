@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/core/comman/entitys/categories.dart';
 import 'package:mktabte/features/auth/presentation/screens/onboarding.dart';
 import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
+import 'package:mktabte/features/home/presentation/screens/cartscreen.dart';
+import 'package:mktabte/features/home/presentation/screens/home.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/utils/custom_error_screen.dart';
+import 'features/admin/presentation/screens/add_items.dart';
+import 'features/admin/presentation/screens/item_page.dart';
+import 'features/admin/presentation/screens/view_orders_summary.dart';
 import 'features/check_out/presentation/screen/product_details_creen.dart';
 import 'features/home/presentation/screens/allcategriesscreen.dart';
+import 'features/home/presentation/screens/category.dart';
+import 'features/home/presentation/screens/userwishlistscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +37,16 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return const ProviderScope(child: MyApp());
+      },
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -51,7 +68,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const Onboard(),
+          home: const UserWishlistScreen(),
         );
       },
     );

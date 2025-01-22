@@ -13,9 +13,24 @@ final homeRepositoryProvider = Provider.autoDispose<HomeRepository>((ref) =>
 class HomeRepository {
   HomeRemoteDataSource remoteDataSource;
   HomeRepository({required this.remoteDataSource});
-  Future<Either<Failure, List<ItemModel>>> getAllItems() async {
+
+  Future<Either<Failure, List<ItemModel>>> getRecommendedItems() async {
     return executeTryAndCatchForRepository(() async {
-      final items = await remoteDataSource.getAllItems();
+      final items = await remoteDataSource.getRecommendedItems();
+      return items.map((item) => ItemModel.fromMap(item)).toList();
+    });
+  }
+
+  Future<Either<Failure, List<ItemModel>>> getBestSellingItems() async {
+    return executeTryAndCatchForRepository(() async {
+      final items = await remoteDataSource.getBestSellingItems();
+      return items.map((item) => ItemModel.fromMap(item)).toList();
+    });
+  }
+
+  Future<Either<Failure, List<ItemModel>>> getAllItems(int categoryId) async {
+    return executeTryAndCatchForRepository(() async {
+      final items = await remoteDataSource.getAllItems(categoryId);
       return items.map((item) => ItemModel.fromMap(item)).toList();
     });
   }
@@ -26,6 +41,49 @@ class HomeRepository {
       return categories
           .map((category) => Categories.fromMap(category))
           .toList();
+    });
+  }
+
+  Future<Either<Failure, List<ItemModel>>> fetchItemsWithFavorites(
+      int userId, int categoryId) async {
+    return executeTryAndCatchForRepository(() async {
+      final items =
+          await remoteDataSource.fetchItemsWithFavorites(userId, categoryId);
+      return items.map((item) => ItemModel.fromMap(item)).toList();
+    });
+  }
+
+  Future<Either<Failure, void>> addToFavorites(
+      int userId, String itemId) async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.addToFavorites(userId, itemId);
+    });
+  }
+
+  Future<Either<Failure, void>> removeFromFavorites(
+      int userId, String itemId) async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.removeFromFavorites(userId, itemId);
+    });
+  }
+
+  Future<Either<Failure, List<ItemModel>>> getUserFavorites(int userId) async {
+    return executeTryAndCatchForRepository(() async {
+      final items = await remoteDataSource.getUserFavorites(userId);
+      return items.map((item) => ItemModel.fromMap(item)).toList();
+    });
+  }
+
+  Future<Either<Failure, void>> addItemToCart(String itemId, int userId) async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.addItemToCart(itemId, userId);
+    });
+  }
+
+  Future<Either<Failure, void>> removeItemFromCart(
+      String itemId, int userId) async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.removeItemFromCart(itemId, userId);
     });
   }
 }

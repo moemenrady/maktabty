@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/comman/entitys/categories.dart';
 import '../../../../../core/utils/pick_image.dart';
 import '../../../data/model/item_model.dart';
 import '../../../data/repository/admin_repository.dart';
@@ -25,11 +25,45 @@ class AddItemRiverpod extends StateNotifier<AddItemRiverpodState> {
   final AdminRepository repository;
 
   AddItemRiverpod({required this.repository})
-      : super(AddItemRiverpodState(state: AddItemState.initial, items: []));
+      : super(AddItemRiverpodState(state: AddItemState.initial, items: [])) {
+    getAllCategories();
+  }
 
-  Future<void> uploadItem(ItemModel itemModel, File image) async {
+  Future<void> getAllCategories() async {
     state = state.copyWith(state: AddItemState.loading);
-    final response = await repository.uploadItem(itemModel, image);
+    final result = await repository.getAllCategories();
+    result.fold(
+      (l) => state = state.copyWith(
+        state: AddItemState.failure,
+        error: l.message,
+      ),
+      (categories) => state = state.copyWith(
+        state: AddItemState.initial,
+        categories: categories,
+      ),
+    );
+  }
+
+  void setSelectedCategory(Categories category) {
+    state = state.copyWith(selectedCategory: category);
+  }
+
+  Future<void> uploadItem(ItemModel itemModel, File? image) async {
+    if (state.selectedCategory == null) {
+      state = state.copyWith(
+        state: AddItemState.failure,
+        error: 'Please select a category',
+      );
+      return;
+    }
+
+    state = state.copyWith(state: AddItemState.loading);
+
+    final updatedItemModel = itemModel.copyWith(
+      categoryId: state.selectedCategory!.id,
+    );
+
+    final response = await repository.uploadItem(updatedItemModel, image);
     response.fold(
       (l) => state = state.copyWith(
         state: AddItemState.failure,
@@ -49,15 +83,5 @@ class AddItemRiverpod extends StateNotifier<AddItemRiverpodState> {
       state = state.copyWith(image: pickedImage);
     }
     state = state.copyWith(state: AddItemState.imageSelected);
-  }
-
-  void updateSelectedTopics(String topic) {
-    final currentTopics = List<String>.from(state.selectedTopics);
-    if (currentTopics.contains(topic)) {
-      currentTopics.remove(topic);
-    } else {
-      currentTopics.add(topic);
-    }
-    state = state.copyWith(selectedTopics: currentTopics);
   }
 }

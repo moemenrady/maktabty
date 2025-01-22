@@ -2,40 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mktabte/features/home/presentation/widgets/mainapppbar.dart';
 import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/product_bar.dart';
 import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/review_card.dart';
-import 'package:mktabte/features/home/presentation/widgets/roundedcontainer.dart';
 
 import '../../../../core/theme/text_style.dart';
+import '../../../admin/data/model/item_model.dart';
 
-class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
-
-  @override
-  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
-}
-
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  late PageController _pageController;
-
-  List<String> productsImgs = [
-    "assets/images/blackcontroller.png",
-    "assets/images/blackcontroller1.png",
-    "assets/images/blackcontroller.png",
-    "assets/images/blackcontroller1.png",
-  ];
-  String prod_desck =
-      "A sleek black joystick with neon accents and a comfortable grip for precise gaming control...";
-
-  @override
-  void initState() {
-    _pageController = PageController(initialPage: 0);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+class ProductDetailsScreen extends StatelessWidget {
+  final ItemModel item;
+  const ProductDetailsScreen({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -51,30 +24,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
               child: SizedBox(
-                height: 384,
-                width: double.infinity,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: productsImgs.length,
-                  itemBuilder: (context, index) {
-                    return Image.asset(
-                      productsImgs[index],
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.error,
-                            size: 50, color: Colors.red);
-                      },
-                    );
-                  },
-                ),
-              ),
+                  height: 384,
+                  width: double.infinity,
+                  child: Image.network(
+                    item.imageUrl,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.error,
+                          size: 50, color: Colors.red);
+                    },
+                  )),
             ),
 
-            // // Product title and price
-            // Text(
-            //   "Nike Sportswear Club Fleece",
-            //   style: TextStyles.Inter18SemiBoldlightBlack,
-            // ),
+            // Product title and price
+            Text(
+              item.name,
+              style: TextStyles.Inter18SemiBoldlightBlack,
+            ),
             // Padding(
             //   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             //   child: Text(
@@ -143,10 +109,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
 
             // ProductBar widget in the bottom
-            const Expanded(
+            Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: ProductBar(),
+                child: ProductBar(item: item),
               ),
             ),
           ],

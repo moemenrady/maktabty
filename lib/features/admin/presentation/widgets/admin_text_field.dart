@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class AdminTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
+  final TextInputType? keyboardType;
+  final int? maxLines;
   const AdminTextField({
     super.key,
     required this.controller,
     required this.hintText,
+    this.keyboardType,
+    this.maxLines = 1,
   });
 
   @override
@@ -16,7 +20,8 @@ class AdminTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
       ),
-      maxLines: null,
+      maxLines: maxLines,
+      keyboardType: keyboardType,
       //TODO:Add validator Regexs
       validator: (value) {
         if (value!.isEmpty) {

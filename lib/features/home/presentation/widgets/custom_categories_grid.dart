@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktabte/features/home/presentation/riverpods/categories_river_pod/categories_riverpod_state.dart';
 
 import '../../../../core/theme/text_style.dart';
 import '../riverpods/categories_river_pod/categories_riverpod.dart';
@@ -7,11 +8,14 @@ import '../screens/allcategriesscreen.dart';
 import '../screens/category.dart';
 
 class CustomCategoriesGrid extends ConsumerWidget {
-  const CustomCategoriesGrid({super.key});
+  final CategoriesRiverpodState state;
+  const CustomCategoriesGrid({super.key, required this.state});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(categoriesRiverpodProvider);
+    if (state.isLoading()) {
+      return const CircularProgressIndicator();
+    }
 
     return Expanded(
       child: Padding(
@@ -23,15 +27,16 @@ class CustomCategoriesGrid extends ConsumerWidget {
             mainAxisSpacing: 8.0, // Vertical space between items
             childAspectRatio: 1.0, // Aspect ratio of each grid item
           ),
-          itemCount: state.categories!.length,
+          itemCount: state.categories.length,
           itemBuilder: (context, index) {
-            final categories = state.categories![index];
+            final categories = state.categories[index];
             return InkWell(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CategoryScreen(),
+                    builder: (context) =>
+                        CategoryScreen(categoryId: categories.id),
                   ),
                 );
               },

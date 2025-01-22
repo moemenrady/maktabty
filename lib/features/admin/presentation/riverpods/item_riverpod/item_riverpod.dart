@@ -7,11 +7,21 @@ import '../../../../../core/utils/pick_image.dart';
 import '../../../data/model/item_model.dart';
 import '../../../data/repository/admin_repository.dart';
 import 'item_list_state.dart';
+import 'item_list_view_model.dart';
 
 final itemListProvider =
     StateNotifierProvider<ItemListController, ItemListState>((ref) {
   final repository = ref.watch(adminRepositoryProvider);
-  return ItemListController(repository: repository);
+  final controller = ItemListController(repository: repository);
+  Future.microtask(() => controller.fetchItems());
+  return controller;
+});
+
+final itemListViewModelProvider =
+    Provider.autoDispose<ItemListViewModel>((ref) {
+  final viewModel = ItemListViewModel();
+  ref.onDispose(() => viewModel.dispose());
+  return viewModel;
 });
 
 class ItemListController extends StateNotifier<ItemListState> {
@@ -19,7 +29,21 @@ class ItemListController extends StateNotifier<ItemListState> {
 
   ItemListController({required this.repository})
       : super(ItemListState.initial()) {
+    fetchCategories();
     fetchItems();
+  }
+
+  Future<void> fetchCategories() async {
+    final result = await repository.getAllCategories();
+    result.fold(
+      (failure) => state = state.copyWith(
+        status: ItemListStateStatus.failure,
+        error: failure.message,
+      ),
+      (categories) => state = state.copyWith(
+        categories: categories,
+      ),
+    );
   }
 
   Future<void> fetchItems() async {

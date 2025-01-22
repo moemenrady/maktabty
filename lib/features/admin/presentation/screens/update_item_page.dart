@@ -7,6 +7,7 @@ import '../../data/model/item_model.dart';
 import '../riverpods/item_riverpod/item_riverpod.dart';
 import '../riverpods/item_riverpod/update_item_view_model.dart';
 import '../../../../core/utils/pick_image.dart';
+import '../riverpods/add_item_riverpod/add_item_riverpod.dart';
 
 class UpdateItemPage extends ConsumerWidget {
   final ItemModel item;
@@ -37,10 +38,11 @@ class UpdateItemPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(updateItemViewModelProvider(item));
+    final categories = ref.watch(addItemRiverpodProvider).categories;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Update Item')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -72,10 +74,34 @@ class UpdateItemPage extends ConsumerWidget {
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
+            DropdownButtonFormField<int>(
+              value: item.categoryId,
+              decoration: const InputDecoration(labelText: 'Category'),
+              items: categories.map((category) {
+                return DropdownMenuItem(
+                  value: category.id,
+                  child: Text(category.name),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  viewModel.categoryIdController.text = value.toString();
+                }
+              },
+            ),
+            const SizedBox(height: 16),
             TextField(
-              controller: viewModel.categoryIdController,
-              decoration: const InputDecoration(labelText: 'Category ID'),
-              keyboardType: TextInputType.number,
+              controller: viewModel.wholesalePriceController,
+              decoration: const InputDecoration(labelText: 'Wholesale Price'),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: viewModel.retailPriceController,
+              decoration: const InputDecoration(labelText: 'Retail Price'),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
             ),
             const SizedBox(height: 24),
             ElevatedButton(
@@ -87,7 +113,13 @@ class UpdateItemPage extends ConsumerWidget {
                   categoryId:
                       int.tryParse(viewModel.categoryIdController.text) ??
                           item.categoryId,
-                  imageUrl: viewModel.imageUrl ?? item.imageUrl,
+                  imageUrl: viewModel.imageUrl,
+                  wholesalePrice: double.tryParse(
+                          viewModel.wholesalePriceController.text) ??
+                      item.wholesalePrice,
+                  retailPrice:
+                      double.tryParse(viewModel.retailPriceController.text) ??
+                          item.retailPrice,
                 );
 
                 final oldImageUrl =

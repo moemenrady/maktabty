@@ -3,15 +3,14 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:uuid/uuid.dart';
-import '../../../../core/constants/constants.dart';
-import '../../../../core/erorr/exception.dart';
+
 import '../../../../core/erorr/failure.dart';
 import '../../../../core/network/connction_checker.dart';
 import '../data_source/admin_remote_data_source.dart';
 import '../model/item_model.dart';
 import '../../../../core/comman/entitys/categories.dart';
 import '../../../../core/utils/try_and_catch.dart';
+import '../model/oders_summary_model.dart';
 
 final adminRepositoryProvider = Provider.autoDispose<AdminRepository>(
   (ref) => AdminRepository(
@@ -34,14 +33,17 @@ class AdminRepository {
 
   //TODO:Separate the uploadItemImage and  item upload
   Future<Either<Failure, ItemModel>> uploadItem(
-      ItemModel itemModel, File image) async {
+      ItemModel itemModel, File? image) async {
     return executeTryAndCatchForRepository(() async {
-      final imageUrl = await adminRemoteDataSource.uploadItemImage(
-        image: image,
-        itemId: itemModel.id!,
-      );
+      if (image != null) {
+        final imageUrl = await adminRemoteDataSource.uploadItemImage(
+          image: image,
+          itemId: itemModel.id,
+        );
 
-      itemModel = itemModel.copyWith(imageUrl: imageUrl);
+        itemModel = itemModel.copyWith(imageUrl: imageUrl);
+      }
+
       final itemData =
           await adminRemoteDataSource.uploadItem(itemModel.toMap());
       return ItemModel.fromMap(itemData);
@@ -141,6 +143,19 @@ class AdminRepository {
       final categoryData =
           await adminRemoteDataSource.addCategory(name, imageUrl);
       return Categories.fromMap(categoryData);
+    });
+  }
+
+  Future<Either<Failure, List<OrderSummaryModel>>>
+      fetchOrderSummaryByDateRange({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    return executeTryAndCatchForRepository(() async {
+      final result = await adminRemoteDataSource.fetchOrderSummaryByDateRange(
+          startDate: startDate, endDate: endDate);
+      final data = result.map((e) => OrderSummaryModel.fromMap(e)).toList();
+      return data;
     });
   }
 }

@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
-import 'package:mktabte/main.dart';
 
+import '../../../../admin/data/model/item_model.dart';
+import '../../../../home/presentation/screens/cartscreen.dart';
 import '../../riverpods/check_out/check_out_riverpod.dart';
+import '../../screen/cart_page.dart';
 
 class ProductBar extends ConsumerWidget {
-  const ProductBar({super.key});
+  final ItemModel item;
+  const ProductBar({super.key, required this.item});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final checkOutState = ref.watch(checkOutRiverpodProvider);
     return Scaffold(
       body: Stack(children: [
         Positioned(
@@ -38,44 +40,54 @@ class ProductBar extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      height: 40,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF68B3B),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: checkOutState.isLoading()
-                          ? const Center(child: CircularProgressIndicator())
-                          : TextButton(
-                              onPressed: () {
-                                ref
-                                    .read(checkOutRiverpodProvider.notifier)
-                                    .addItemToCart(
-                                        "8aad2a80-b210-11ef-a14c-af15a5030040",
-                                        1);
-                              },
-                              child: const Text(
-                                "Add to cart",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                    ),
+                        height: 40,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF68B3B),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Consumer(builder: (context, ref, child) {
+                          final checkOutState =
+                              ref.watch(checkOutRiverpodProvider);
+                          return checkOutState.isLoading()
+                              ? const Center(child: CircularProgressIndicator())
+                              : TextButton(
+                                  onPressed: () {
+                                    ref
+                                        .read(checkOutRiverpodProvider.notifier)
+                                        .addItemToCart(item.id, 1);
+                                  },
+                                  child: const Text(
+                                    "Add to cart",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                );
+                        })),
                     Container(
                       width: 150,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Color(0xFFF68B3B),
+                        color: const Color(0xFFF68B3B),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CartPage()));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset("assets/images/btns/cart_btn_img.png",width: 18.w,height: 18.h,),
+                            Image.asset(
+                              "assets/images/btns/cart_btn_img.png",
+                              width: 18.w,
+                              height: 18.h,
+                            ),
                             const SizedBox(width: 5),
                             const Text(
-                              "Buy Now",
+                              "Go To Cart",
                               style: TextStyle(color: Colors.white),
                             ),
                           ],
@@ -85,7 +97,7 @@ class ProductBar extends ConsumerWidget {
                     Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Color(0xFFF68B3B),
+                        color: const Color(0xFFF68B3B),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.grey.shade300),
                       ),
