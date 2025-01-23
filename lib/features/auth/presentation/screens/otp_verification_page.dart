@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/auth/presentation/riverpod/auth_state.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_txt_btn.dart';
-import 'package:mktabte/main.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../riverpod/auth_riverpod.dart';

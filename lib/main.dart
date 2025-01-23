@@ -14,6 +14,7 @@ import 'core/utils/custom_error_screen.dart';
 import 'features/admin/presentation/screens/add_items.dart';
 import 'features/admin/presentation/screens/item_page.dart';
 import 'features/admin/presentation/screens/view_orders_summary.dart';
+import 'features/auth/data/auth_gate.dart';
 import 'features/check_out/presentation/screen/product_details_creen.dart';
 import 'features/home/presentation/screens/allcategriesscreen.dart';
 import 'features/home/presentation/screens/category.dart';
@@ -68,7 +69,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const UserWishlistScreen(),
+          home: const AuthGate(),
         );
       },
     );
