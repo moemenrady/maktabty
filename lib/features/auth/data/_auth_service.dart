@@ -37,6 +37,23 @@ class AuthService {
     return user?.userMetadata?['name']; // Retrieve the name from user metadata
   }
 
+  // Send OTP to the phone number
+  Future<void> signInWithPhone(String phoneNumber) async {
+    await _supabase.auth.signInWithOtp(
+      phone: phoneNumber,
+    );
+  }
+
+  // Verify OTP and log the user in
+  Future<AuthResponse> verifyPhoneOtp(String phoneNumber, String otp) async {
+    final response = await _supabase.auth.verifyOTP(
+      phone: phoneNumber,
+      token: otp,
+      type: OtpType.sms, // We're using SMS for OTP
+    );
+    return response;
+  }
+
 //logout
   Future<void> signout() async {
     await _supabase.auth.signOut();
