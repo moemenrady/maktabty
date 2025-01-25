@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mktabte/core/theme/text_style.dart';
+import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String txt;
@@ -38,7 +39,12 @@ class CustomAppBar extends StatelessWidget {
             icon: Image.asset("assets/images/btns/black_notification_btn_img.png"),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CartPage(),
+          ),
+        );},
             icon: Image.asset("assets/images/btns/black_cart_btn_img.png"),
           ),
         ],

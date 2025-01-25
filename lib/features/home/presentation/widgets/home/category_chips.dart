@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/comman/entitys/categories.dart';
+import '../../../../../core/theme/text_style.dart';
 
 class CategoryChips extends StatelessWidget {
   final List<Categories> categories;
@@ -36,14 +37,17 @@ class CategoryChips extends StatelessWidget {
         child: Chip(
           label: Text(
             label,
-            style: TextStyle(
-              color: isSelected ? Colors.white : Colors.black,
-              fontFamily: 'Blinker',
-              fontSize: 14.sp,
+            style: TextStyles.Blinker14regular.copyWith(
+              color: isSelected
+                  ? Colors.white
+                  : Color(0xFF808080),
             ),
           ),
-          backgroundColor: isSelected ? Colors.orange : Colors.grey[200],
+          backgroundColor: isSelected ? Color(0xFFF68B3B) : Color(0xFFDADADA),
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
         ),
       ),
     );

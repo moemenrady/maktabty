@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/check_out/presentation/screen/product_details_creen.dart';
 import 'package:mktabte/features/home/presentation/widgets/category/custome_favourite_button.dart';
 

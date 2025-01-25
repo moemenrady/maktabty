@@ -6,6 +6,7 @@ import '../../../admin/data/model/item_model.dart';
 import '../riverpods/items_river_pod/items_riverpod.dart';
 import '../riverpods/items_river_pod/items_riverpod_state.dart';
 import '../widgets/category/custom_category_card.dart';
+import '../widgets/home/custom_search_bar.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
   final int categoryId;
@@ -33,11 +34,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
               CustomAppBar(txt: "Categoty1", hasArrow: true, hasIcons: true),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SearchBar(
-                  autoFocus: false,
-                  hintText: 'Search',
-                  leading: Image.asset("assets/images/Search-Magnifier.png"),
-                ),
+                child: CustomSearchBar(),
               ),
               const SizedBox(height: 8),
               Consumer(
@@ -130,7 +127,7 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
         crossAxisCount: 2,
         crossAxisSpacing: 8.0,
         mainAxisSpacing: 8.0,
-        childAspectRatio: 0.7,
+        childAspectRatio: 0.6,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
