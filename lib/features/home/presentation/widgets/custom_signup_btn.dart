@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/text_style.dart';
+import '../../../auth/data/_auth_service.dart';
 import '../../../auth/presentation/screens/signup_screen.dart';
 
 class CustomSignupBtn extends StatelessWidget {
@@ -19,7 +20,9 @@ class CustomSignupBtn extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignupScreen(),
+                        
+                        builder: (context) => const SignupScreen(),
+                        // builder: (context) => SignupScreen(),
                       ),
                     );
                   },

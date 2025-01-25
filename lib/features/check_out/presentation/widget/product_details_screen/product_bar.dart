@@ -21,6 +21,8 @@ class ProductBar extends ConsumerWidget {
           right: 0,
           bottom: 3,
           child: Container(
+            height: 60.h,
+            width: 296.w,
             margin: const EdgeInsets.symmetric(horizontal: 5.0),
             decoration: BoxDecoration(
               color: Colors.grey.shade300,
@@ -40,11 +42,11 @@ class ProductBar extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        height: 40,
+                        height: 45,
                         width: 150,
                         decoration: BoxDecoration(
                           color: const Color(0xFFF68B3B),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(25),
                         ),
                         child: Consumer(builder: (context, ref, child) {
                           final checkOutState =
@@ -65,10 +67,10 @@ class ProductBar extends ConsumerWidget {
                         })),
                     Container(
                       width: 150,
-                      height: 40,
+                      height: 45,
                       decoration: BoxDecoration(
                         color: const Color(0xFFF68B3B),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(25),
                       ),
                       child: InkWell(
                         onTap: () {
@@ -81,7 +83,7 @@ class ProductBar extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
-                              "assets/images/btns/cart_btn_img.png",
+                              "assets/images/Add_Item_Cart.png",
                               width: 18.w,
                               height: 18.h,
                             ),
@@ -95,9 +97,9 @@ class ProductBar extends ConsumerWidget {
                       ),
                     ),
                     Container(
-                      height: 40,
+                      height: 45,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF68B3B),
+                        color: const Color(0xF68B3B),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.grey.shade300),
                       ),
@@ -110,7 +112,7 @@ class ProductBar extends ConsumerWidget {
                                   .withOpacity(0.8),
                           child: const Icon(
                             Icons.favorite_border_outlined,
-                            color: Colors.white,
+                            color: Color(0xFFB05A1B),
                             size: 20,
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mktabte/features/auth/data/_auth_service.dart';
 import 'package:mktabte/features/auth/presentation/screens/forget_pass_screen.dart';
 import 'package:mktabte/features/auth/presentation/screens/signup_screen.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_txt_field.dart';
@@ -17,8 +18,34 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
-  TextEditingController Pass = TextEditingController();
-  TextEditingController email = TextEditingController();
+  final authservice = AuthService();
+  TextEditingController _passController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  String? _validateField(String value, String fieldName) {
+    if (value.isEmpty) {
+      return "$fieldName can't be empty.";
+    }
+    return null;
+  }
+
+  void loginFUN() async {
+    final email = _emailController.text;
+    final pass = _passController.text;
+    try {
+      await authservice.signinWithEmailPass(email, pass);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainBar(),
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Error: $e")));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +55,9 @@ class _LoginState extends State<LoginPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 70,),
+            SizedBox(
+              height: 70,
+            ),
             Center(
               child: Text(
                 "Log in",
@@ -50,8 +79,10 @@ class _LoginState extends State<LoginPage> {
                 style: TextStyles.Lato14extraBoldBlack,
               ),
             ),
-
-            Center(child: CustomTextField(hinttxt: "Enter your email", mycontroller: email)),
+            Center(
+                child: CustomTextField(
+                    hinttxt: "Enter your Email",
+                    mycontroller: _emailController)),
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.all(4.0),
@@ -63,18 +94,20 @@ class _LoginState extends State<LoginPage> {
             Center(
               child: CustompassTxtFiels(
                 hinttxt: "Enter your password",
-                mycontroller: Pass,
+                mycontroller: _passController,
               ),
             ),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ForgetPassScreen(),
-                      ),
-                    );},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgetPassScreen(),
+                    ),
+                  );
+                },
                 child: Text(
                   "Forgot password?",
                   style: TextStyles.Lato12extraBoldBlack,
@@ -83,35 +116,36 @@ class _LoginState extends State<LoginPage> {
             ),
             const SizedBox(height: 30),
             Center(
-              child: CustomTxtBtn(txtstyle: TextStyles.Lato16extraBoldBlack,btnWidth: 327,btnHeight: 48,
-              btnradious: 15,
-              bgclr: Color(0xFFF68B3B),
+              child: CustomTxtBtn(
+                txtstyle: TextStyles.Lato16extraBoldBlack,
+                btnWidth: 327,
+                btnHeight: 48,
+                btnradious: 15,
+                bgclr: Color(0xFFF68B3B),
                 btnName: "Log in",
                 onPress: () {
-                  if (email.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Email can't be empty."),
-                      ),
-                    );
-                  } else if (Pass.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Password can't be empty."),
-                      ),
-                    );
+                  final email = _emailController.text;
+                  final password = _passController.text;
+
+                  // Validation checks
+                  final emailError = _validateField(email, "Email");
+                  final passwordError = _validateField(password, "Password");
+
+                  if (emailError != null) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(emailError)));
+                  } else if (passwordError != null) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(passwordError)));
                   } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MainBar(),
-                      ),
-                    );
+                    loginFUN();
                   }
                 },
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             CustomSignupBtn(),
           ],
         ),

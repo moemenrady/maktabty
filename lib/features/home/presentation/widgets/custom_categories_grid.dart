@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/home/presentation/riverpods/categories_river_pod/categories_riverpod_state.dart';
 
 import '../../../../core/theme/text_style.dart';
@@ -21,11 +22,11 @@ class CustomCategoriesGrid extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Number of columns
-            crossAxisSpacing: 8.0, // Horizontal space between items
-            mainAxisSpacing: 8.0, // Vertical space between items
-            childAspectRatio: 1.0, // Aspect ratio of each grid item
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 16.w,
+            mainAxisSpacing: 16.h,
           ),
           itemCount: state.categories.length,
           itemBuilder: (context, index) {
@@ -43,10 +44,10 @@ class CustomCategoriesGrid extends ConsumerWidget {
               child: Card(
                 elevation: 8,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                     child: Column(
                       children: [
                         Image.network(
@@ -54,7 +55,7 @@ class CustomCategoriesGrid extends ConsumerWidget {
                           fit: BoxFit.cover,
                         ),
                         const Spacer(),
-                        Text(categories.name),
+                        Text(categories.name,style: TextStyles.Roboto14mediumblackForText,),
                         const Spacer(),
                       ],
                     )),

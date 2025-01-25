@@ -7,6 +7,7 @@ import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../admin/data/model/item_model.dart';
 import '../riverpods/home_river_pod/home_riverpod.dart';
+import '../widgets/home/custom_search_bar.dart';
 import '../widgets/home/custome_show_recommend_and_offers.dart';
 import '../widgets/home/category_chips.dart';
 
@@ -33,41 +34,32 @@ class HomePpage extends ConsumerWidget {
                         children: [
                           SvgPicture.asset(
                             'assets/images/home_logo.svg',
-                            height: 40.h,
+                            height: 28.h,
+                            width: 175.w,
                           ),
                           const Spacer(),
                           IconButton(
-                            icon:
-                                Icon(Icons.notifications_outlined, size: 24.w),
+                            icon: Image.asset(
+                              "assets/images/btns/notification_icon.png",
+                              width: 20.w,
+                              height: 20.h,
+                            ),
                             onPressed: () {},
                           ),
                           IconButton(
-                            icon:
-                                Icon(Icons.shopping_cart_outlined, size: 24.w),
+                            icon: Image.asset(
+                              "assets/images/btns/cart_icon_black.png",
+                              width: 20.w,
+                              height: 20.h,
+                            ),
                             onPressed: () {},
                           ),
                         ],
                       ),
                       SizedBox(height: 16.h),
                       // Search Bar
-                      SearchBar(
-                        hintText: 'Search',
-                        hintStyle: WidgetStateProperty.all(
-                          TextStyle(
-                            color: Colors.grey,
-                            fontFamily: 'Blinker',
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                        leading: Icon(Icons.search, size: 20.w),
-                        padding: WidgetStateProperty.all(
-                          EdgeInsets.symmetric(horizontal: 16.w),
-                        ),
-                        elevation: WidgetStateProperty.all(0),
-                        backgroundColor: WidgetStateProperty.all(
-                          Colors.grey[100],
-                        ),
-                      ),
+                      CustomSearchBar(),
+
                       SizedBox(height: 16.h),
                       // Offers Carousel
                       CustomeShowRecommendAndOffers(
@@ -97,11 +89,7 @@ class HomePpage extends ConsumerWidget {
                             onPressed: () {},
                             child: Text(
                               'See all',
-                              style: TextStyle(
-                                color: AppPallete.primaryColor,
-                                fontFamily: 'Blinker',
-                                fontSize: 14.sp,
-                              ),
+                              style: TextStyles.Blinker16regularorangeColor,
                             ),
                           ),
                         ],
@@ -115,6 +103,22 @@ class HomePpage extends ConsumerWidget {
                                 child: CircularProgressIndicator(),
                               ),
                             )
+                            // : ListView.builder(
+                            //   shrinkWrap: true,
+                            //   physics: const NeverScrollableScrollPhysics(),
+                            //   itemCount: homeState.selectedCategory != null
+                            //       ? homeState.categoryItems.length
+                            //       : homeState.bestSellingItems.length,
+                            //   itemBuilder: (context, index) {
+                            //     final item = homeState.selectedCategory != null
+                            //         ? homeState.categoryItems[index]
+                            //         : homeState.bestSellingItems[index];
+                            //     return _buildProductCard(item);
+                            //   },),
+
+
+
+
                           : GridView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
