@@ -10,6 +10,12 @@ class TextStyles {
       fontFamily: "Blinker",
       color: AppPallete.lightGreyForText);
 
+  static TextStyle blinker20SemiBoldwhite = TextStyle(
+      fontSize: 20.h,
+      fontWeight: FontWeightHelper.semiBold,
+      fontFamily: "Blinker",
+      color: AppPallete.white);
+
   static TextStyle blinker20SemiBoldBlack = TextStyle(
       fontSize: 20.h,
       fontWeight: FontWeightHelper.semiBold,
