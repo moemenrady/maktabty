@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
-import '../../data/model/oders_summary_model.dart';
+import '../../../../core/comman/entitys/oders_summary_model.dart';
 
 class OrderSummaryCard extends StatelessWidget {
   final OrderSummaryModel order;

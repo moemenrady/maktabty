@@ -1,4 +1,4 @@
-import '../../../data/model/oders_summary_model.dart';
+import '../../../../../core/comman/entitys/oders_summary_model.dart';
 
 enum ViewOrdersSummaryStatus { initial, loading, success, failure }
 

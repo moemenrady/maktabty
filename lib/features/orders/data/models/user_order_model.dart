@@ -1,4 +1,4 @@
-class OrderSummaryModel {
+class UserOrderModel {
   final String orderId;
   final int userId;
   final String address;
@@ -9,38 +9,38 @@ class OrderSummaryModel {
   final String itemId;
   final String itemName;
   final String imageUrl;
+  final int totalQuantity;
+  final int quantity;
   final double itemPrice;
-  final int itemStockQuantity;
-  final int previousQuantity;
-  final int nextQuantity;
-  final int transactionQuantity;
-  final String transactionType;
-
-  OrderSummaryModel({
+  final double totalPrice;
+  final String orderState;
+  final List<UserOrderModel> items;
+  UserOrderModel({
     this.orderId = '',
     this.userId = 0,
     this.address = '',
     this.region = '',
     this.userName = '',
     this.addressId = 0,
+    this.totalPrice = 0.0,
+    this.totalQuantity = 0,
+    this.quantity = 0,
     DateTime? orderCreatedAt,
     this.itemId = '',
     this.itemName = '',
     this.imageUrl = '',
     this.itemPrice = 0.0,
-    this.itemStockQuantity = 0,
-    this.previousQuantity = 0,
-    this.nextQuantity = 0,
-    this.transactionQuantity = 0,
-    this.transactionType = '',
+    this.orderState = '',
+    this.items = const [],
   }) : orderCreatedAt = orderCreatedAt ?? DateTime.now();
 
   /// Factory constructor to create an instance from a map
-  factory OrderSummaryModel.fromMap(Map<String, dynamic> map) {
-    return OrderSummaryModel(
+  factory UserOrderModel.fromMap(Map<String, dynamic> map) {
+    return UserOrderModel(
       orderId: map['order_id'] ?? '',
       userId: map['user_id'] ?? 0,
       address: map['address'] ?? '',
+      quantity: map['quantity'] ?? 0,
       region: map['region'] ?? '',
       userName: map['user_name'] ?? '',
       addressId: map['adress_id'] ?? 0,
@@ -51,11 +51,8 @@ class OrderSummaryModel {
       itemName: map['item_name'] ?? '',
       imageUrl: map['image_url'] ?? '',
       itemPrice: (map['item_price'] as num?)?.toDouble() ?? 0.0,
-      itemStockQuantity: map['item_stock_quantity'] ?? 0,
-      previousQuantity: map['previous_quantity'] ?? 0,
-      nextQuantity: map['next_quantity'] ?? 0,
-      transactionQuantity: map['transaction_quantity'] ?? 0,
-      transactionType: map['transaction_type'] ?? '',
+      orderState: map['state'] ?? '',
+      items: map['items'] ?? [],
     );
   }
 
@@ -73,20 +70,19 @@ class OrderSummaryModel {
       'item_name': itemName,
       'image_url': imageUrl,
       'item_price': itemPrice,
-      'item_stock_quantity': itemStockQuantity,
-      'previous_quantity': previousQuantity,
-      'next_quantity': nextQuantity,
-      'transaction_quantity': transactionQuantity,
-      'transaction_type': transactionType,
+      'quantity': quantity,
+      'state': orderState,
+      'items': items,
     };
   }
 
   /// Copy the object with modified values
-  OrderSummaryModel copyWith({
+  UserOrderModel copyWith({
     String? orderId,
     int? userId,
     String? address,
     String? region,
+    int? totalQuantity,
     String? userName,
     int? addressId,
     DateTime? orderCreatedAt,
@@ -94,29 +90,28 @@ class OrderSummaryModel {
     String? itemName,
     String? imageUrl,
     double? itemPrice,
-    int? itemStockQuantity,
-    int? previousQuantity,
-    int? nextQuantity,
-    int? transactionQuantity,
-    String? transactionType,
+    int? quantity,
+    double? totalPrice,
+    String? orderState,
+    List<UserOrderModel>? items,
   }) {
-    return OrderSummaryModel(
+    return UserOrderModel(
       orderId: orderId ?? this.orderId,
       userId: userId ?? this.userId,
       address: address ?? this.address,
       region: region ?? this.region,
       userName: userName ?? this.userName,
+      totalQuantity: totalQuantity ?? this.totalQuantity,
       addressId: addressId ?? this.addressId,
       orderCreatedAt: orderCreatedAt ?? this.orderCreatedAt,
       itemId: itemId ?? this.itemId,
       itemName: itemName ?? this.itemName,
       imageUrl: imageUrl ?? this.imageUrl,
       itemPrice: itemPrice ?? this.itemPrice,
-      itemStockQuantity: itemStockQuantity ?? this.itemStockQuantity,
-      previousQuantity: previousQuantity ?? this.previousQuantity,
-      nextQuantity: nextQuantity ?? this.nextQuantity,
-      transactionQuantity: transactionQuantity ?? this.transactionQuantity,
-      transactionType: transactionType ?? this.transactionType,
+      quantity: quantity ?? this.quantity,
+      totalPrice: totalPrice ?? this.totalPrice,
+      orderState: orderState ?? this.orderState,
+      items: items ?? this.items,
     );
   }
 
@@ -127,22 +122,30 @@ class OrderSummaryModel {
     String? address,
     String? region,
     String? userName,
+    int? totalQuantity,
     int? addressId,
     String? itemId,
     String? itemName,
     String? imageUrl,
-    String? transactionType,
+    String? orderState,
+    List<UserOrderModel>? items,
+    int? quantity,
+    double? totalPrice,
   }) {
     return (orderId == null || this.orderId == orderId) &&
         (userId == null || this.userId == userId) &&
         (address == null || this.address == address) &&
         (region == null || this.region == region) &&
         (userName == null || this.userName == userName) &&
+        (totalQuantity == null || this.totalQuantity == totalQuantity) &&
         (addressId == null || this.addressId == addressId) &&
         (itemId == null || this.itemId == itemId) &&
         (itemName == null || this.itemName == itemName) &&
         (imageUrl == null || this.imageUrl == imageUrl) &&
-        (transactionType == null || this.transactionType == transactionType);
+        (orderState == null || this.orderState == orderState) &&
+        (quantity == null || this.quantity == quantity) &&
+        (totalPrice == null || this.totalPrice == totalPrice) &&
+        (items == null || this.items == items);
   }
 
   /// String representation of the object
@@ -150,8 +153,7 @@ class OrderSummaryModel {
   String toString() {
     return 'OrderSummary(orderId: $orderId, userId: $userId, address: $address, region: $region, '
         'userName: $userName, addressId: $addressId, orderCreatedAt: $orderCreatedAt, itemId: $itemId, '
-        'itemName: $itemName, imageUrl: $imageUrl, itemPrice: $itemPrice, itemStockQuantity: $itemStockQuantity, '
-        'previousQuantity: $previousQuantity, nextQuantity: $nextQuantity, transactionQuantity: $transactionQuantity, '
-        'transactionType: $transactionType)';
+        'itemName: $itemName, imageUrl: $imageUrl, itemPrice: $itemPrice, quantity: $quantity, '
+        'totalPrice: $totalPrice, totalQuantity: $totalQuantity, orderState: $orderState, items: $items)';
   }
 }

@@ -12,12 +12,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/utils/custom_error_screen.dart';
 import 'features/admin/presentation/screens/add_items.dart';
+import 'features/admin/presentation/screens/admin_control_user_orders.dart';
 import 'features/admin/presentation/screens/item_page.dart';
 import 'features/admin/presentation/screens/view_orders_summary.dart';
 import 'features/check_out/presentation/screen/product_details_creen.dart';
 import 'features/home/presentation/screens/allcategriesscreen.dart';
 import 'features/home/presentation/screens/category.dart';
 import 'features/home/presentation/screens/userwishlistscreen.dart';
+import 'features/orders/presentation/screens/user_orders_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,7 +70,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const UserWishlistScreen(),
+          home: const AdminControlUserOrders(),
         );
       },
     );

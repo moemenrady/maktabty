@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../core/utils/try_and_catch.dart';
 
 final supabaseClientProvider =
@@ -33,6 +34,8 @@ abstract interface class AdminRemoteDataSource {
     required DateTime startDate,
     required DateTime endDate,
   });
+  Future<List<Map<String, dynamic>>> fetchOrderSummaryForUser();
+  Future<void> updateOrderState(String orderId, OrderState newState);
 }
 
 class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
@@ -188,6 +191,27 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
 
       // Map the response to a list of OrderSummary objects
       return response;
+    });
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchOrderSummaryForUser() async {
+    return executeTryAndCatchForDataLayer(() async {
+      final response = await supabaseClient
+          .from('user_orders')
+          .select()
+          .order('order_created_at', ascending: false);
+      // Map the response to a list of OrderSummary objects
+      return response;
+    });
+  }
+
+  @override
+  Future<void> updateOrderState(String orderId, OrderState newState) async {
+    return executeTryAndCatchForDataLayer(() async {
+      await supabaseClient
+          .from('orders')
+          .update({'state': newState.name}).match({'id': orderId});
     });
   }
 }

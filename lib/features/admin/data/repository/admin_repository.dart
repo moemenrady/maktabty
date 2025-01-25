@@ -4,13 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
+import '../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../core/erorr/failure.dart';
 import '../../../../core/network/connction_checker.dart';
+import '../../../orders/data/models/user_order_model.dart';
 import '../data_source/admin_remote_data_source.dart';
 import '../model/item_model.dart';
 import '../../../../core/comman/entitys/categories.dart';
 import '../../../../core/utils/try_and_catch.dart';
-import '../model/oders_summary_model.dart';
+import '../../../../core/comman/entitys/oders_summary_model.dart';
 
 final adminRepositoryProvider = Provider.autoDispose<AdminRepository>(
   (ref) => AdminRepository(
@@ -156,6 +158,22 @@ class AdminRepository {
           startDate: startDate, endDate: endDate);
       final data = result.map((e) => OrderSummaryModel.fromMap(e)).toList();
       return data;
+    });
+  }
+
+  Future<Either<Failure, List<UserOrderModel>>>
+      fetchOrderSummaryForUser() async {
+    return executeTryAndCatchForRepository(() async {
+      final result = await adminRemoteDataSource.fetchOrderSummaryForUser();
+      final data = result.map((e) => UserOrderModel.fromMap(e)).toList();
+      return data;
+    });
+  }
+
+  Future<Either<Failure, void>> updateOrderState(
+      String orderId, OrderState newState) async {
+    return executeTryAndCatchForRepository(() async {
+      await adminRemoteDataSource.updateOrderState(orderId, newState);
     });
   }
 }

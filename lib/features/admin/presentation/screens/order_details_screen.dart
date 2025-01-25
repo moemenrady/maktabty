@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
-import '../../data/model/oders_summary_model.dart';
+import '../../../../core/comman/entitys/oders_summary_model.dart';
 import '../riverpods/view_orders_summary/view_orders_summary_riverpod.dart';
 
 class OrderDetailsScreen extends ConsumerWidget {
