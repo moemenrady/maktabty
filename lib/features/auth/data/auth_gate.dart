@@ -26,8 +26,8 @@ class AuthGate extends StatelessWidget {
           return MainBar();
         } else {
           // If session is null, the user is not logged in
-          return SignupWithPhoneScreen();
-          //return Onboard();
+          //return SignupWithPhoneScreen();
+          return Onboard();
         }
       },
     );

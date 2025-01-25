@@ -21,7 +21,9 @@ class CustomeShowRecommendAndOffers extends StatelessWidget {
             ),
           ),
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
+            width: 335.w,
+            height: 190.h,
+            margin: const EdgeInsets.symmetric(horizontal: 1),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
@@ -35,8 +37,8 @@ class CustomeShowRecommendAndOffers extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Image.network(
-                width: 300.w,
-                height: 100.h,
+                width: 335.w,
+                height: 190.h,
                 item.imageUrl,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
@@ -51,8 +53,8 @@ class CustomeShowRecommendAndOffers extends StatelessWidget {
         );
       }).toList(),
       options: CarouselOptions(
-        height: 200,
-        viewportFraction: 0.7,
+        height: 190.h,
+        viewportFraction: 0.85,
         enlargeCenterPage: true,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),

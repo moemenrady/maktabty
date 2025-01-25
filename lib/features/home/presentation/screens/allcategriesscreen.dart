@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import '../riverpods/categories_river_pod/categories_riverpod.dart';
 import '../widgets/custom_categories_grid.dart';
-import '../widgets/mainapppbar.dart';
+import '../widgets/home/custom_search_bar.dart';
 
 class CategryScreen extends ConsumerWidget {
   const CategryScreen({super.key});
@@ -10,16 +12,13 @@ class CategryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: MainAppBar(context, false, "All categories"),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(10.0),
-            child: SearchBar(
-              autoFocus: false,
-              hintText: 'Search',
-              leading: Icon(Icons.search_outlined),
-            ),
+          SizedBox(height: 5.h,),
+          CustomAppBar(txt: "All categories",hasArrow:  false,hasIcons:  true),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: CustomSearchBar(),
           ),
           const SizedBox(
             height: 16,

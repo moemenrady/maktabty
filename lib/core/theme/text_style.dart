@@ -46,6 +46,12 @@ class TextStyles {
       fontFamily: "Roboto",
       color: AppPallete.blackForText);
 
+  static TextStyle Roboto14mediumblackForText = const TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeightHelper.medium,
+      fontFamily: "Roboto",
+      color: AppPallete.blackForText);
+
   static TextStyle Roboto15regularlightBlack = const TextStyle(
       fontSize: 15,
       fontWeight: FontWeightHelper.regular,
@@ -117,6 +123,12 @@ class TextStyles {
       fontWeight: FontWeightHelper.semiBold,
       fontFamily: "Blinker",
       color: AppPallete.blackForText);
+
+  static TextStyle Blinker16regularorangeColor = const TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeightHelper.regular,
+      fontFamily: "Blinker",
+      color: AppPallete.orangeColor);
 
   static TextStyle Blinker16regularlightOrange = const TextStyle(
       fontSize: 16,
@@ -276,4 +288,10 @@ class TextStyles {
     color: AppPallete.lightBlack,
   );
 
+  static TextStyle Roboto12regularlightGrey = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Roboto",
+    color: AppPallete.lightGrey,
+  );
 }
