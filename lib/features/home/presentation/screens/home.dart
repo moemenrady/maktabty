@@ -6,6 +6,7 @@ import 'package:mktabte/features/home/presentation/riverpods/home_river_pod/home
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../admin/data/model/item_model.dart';
+import '../../../check_out/presentation/screen/product_details_creen.dart';
 import '../riverpods/home_river_pod/home_riverpod.dart';
 import '../widgets/home/custom_search_bar.dart';
 import '../widgets/home/custome_show_recommend_and_offers.dart';
@@ -24,13 +25,14 @@ class HomePpage extends ConsumerWidget {
         child: homeState.isLoading()
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(16.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // App Bar with Logo and Icons
-                      Row(
+                ////////////////////
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // App Bar with Logo and Icons
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
                         children: [
                           SvgPicture.asset(
                             'assets/images/home_logo.svg',
@@ -56,18 +58,24 @@ class HomePpage extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16.h),
-                      // Search Bar
-                      CustomSearchBar(),
+                    ),
+                    SizedBox(height: 16.h),
+                    // Search Bar
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomSearchBar(),
+                    ),
 
-                      SizedBox(height: 16.h),
-                      // Offers Carousel
-                      CustomeShowRecommendAndOffers(
-                        items: homeState.recommendedItems,
-                      ),
-                      SizedBox(height: 16.h),
-                      // Category Chips
-                      CategoryChips(
+                    SizedBox(height: 16.h),
+                    // Offers Carousel
+                    CustomeShowRecommendAndOffers(
+                      items: homeState.recommendedItems,
+                    ),
+                    SizedBox(height: 16.h),
+                    // Category Chips
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: CategoryChips(
                         categories: homeState.categories ?? [],
                         selectedCategory: homeState.selectedCategory,
                         onCategorySelected: (category) {
@@ -76,9 +84,12 @@ class HomePpage extends ConsumerWidget {
                               .selectCategory(category!);
                         },
                       ),
-                      SizedBox(height: 16.h),
-                      // Best Seller Section
-                      Row(
+                    ),
+                    SizedBox(height: 16.h),
+                    // Best Seller Section
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -94,38 +105,37 @@ class HomePpage extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.h),
-                      // Items Grid
-                      homeState.isCategoryLoading
-                          ? const Center(
+                    ),
+                    SizedBox(height: 8.h),
+                    // Items Grid
+                    homeState.isCategoryLoading
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(
                               child: Padding(
                                 padding: EdgeInsets.all(32.0),
                                 child: CircularProgressIndicator(),
                               ),
-                            )
-                          // : ListView.builder(
-                          //   shrinkWrap: true,
-                          //   physics: const NeverScrollableScrollPhysics(),
-                          //   itemCount: homeState.selectedCategory != null
-                          //       ? homeState.categoryItems.length
-                          //       : homeState.bestSellingItems.length,
-                          //   itemBuilder: (context, index) {
-                          //     final item = homeState.selectedCategory != null
-                          //         ? homeState.categoryItems[index]
-                          //         : homeState.bestSellingItems[index];
-                          //     return _buildProductCard(item);
-                          //   },),
+                            ),
+                          )
+                        // : ListView.builder(
+                        //   shrinkWrap: true,
+                        //   physics: const NeverScrollableScrollPhysics(),
+                        //   itemCount: homeState.selectedCategory != null
+                        //       ? homeState.categoryItems.length
+                        //       : homeState.bestSellingItems.length,
+                        //   itemBuilder: (context, index) {
+                        //     final item = homeState.selectedCategory != null
+                        //         ? homeState.categoryItems[index]
+                        //         : homeState.bestSellingItems[index];
+                        //     return _buildProductCard(item);
+                        //   },),
 
-                          : GridView.builder(
+                        : Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.75,
-                                crossAxisSpacing: 16.w,
-                                mainAxisSpacing: 16.h,
-                              ),
                               itemCount: homeState.selectedCategory != null
                                   ? homeState.categoryItems.length
                                   : homeState.bestSellingItems.length,
@@ -133,78 +143,171 @@ class HomePpage extends ConsumerWidget {
                                 final item = homeState.selectedCategory != null
                                     ? homeState.categoryItems[index]
                                     : homeState.bestSellingItems[index];
-                                return _buildProductCard(item);
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8.h, horizontal: 8.w),
+                                  child: _buildProductCard(context, item),
+                                );
                               },
                             ),
-                    ],
-                  ),
+                          ),
+
+                    // : GridView.builder(
+                    //     shrinkWrap: true,
+                    //     physics: const NeverScrollableScrollPhysics(),
+                    //     gridDelegate:
+                    //         SliverGridDelegateWithFixedCrossAxisCount(
+                    //       crossAxisCount: 2,
+                    //       childAspectRatio: 0.75,
+                    //       crossAxisSpacing: 16.w,
+                    //       mainAxisSpacing: 16.h,
+                    //     ),
+                    //     itemCount: homeState.selectedCategory != null
+                    //         ? homeState.categoryItems.length
+                    //         : homeState.bestSellingItems.length,
+                    //     itemBuilder: (context, index) {
+                    //       final item = homeState.selectedCategory != null
+                    //           ? homeState.categoryItems[index]
+                    //           : homeState.bestSellingItems[index];
+                    //       return _buildProductCard(item);
+                    //     },
+                    //   ),
+                  ],
                 ),
               ),
       ),
     );
   }
 
-  Widget _buildProductCard(ItemModel item) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.r),
+//   Widget _buildProductCard(ItemModel item) {
+//     return Card(
+//       elevation: 4,
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(12.r),
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Expanded(
+//             child: ClipRRect(
+//               borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+//               child: Image.network(
+//                 item.imageUrl,
+//                 fit: BoxFit.cover,
+//                 width: double.infinity,
+//               ),
+//             ),
+//           ),
+//           Padding(
+//             padding: EdgeInsets.all(8.w),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   item.name,
+//                   style: TextStyle(
+//                     fontFamily: 'Blinker',
+//                     fontWeight: FontWeight.w600,
+//                     fontSize: 16.sp,
+//                   ),
+//                   maxLines: 1,
+//                   overflow: TextOverflow.ellipsis,
+//                 ),
+//                 SizedBox(height: 4.h),
+//                 Row(
+//                   children: [
+  // Text(
+  //   '${item.retailPrice} Sales',
+  //   style: TextStyle(
+  //     fontFamily: 'Blinker',
+  //     color: Colors.grey,
+  //     fontSize: 14.sp,
+  //   ),
+  // ),
+//                     const Spacer(),
+//                     Icon(Icons.star, color: Colors.amber, size: 16.w),
+//                     Text(
+//                       '4.5',
+//                       style: TextStyle(
+//                         fontFamily: 'Blinker',
+//                         color: Colors.grey[600],
+//                         fontSize: 14.sp,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+  Widget _buildProductCard(BuildContext context, ItemModel item) {
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProductDetailsScreen(item: item),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25.r),
+        ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(25.r), top: Radius.circular(25.r)),
               child: Image.network(
                 item.imageUrl,
                 fit: BoxFit.cover,
-                width: double.infinity,
+                width: double.infinity.w,
+                height: 247.h,
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(8.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name,
-                  style: TextStyle(
-                    fontFamily: 'Blinker',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
+            Positioned(
+                bottom: 30,
+                left: 27,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(103, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(20.r)),
+                  width: 307.w,
+                  height: 72.h,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          '${item.name} Sales',
+                          style: TextStyles.blinker20SemiBoldwhite,
+                        ),
+                        //Image.asset("assets/images/spacer.png"),
+                        const VerticalDivider(
+                          color: Colors.white,
+                          thickness: 1,
+                        ),
+                        Text(
+                          'EGP${item.retailPrice}',
+                          style: TextStyles.blinker20SemiBoldwhite,
+                        ),
+                        Image.asset(
+                          "assets/images/btns/selected_cart_btn_img.png",
+                          width: 20.w,
+                          height: 20.h,
+                        ),
+                      ],
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: 4.h),
-                Row(
-                  children: [
-                    Text(
-                      '${item.retailPrice} Sales',
-                      style: TextStyle(
-                        fontFamily: 'Blinker',
-                        color: Colors.grey,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    const Spacer(),
-                    Icon(Icons.star, color: Colors.amber, size: 16.w),
-                    Text(
-                      '4.5',
-                      style: TextStyle(
-                        fontFamily: 'Blinker',
-                        color: Colors.grey[600],
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+                )), //name & prrice
+          ],
+        ),
       ),
     );
   }
