@@ -5,19 +5,43 @@ import 'package:mktabte/features/check_out/presentation/riverpods/check_out/chec
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 import 'package:mktabte/features/check_out/presentation/screen/check_out_screen.dart';
 import 'package:mktabte/features/check_out/presentation/widget/cart_page/custom_cart_button.dart';
+import 'package:mktabte/features/check_out/presentation/widget/cart_page/user_all_addresses.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import '../../../../core/theme/text_style.dart';
 import '../widget/cart_page/cart_address_button_sheet_dialog.dart';
 import '../widget/cart_page/cart_state_listner.dart';
 import '../widget/cart_page/custom_cart_card.dart';
 
+final selectedLocationProvider = StateProvider<String?>((ref) => null);
+
 class CartPage extends ConsumerWidget {
   const CartPage({super.key});
+
+  Future<void> allAddressesFunction(BuildContext context, WidgetRef ref) async {
+    // Open the modal and wait for the selected address
+    final result = await showModalBottomSheet<Map<String, String>>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        return const UserAllAddresses();
+      },
+    );
+
+    // Update the state with the selected location using Riverpod
+    if (result != null) {
+      ref.read(selectedLocationProvider.notifier).state =
+          "${result['region']} - ${result['address']}";
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checkOutController = ref.watch(checkOutRiverpodProvider.notifier);
     final state = ref.watch(checkOutRiverpodProvider);
+    final selectedLocation = ref.watch(selectedLocationProvider);
 
     ref.listen(checkOutRiverpodProvider, (previous, next) {
       cartStateListner(context, checkOutController, next);
@@ -45,9 +69,12 @@ class CartPage extends ConsumerWidget {
                           style: TextStyles.blinker20SemiBoldBlack,
                         ),
                         const Spacer(),
-                        Text(
-                          "Edit",
-                          style: TextStyles.blinker16RegularLightBlue,
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Edit",
+                            style: TextStyles.blinker16RegularLightBlue,
+                          ),
                         ),
                       ],
                     ),
@@ -71,7 +98,10 @@ class CartPage extends ConsumerWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  Divider(color: Color(0xFFCACACA),thickness: 1,),
+                  Divider(
+                    color: Color(0xFFCACACA),
+                    thickness: 1,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -93,6 +123,7 @@ class CartPage extends ConsumerWidget {
                           ))
                     ],
                   ),
+
                   Row(
                     children: [
                       Image.asset("assets/images/location_img.png"),
@@ -100,22 +131,29 @@ class CartPage extends ConsumerWidget {
                         width: 8.w,
                       ),
                       Text(
-                        "User location",
+                        selectedLocation ??
+                            "User location", // Show the selected location or default text
                         style: TextStyles.Inter12regularlightBlack,
                       ),
                       const Spacer(),
                       IconButton(
-                          onPressed: () {},
-                          icon: Image.asset(
-                            "assets/images/arrow_right.png",
-                            height: 22.h,
-                          ))
+                        onPressed: () async {
+                          await allAddressesFunction(context, ref);
+                        },
+                        icon: Image.asset(
+                          "assets/images/arrow_right.png",
+                          height: 22.h,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 14.h,
                   ),
-                  Divider(color: Color(0xFFCACACA),thickness: 1,),
+                  Divider(
+                    color: Color(0xFFCACACA),
+                    thickness: 1,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -158,7 +196,10 @@ class CartPage extends ConsumerWidget {
                   SizedBox(
                     height: 14.h,
                   ),
-                  Divider(color: Color(0xFFCACACA),thickness: 1,),
+                  Divider(
+                    color: Color(0xFFCACACA),
+                    thickness: 1,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
