@@ -71,10 +71,7 @@ class CartPage extends ConsumerWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  Image.asset(
-                    "assets/images/Above Lines.png",
-                    width: 357.w,
-                  ),
+                  Divider(color: Color(0xFFCACACA),thickness: 1,),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -118,7 +115,7 @@ class CartPage extends ConsumerWidget {
                   SizedBox(
                     height: 14.h,
                   ),
-                  Image.asset("assets/images/Above Lines.png", width: 357.w),
+                  Divider(color: Color(0xFFCACACA),thickness: 1,),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -161,7 +158,7 @@ class CartPage extends ConsumerWidget {
                   SizedBox(
                     height: 14.h,
                   ),
-                  Image.asset("assets/images/Above Lines.png", width: 357.w),
+                  Divider(color: Color(0xFFCACACA),thickness: 1,),
                   SizedBox(
                     height: 10.h,
                   ),

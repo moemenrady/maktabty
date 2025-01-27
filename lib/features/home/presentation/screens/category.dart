@@ -10,7 +10,9 @@ import '../widgets/home/custom_search_bar.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
   final int categoryId;
-  const CategoryScreen({super.key, required this.categoryId});
+  final String categoryName;
+  const CategoryScreen(
+      {super.key, required this.categoryId, required this.categoryName});
 
   @override
   ConsumerState<CategoryScreen> createState() => _CategoryScreenState();
@@ -31,7 +33,8 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              CustomAppBar(txt: "Categoty1", hasArrow: true, hasIcons: true),
+              CustomAppBar(
+                  txt: widget.categoryName, hasArrow: true, hasIcons: true),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CustomSearchBar(),
