@@ -24,6 +24,8 @@ class HomeRiverpodState {
   final Categories? selectedCategory;
   final List<ItemModel> categoryItems;
   final bool isCategoryLoading;
+  final String searchQuery;
+  final List<ItemModel> filteredItems;
 
   HomeRiverpodState({
     this.state = HomeState.initial,
@@ -34,6 +36,8 @@ class HomeRiverpodState {
     this.selectedCategory,
     this.categoryItems = const [],
     this.isCategoryLoading = false,
+    this.searchQuery = '',
+    this.filteredItems = const [],
   });
 
   HomeRiverpodState copyWith({
@@ -45,6 +49,8 @@ class HomeRiverpodState {
     Categories? selectedCategory,
     List<ItemModel>? categoryItems,
     bool? isCategoryLoading,
+    String? searchQuery,
+    List<ItemModel>? filteredItems,
   }) {
     return HomeRiverpodState(
       state: state ?? this.state,
@@ -55,6 +61,8 @@ class HomeRiverpodState {
       selectedCategory: selectedCategory ?? this.selectedCategory,
       categoryItems: categoryItems ?? this.categoryItems,
       isCategoryLoading: isCategoryLoading ?? this.isCategoryLoading,
+      searchQuery: searchQuery ?? this.searchQuery,
+      filteredItems: filteredItems ?? this.filteredItems,
     );
   }
 }

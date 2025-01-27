@@ -83,4 +83,23 @@ class HomeRiverpod extends StateNotifier<HomeRiverpodState> {
       ),
     );
   }
+
+  void searchItems(String query) {
+    if (query.isEmpty) {
+      state = state.copyWith(
+        searchQuery: '',
+        filteredItems: [],
+      );
+      return;
+    }
+
+    final filteredItems = state.recommendedItems.where((item) {
+      return item.name.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+
+    state = state.copyWith(
+      searchQuery: query,
+      filteredItems: filteredItems,
+    );
+  }
 }

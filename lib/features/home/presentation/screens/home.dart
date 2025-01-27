@@ -8,6 +8,7 @@ import '../../../../core/theme/text_style.dart';
 import '../../../admin/data/model/item_model.dart';
 import '../../../check_out/presentation/screen/product_details_creen.dart';
 import '../riverpods/home_river_pod/home_riverpod.dart';
+import '../widgets/home/custom_home_advertising.dart';
 import '../widgets/home/custom_search_bar.dart';
 import '../widgets/home/custome_show_recommend_and_offers.dart';
 import '../widgets/home/category_chips.dart';
@@ -25,19 +26,41 @@ class HomePpage extends ConsumerWidget {
         child: homeState.isLoading()
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                ////////////////////
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // App Bar with Logo and Icons
+                    // Updated App Bar with new logo and text
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
                         children: [
-                          SvgPicture.asset(
-                            'assets/images/home_logo.svg',
-                            height: 28.h,
-                            width: 175.w,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: Image.asset(
+                              'assets/images/app_logo.jpg',
+                              height: 40.h,
+                              width: 40.w,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "For the best",
+                                style:
+                                    TextStyles.Blinker18semiBoldBlack.copyWith(
+                                  color:
+                                      const Color.fromARGB(255, 255, 166, 97),
+                                ),
+                              ),
+                              SizedBox(height: 1.h),
+                              Text(
+                                "We're here for you,for your best",
+                                style: TextStyles.blinker5regularblack,
+                              ),
+                            ],
                           ),
                           const Spacer(),
                           IconButton(
@@ -59,19 +82,83 @@ class HomePpage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    // Search Bar
+
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CustomSearchBar(),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: const CustomSearchBar(),
                     ),
 
-                    SizedBox(height: 16.h),
-                    // Offers Carousel
-                    CustomeShowRecommendAndOffers(
-                      items: homeState.recommendedItems,
+                    SizedBox(height: 24.h),
+
+                    const CustomHomeAdvertising(),
+
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 5.w, vertical: 6.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.r),
+                              boxShadow: [],
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16.h, horizontal: 20.w),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: Icon(
+                                    Icons.auto_awesome,
+                                    color: const Color(0xFFF68B3B),
+                                    size: 15.h,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Recommended Items",
+                                      style: TextStyles.Blinker24boldBlack
+                                          .copyWith(
+                                        color: const Color(0xFFF68B3B),
+                                      ),
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    Text(
+                                      "Handpicked just for you",
+                                      style: TextStyles.blinker14regularwhite,
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    'See all',
+                                    style:
+                                        TextStyles.Blinker16regularorangeColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          CustomeShowRecommendAndOffers(
+                            items: homeState.searchQuery.isEmpty
+                                ? homeState.recommendedItems
+                                : homeState.filteredItems,
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 16.h),
+
+                    SizedBox(height: 6.h),
                     // Category Chips
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -85,52 +172,17 @@ class HomePpage extends ConsumerWidget {
                         },
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    // Best Seller Section
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            homeState.selectedCategory?.name ?? 'Best Seller',
-                            style: TextStyles.Blinker18semiBoldBlack,
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'See all',
-                              style: TextStyles.Blinker16regularorangeColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    // Items Grid
+
                     homeState.isCategoryLoading
-                        ? const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Center(
+                        ? Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0.w),
+                            child: const Center(
                               child: Padding(
                                 padding: EdgeInsets.all(32.0),
                                 child: CircularProgressIndicator(),
                               ),
                             ),
                           )
-                        // : ListView.builder(
-                        //   shrinkWrap: true,
-                        //   physics: const NeverScrollableScrollPhysics(),
-                        //   itemCount: homeState.selectedCategory != null
-                        //       ? homeState.categoryItems.length
-                        //       : homeState.bestSellingItems.length,
-                        //   itemBuilder: (context, index) {
-                        //     final item = homeState.selectedCategory != null
-                        //         ? homeState.categoryItems[index]
-                        //         : homeState.bestSellingItems[index];
-                        //     return _buildProductCard(item);
-                        //   },),
-
                         : Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: ListView.builder(
@@ -151,99 +203,12 @@ class HomePpage extends ConsumerWidget {
                               },
                             ),
                           ),
-
-                    // : GridView.builder(
-                    //     shrinkWrap: true,
-                    //     physics: const NeverScrollableScrollPhysics(),
-                    //     gridDelegate:
-                    //         SliverGridDelegateWithFixedCrossAxisCount(
-                    //       crossAxisCount: 2,
-                    //       childAspectRatio: 0.75,
-                    //       crossAxisSpacing: 16.w,
-                    //       mainAxisSpacing: 16.h,
-                    //     ),
-                    //     itemCount: homeState.selectedCategory != null
-                    //         ? homeState.categoryItems.length
-                    //         : homeState.bestSellingItems.length,
-                    //     itemBuilder: (context, index) {
-                    //       final item = homeState.selectedCategory != null
-                    //           ? homeState.categoryItems[index]
-                    //           : homeState.bestSellingItems[index];
-                    //       return _buildProductCard(item);
-                    //     },
-                    //   ),
                   ],
                 ),
               ),
       ),
     );
   }
-
-//   Widget _buildProductCard(ItemModel item) {
-//     return Card(
-//       elevation: 4,
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(12.r),
-//       ),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Expanded(
-//             child: ClipRRect(
-//               borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
-//               child: Image.network(
-//                 item.imageUrl,
-//                 fit: BoxFit.cover,
-//                 width: double.infinity,
-//               ),
-//             ),
-//           ),
-//           Padding(
-//             padding: EdgeInsets.all(8.w),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   item.name,
-//                   style: TextStyle(
-//                     fontFamily: 'Blinker',
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: 16.sp,
-//                   ),
-//                   maxLines: 1,
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//                 SizedBox(height: 4.h),
-//                 Row(
-//                   children: [
-  // Text(
-  //   '${item.retailPrice} Sales',
-  //   style: TextStyle(
-  //     fontFamily: 'Blinker',
-  //     color: Colors.grey,
-  //     fontSize: 14.sp,
-  //   ),
-  // ),
-//                     const Spacer(),
-//                     Icon(Icons.star, color: Colors.amber, size: 16.w),
-//                     Text(
-//                       '4.5',
-//                       style: TextStyle(
-//                         fontFamily: 'Blinker',
-//                         color: Colors.grey[600],
-//                         fontSize: 14.sp,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
   Widget _buildProductCard(BuildContext context, ItemModel item) {
     return InkWell(
@@ -288,7 +253,6 @@ class HomePpage extends ConsumerWidget {
                           '${item.name} Sales',
                           style: TextStyles.blinker20SemiBoldwhite,
                         ),
-                        //Image.asset("assets/images/spacer.png"),
                         const VerticalDivider(
                           color: Colors.white,
                           thickness: 1,
@@ -305,7 +269,7 @@ class HomePpage extends ConsumerWidget {
                       ],
                     ),
                   ),
-                )), //name & prrice
+                )),
           ],
         ),
       ),

@@ -17,13 +17,48 @@ class CategoryChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          ...categories.map((category) => _buildChip(category.name, category)),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 16.w, bottom: 12.h),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(6.w),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF68B3B).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Icon(
+                  Icons.category_outlined,
+                  color: const Color(0xFFF68B3B),
+                  size: 18.w,
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Text(
+                "Categories",
+                style: TextStyles.Blinker18semiBoldBlack.copyWith(
+                  color: const Color(0xFFF68B3B),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          child: Row(
+            children: [
+              SizedBox(width: 16.w), // Initial padding
+              ...categories
+                  .map((category) => _buildChip(category.name, category)),
+              SizedBox(width: 8.w), // End padding
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -34,19 +69,47 @@ class CategoryChips extends StatelessWidget {
       padding: EdgeInsets.only(right: 8.w),
       child: GestureDetector(
         onTap: () => onCategorySelected(category),
-        child: Chip(
-          label: Text(
-            label,
-            style: TextStyles.Blinker14regular.copyWith(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          decoration: BoxDecoration(
+            color: isSelected ? const Color(0xFFF68B3B) : Colors.white,
+            borderRadius: BorderRadius.circular(20.r),
+            border: Border.all(
               color: isSelected
-                  ? Colors.white
-                  : Color(0xFF808080),
+                  ? const Color(0xFFF68B3B)
+                  : const Color(0xFFF68B3B).withOpacity(0.2),
+              width: 1.5,
             ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFFF68B3B).withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : [],
           ),
-          backgroundColor: isSelected ? Color(0xFFF68B3B) : Color(0xFFDADADA),
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isSelected) ...[
+                Icon(
+                  Icons.check_circle_outline,
+                  color: Colors.white,
+                  size: 16.w,
+                ),
+                SizedBox(width: 4.w),
+              ],
+              Text(
+                label,
+                style: TextStyles.Blinker14regular.copyWith(
+                  color: isSelected ? Colors.white : const Color(0xFF808080),
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -23,6 +23,7 @@ import 'features/check_out/presentation/screen/product_details_creen.dart';
 import 'features/home/presentation/screens/allcategriesscreen.dart';
 import 'features/home/presentation/screens/category.dart';
 import 'features/home/presentation/screens/userwishlistscreen.dart';
+import 'features/home/presentation/widgets/mainbar.dart';
 import 'features/orders/presentation/screens/user_orders_screen.dart';
 
 void main() async {
@@ -74,7 +75,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const HomePpage(),
+          home: const MainBar(),
         );
       },
     );
