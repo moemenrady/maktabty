@@ -116,7 +116,7 @@ class _LoginState extends ConsumerState<LoginPage> {
                   ),
                 ),
                 Center(
-                  child: CustompassTxtFiels(
+                  child: CustompassTxtField(
                     hinttxt: "Enter your password",
                     mycontroller: _passController,
                     focusNode: _focusNode,

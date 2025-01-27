@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class CustompassTxtFiels extends StatelessWidget {
+class CustompassTxtField extends StatelessWidget {
   final String hinttxt;
   final TextEditingController mycontroller;
   final Function(String)? onFieldSubmitted;
@@ -10,7 +10,7 @@ class CustompassTxtFiels extends StatelessWidget {
   final bool obscureText;
   final VoidCallback onToggleVisibility;
 
-  const CustompassTxtFiels({
+  const CustompassTxtField({
     super.key,
     required this.hinttxt,
     required this.mycontroller,

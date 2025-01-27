@@ -134,7 +134,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                 ),
                 Center(
-                  child: CustompassTxtFiels(
+                  child: CustompassTxtField(
                     hinttxt: "Enter your password",
                     mycontroller: _passwordController,
                     obscureText:
@@ -147,17 +147,19 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                CustompassTxtFiels(
-                  hinttxt: "Confirm password",
-                  mycontroller: _confirmPasswordController,
-                  obscureText: !ref
-                      .watch(signupControllerProvider)
-                      .isConfirmPasswordVisible,
-                  onToggleVisibility: () {
-                    ref
-                        .read(signupControllerProvider.notifier)
-                        .toggleConfirmPasswordVisibility();
-                  },
+                Center(
+                  child: CustompassTxtField(
+                    hinttxt: "Confirm password",
+                    mycontroller: _confirmPasswordController,
+                    obscureText: !ref
+                        .watch(signupControllerProvider)
+                        .isConfirmPasswordVisible,
+                    onToggleVisibility: () {
+                      ref
+                          .read(signupControllerProvider.notifier)
+                          .toggleConfirmPasswordVisibility();
+                    },
+                  ),
                 ),
               ] else
                 CustomTextField(
