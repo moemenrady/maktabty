@@ -16,12 +16,12 @@ class OTPVerificationPage extends ConsumerWidget {
 
   void verifyOTP(BuildContext context, WidgetRef ref) {
     final viewModel = ref.read(authViewModelProvider);
-    if (viewModel.formKey.currentState!.validate()) {
-      ref.read(authControllerProvider.notifier).verifyOTP(
-            phone: phone,
-            otp: viewModel.otpController.text,
-          );
-    }
+    // if (viewModel.formKey.currentState!.validate()) {
+    //   ref.read(authControllerProvider.notifier).verifyOTP(
+    //         phone: phone,
+    //         otp: viewModel.otpController.text,
+    //       );
+    // }
   }
 
   @override
@@ -49,23 +49,23 @@ class OTPVerificationPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomAppBar(txt: "", hasArrow: true, hasIcons: false),
-              SizedBox(
-              height: 50,
-            ),
+              const SizedBox(
+                height: 50,
+              ),
               Text(
-              "Verification Code",
-              style: TextStyles.Inter28SemiBoldBlack,
-            ),
-            SizedBox(
-              height: 10,
-            ),
+                "Verification Code",
+                style: TextStyles.Inter28SemiBoldBlack,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Text('Enter the code sent to $phone'),
               const SizedBox(height: 40),
-            Image.asset(
-              "assets/images/forget_pass_img.png",
-              height: 166.h,
-              width: 225.w,
-            ),
+              Image.asset(
+                "assets/images/forget_pass_img.png",
+                height: 166.h,
+                width: 225.w,
+              ),
               const SizedBox(height: 70),
               TextFormField(
                 controller: viewModel.otpController,
@@ -82,18 +82,32 @@ class OTPVerificationPage extends ConsumerWidget {
               if (state.isLoading())
                 const CircularProgressIndicator()
               else
-                CustomTxtBtn(txtstyle: TextStyles.Lato16extraBoldBlack,bgclr: Color(0xFFF68B3B),btnHeight: 60,btnWidth: 345,btnradious: 14,
-                btnName: "Confirm Code", onPress: (){verifyOTP(context, ref);}),
-                Row(mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text("Didn’t get OTP? ",style: TextStyles.Lato16regularBlack,),
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                  "Resend OTP",
-                  style: TextStyles.Poppins14regularBlue,
-                ),
-              ),
-            ],)
+                CustomTxtBtn(
+                    txtstyle: TextStyles.Lato16extraBoldBlack,
+                    bgclr: const Color(0xFFF68B3B),
+                    btnHeight: 60,
+                    btnWidth: 345,
+                    btnradious: 14,
+                    btnName: "Confirm Code",
+                    onPress: () {
+                      verifyOTP(context, ref);
+                    }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Didn’t get OTP? ",
+                    style: TextStyles.Lato16regularBlack,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Resend OTP",
+                      style: TextStyles.Poppins14regularBlue,
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

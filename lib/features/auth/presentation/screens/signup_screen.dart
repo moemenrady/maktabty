@@ -1,210 +1,197 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktabte/features/auth/presentation/riverpod/auth_state.dart';
+import 'package:mktabte/features/auth/presentation/riverpod/signup_riverpod.dart';
 import 'package:mktabte/features/auth/presentation/screens/login.dart';
-import 'package:mktabte/features/home/presentation/widgets/mainbar.dart';
 import 'package:riverpod/src/framework.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/theme/text_style.dart';
+import '../../../../core/utils/show_snack_bar.dart';
 import '../../../home/presentation/widgets/custom_txt_btn.dart';
 import '../../../home/presentation/widgets/custom_txt_field.dart';
 import '../../../home/presentation/widgets/custompass_txt_fiels.dart';
-import '../../data/_auth_service.dart';
 import '../riverpod/login_state.dart';
+import '../riverpod/auth_riverpod.dart';
+import '../../../../core/comman/entitys/user_model.dart';
 
-final supabase = Supabase.instance.client;
-
-class SignupScreen extends StatefulWidget {
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-    final authservice = AuthService();
+class _SignupScreenState extends ConsumerState<SignupScreen> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _otpController = TextEditingController();
+  final bool _showOtpField = false;
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passController = TextEditingController();
-  final TextEditingController _confirmpassController = TextEditingController();
-
-  void signupFUN() async {
-    final email = _emailController.text;
-    final pass = _passController.text;
-    final name = _nameController.text;
-    try {
-      await authservice.signupWithEmailPass(email, pass, name);
-      // After successful signup, log in the user
-      context.read(loginStateProvider.notifier).logIn();
-
-      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MainBar(),
-                        ),
-                      );
+  String? _validateFields() {
+    if (_nameController.text.isEmpty) {
+      return 'Name is required';
     }
-    catch (e) {
-      if (e is AuthException) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Authentication Error: ${e.message}')));
-} else {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
-}
-
+    if (_emailController.text.isEmpty) {
+      return 'Email is required';
     }
-  }
-
-  String? _validateField(String value, String fieldName) {
-    if (value.isEmpty) {
-      return "$fieldName can't be empty.";
+    if (_passwordController.text.isEmpty) {
+      return 'Password is required';
+    }
+    if (_passwordController.text != _confirmPasswordController.text) {
+      return 'Passwords do not match';
     }
     return null;
   }
 
-  String? _validatePasswordMatch() {
-    if (_passController.text != _confirmpassController.text) {
-      return "Passwords do not match.";
+  void _signUp() {
+    final error = _validateFields();
+    if (error != null) {
+      showSnackBar(context, error);
+      return;
     }
-    return null;
+    ref.read(signupControllerProvider.notifier).signUpWithEmail(
+          email: _emailController.text,
+          name: _nameController.text,
+          password: _passwordController.text,
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    // Use context.watch() to listen to changes in the login state
+    ref.listen(signupControllerProvider, (previous, next) {
+      if (next.error != null) {
+        showSnackBar(context, next.error!);
+      } else if (next.isSuccessCreateEmail()) {
+        showSnackBar(context, 'Please check your email for OTP');
+        ref.read(signupControllerProvider.notifier).createUserProfile(
+              user: next.user!,
+            );
+      } else if (next.isSuccessSaveEmailInSupabaseDatabase()) {
+        showSnackBar(context, 'User created successfully');
+      }
+    });
+
+    final state = ref.watch(signupControllerProvider);
+
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 70,
-            ),
-            Center(
-              child: Text(
-                "Signup",
-                style: TextStyles.Lato16extraBoldBlack,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 70),
+              Center(
+                child: Text(
+                  "Signup",
+                  style: TextStyles.Lato16extraBoldBlack,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: Image.asset(
-                "assets/images/login_img.png",
-                height: 150,
+              const SizedBox(height: 20),
+              Center(
+                child: Image.asset(
+                  "assets/images/login_img.png",
+                  height: 150,
+                ),
               ),
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "Name:",
-                style: TextStyles.Lato14extraBoldBlack,
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  "Name:",
+                  style: TextStyles.Lato14extraBoldBlack,
+                ),
               ),
-            ),
-            Center(
-              child: CustomTextField(
-                hinttxt: 'Enter Your Full Name',
-                mycontroller: _nameController,
+              Center(
+                child: CustomTextField(
+                  hinttxt: 'Enter Your Full Name',
+                  mycontroller: _nameController,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "Email:",
-                style: TextStyles.Lato14extraBoldBlack,
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  "Email:",
+                  style: TextStyles.Lato14extraBoldBlack,
+                ),
               ),
-            ),
-            Center(
-              child: CustomTextField(
-                hinttxt: 'Enter your Email',
-                mycontroller: _emailController,
+              Center(
+                child: CustomTextField(
+                  hinttxt: 'Enter your Email',
+                  mycontroller: _emailController,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "Password:",
-                style: TextStyles.Lato14extraBoldBlack,
-              ),
-            ),
-            Center(
-              child: CustompassTxtFiels(
-                hinttxt: "Enter your password",
-                mycontroller: _passController,
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                "Confirm Password:",
-                style: TextStyles.Lato14extraBoldBlack,
-              ),
-            ),
-            Center(
-              child: CustompassTxtFiels(
-                hinttxt: "Confirm password",
-                mycontroller: _confirmpassController,
-              ),
-            ),
-            const Spacer(),
-            Center(
-              child: CustomTxtBtn(
+              const SizedBox(height: 30),
+              if (!_showOtpField) ...[
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    "Password:",
+                    style: TextStyles.Lato14extraBoldBlack,
+                  ),
+                ),
+                Center(
+                  child: CustompassTxtFiels(
+                    hinttxt: "Enter your password",
+                    mycontroller: _passwordController,
+                    obscureText:
+                        !ref.watch(signupControllerProvider).isPasswordVisible,
+                    onToggleVisibility: () {
+                      ref
+                          .read(signupControllerProvider.notifier)
+                          .togglePasswordVisibility();
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+                CustompassTxtFiels(
+                  hinttxt: "Confirm password",
+                  mycontroller: _confirmPasswordController,
+                  obscureText: !ref
+                      .watch(signupControllerProvider)
+                      .isConfirmPasswordVisible,
+                  onToggleVisibility: () {
+                    ref
+                        .read(signupControllerProvider.notifier)
+                        .toggleConfirmPasswordVisibility();
+                  },
+                ),
+              ] else
+                CustomTextField(
+                  hinttxt: "Enter OTP",
+                  mycontroller: _otpController,
+                ),
+              const SizedBox(height: 40),
+              Center(
+                child: CustomTxtBtn(
                   txtstyle: TextStyles.Lato16extraBoldBlack,
                   bgclr: const Color(0xFFF68B3B),
                   btnWidth: 327,
                   btnHeight: 48,
                   btnradious: 10,
+                  btnName: state.isLoading()
+                      ? "Loading..."
+                      : (_showOtpField ? 'Verify OTP' : 'Sign Up'),
                   onPress: () {
-                    final name = _nameController.text;
-                    final email = _emailController.text;
-                    final password = _passController.text;
-
-                    // Validation checks
-                    final nameError = _validateField(name, "Name");
-                    final emailError = _validateField(email, "Email");
-                    final passwordError = _validateField(password, "Password");
-                    final confirmPasswordError = _validatePasswordMatch();
-
-                    if (nameError != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(nameError)));
-                    } else if (emailError != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(emailError)));
-                    } else if (passwordError != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(passwordError)));
-                    } else if (confirmPasswordError != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(confirmPasswordError)));
-                    } else {
-                      signupFUN();
+                    if (state.isLoading()) {
+                      return;
                     }
+                    _signUp();
                   },
-                  btnName: "Sign up"),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "already have an account?",
-                  style: TextStyle(fontSize: 18, fontFamily: "Inter"),
                 ),
-                TextButton(
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "already have an account?",
+                    style: TextStyle(fontSize: 18, fontFamily: "Inter"),
+                  ),
+                  TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -216,19 +203,25 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Text(
                       " Log in",
                       style: TextStyles.Lato16extraBoldBlack,
-                    ))
-              ],
-            ),
-            const SizedBox(
-              height: 40,
-            )
-          ],
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );
   }
-}
 
-extension on BuildContext {
-  read(AlwaysAliveRefreshable<LoginStateNotifier> notifier) {}
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _otpController.dispose();
+    super.dispose();
+  }
 }

@@ -103,21 +103,18 @@ class HomePpage extends ConsumerWidget {
                                 child: CircularProgressIndicator(),
                               ),
                             )
-                            // : ListView.builder(
-                            //   shrinkWrap: true,
-                            //   physics: const NeverScrollableScrollPhysics(),
-                            //   itemCount: homeState.selectedCategory != null
-                            //       ? homeState.categoryItems.length
-                            //       : homeState.bestSellingItems.length,
-                            //   itemBuilder: (context, index) {
-                            //     final item = homeState.selectedCategory != null
-                            //         ? homeState.categoryItems[index]
-                            //         : homeState.bestSellingItems[index];
-                            //     return _buildProductCard(item);
-                            //   },),
-
-
-
+                          // : ListView.builder(
+                          //   shrinkWrap: true,
+                          //   physics: const NeverScrollableScrollPhysics(),
+                          //   itemCount: homeState.selectedCategory != null
+                          //       ? homeState.categoryItems.length
+                          //       : homeState.bestSellingItems.length,
+                          //   itemBuilder: (context, index) {
+                          //     final item = homeState.selectedCategory != null
+                          //         ? homeState.categoryItems[index]
+                          //         : homeState.bestSellingItems[index];
+                          //     return _buildProductCard(item);
+                          //   },),
 
                           : GridView.builder(
                               shrinkWrap: true,

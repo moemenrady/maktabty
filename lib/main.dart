@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/auth_test.dart';
 import 'package:mktabte/core/comman/entitys/categories.dart';
 import 'package:mktabte/features/auth/presentation/screens/onboarding.dart';
 import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
@@ -16,6 +17,8 @@ import 'features/admin/presentation/screens/admin_control_user_orders.dart';
 import 'features/admin/presentation/screens/item_page.dart';
 import 'features/admin/presentation/screens/view_orders_summary.dart';
 import 'features/auth/data/auth_gate.dart';
+import 'features/auth/presentation/screens/login.dart';
+import 'features/auth/presentation/screens/signup_screen.dart';
 import 'features/check_out/presentation/screen/product_details_creen.dart';
 import 'features/home/presentation/screens/allcategriesscreen.dart';
 import 'features/home/presentation/screens/category.dart';
@@ -71,7 +74,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const AuthGate(),
+          home: const HomePpage(),
         );
       },
     );

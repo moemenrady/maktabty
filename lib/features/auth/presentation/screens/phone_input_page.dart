@@ -11,21 +11,21 @@ class PhoneInputPage extends ConsumerWidget {
 
   const PhoneInputPage({super.key, this.isSignUp = false});
 
-  void verifyPhone(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.read(authViewModelProvider);
-    if (viewModel.formKey.currentState!.validate()) {
-      if (isSignUp) {
-        ref.read(authControllerProvider.notifier).signUpWithPhone(
-              phone: viewModel.phoneController.text,
-              name: viewModel.nameController.text,
-            );
-      } else {
-        ref.read(authControllerProvider.notifier).signInWithPhone(
-              phone: viewModel.phoneController.text,
-            );
-      }
-    }
-  }
+  // void verifyPhone(BuildContext context, WidgetRef ref) {
+  //   final viewModel = ref.read(authViewModelProvider);
+  //   if (viewModel.formKey.currentState!.validate()) {
+  //     if (isSignUp) {
+  //       ref.read(authControllerProvider.notifier).signUpWithPhone(
+  //             phone: viewModel.phoneController.text,
+  //             name: viewModel.nameController.text,
+  //           );
+  //     } else {
+  //       ref.read(authControllerProvider.notifier).signInWithPhone(
+  //             phone: viewModel.phoneController.text,
+  //           );
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,13 +84,12 @@ class PhoneInputPage extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: 24),
-              if (state.isLoading())
-                const CircularProgressIndicator()
-              else
-                ElevatedButton(
-                  onPressed: () => verifyPhone(context, ref),
-                  child: Text(isSignUp ? 'Sign Up' : 'Sign In'),
-                ),
+              if (state.isLoading()) const CircularProgressIndicator()
+              // else
+              //   ElevatedButton(
+              //     onPressed: () => verifyPhone(context, ref),
+              //     child: Text(isSignUp ? 'Sign Up' : 'Sign In'),
+              //   ),
             ],
           ),
         ),

@@ -26,13 +26,13 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
     await authservice.signout();
 
     // Check if the widget is still mounted before updating the state
-    if (mounted) {
-      ref.read(loginStateProvider.notifier).logOut();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
-    }
+    // if (mounted) {
+    //   ref.read(loginStateProvider.notifier).logOut();
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => const LoginPage()),
+    //   );
+    // }
   }
 
   late String userName;
@@ -43,7 +43,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
     fetchUserName();
   }
 
- void fetchUserName() {
+  void fetchUserName() {
     // Safely fetch the user name from the metadata
     final name = authservice.getCurrentUserName();
     setState(() {
@@ -73,7 +73,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
               ],
             ),
             SizedBox(height: 30.h),
-            
+
             // Profile Options List
             Expanded(
               child: ListView(
@@ -122,11 +122,12 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                 ],
               ),
             ),
-            
+
             // Logout Button
             CustomProfileOption(
               OntapFN: () {
-                logout(context);  // Logout function does not need ref, just the context
+                logout(
+                    context); // Logout function does not need ref, just the context
               },
               iconPath: "assets/images/Logout.png",
               title: "Logout",

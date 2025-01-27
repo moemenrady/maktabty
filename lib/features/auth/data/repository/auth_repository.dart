@@ -19,38 +19,26 @@ class AuthRepository {
     required this.remoteDataSource,
   });
 
-  Future<Either<Failure, UserModel>> signInWithPhone({
-    required String phone,
-  }) async {
-    return executeTryAndCatchForRepository(() async {
-      final userData = await remoteDataSource.signInWithPhone(phone: phone);
-      final user = UserModel.fromMap(userData);
-      return user;
-    });
-  }
-
-  Future<Either<Failure, UserModel>> signUpWithPhone({
-    required String phone,
+  Future<Either<Failure, UserModel>> signUpWithEmail({
+    required String email,
     required String name,
+    required String password,
   }) async {
     return executeTryAndCatchForRepository(() async {
-      final userData = await remoteDataSource.signUpWithPhone(
-        phone: phone,
+      final userData = await remoteDataSource.signUpWithEmail(
+        email: email,
         name: name,
+        password: password,
       );
-      final user = UserModel.fromMap(userData);
-      return user;
+      return UserModel.fromMap(userData);
     });
   }
 
-  Future<Either<Failure, UserModel>> verifyOTP({
-    required String phone,
-    required String otp,
+  Future<Either<Failure, void>> createUserProfile({
+    required UserModel user,
   }) async {
     return executeTryAndCatchForRepository(() async {
-      final userData = await remoteDataSource.verifyOTP(phone: phone, otp: otp);
-      final user = UserModel.fromMap(userData);
-      return user;
+      await remoteDataSource.createUserProfile(user: user);
     });
   }
 
@@ -59,6 +47,15 @@ class AuthRepository {
       final userData = await remoteDataSource.getCurrentUserData();
       if (userData == null) return null;
       return UserModel.fromMap(userData);
+    });
+  }
+
+  Future<Either<Failure, void>> loginWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.loginWithEmail(email: email, password: password);
     });
   }
 }

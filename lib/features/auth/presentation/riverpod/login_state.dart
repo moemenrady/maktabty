@@ -1,19 +1,44 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/comman/entitys/user_model.dart';
 
-// StateNotifier to manage login state
-class LoginStateNotifier extends StateNotifier<bool> {
-  LoginStateNotifier() : super(false); // By default, user is logged out
-
-  void logIn() {
-    state = true; // Set to logged in
-  }
-
-  void logOut() {
-    state = false; // Set to logged out
-  }
+enum LoginState {
+  initial,
+  loading,
+  success,
+  error,
 }
 
-// Define a provider for login state
-final loginStateProvider = StateNotifierProvider<LoginStateNotifier, bool>(
-  (ref) => LoginStateNotifier(),
-);
+class LoginRiverpodState {
+  final LoginState state;
+  final String? error;
+  final UserModel? user;
+  final bool isPasswordVisible;
+
+  LoginRiverpodState({
+    required this.state,
+    this.error,
+    this.user,
+    this.isPasswordVisible = false,
+  });
+
+  factory LoginRiverpodState.initial() {
+    return LoginRiverpodState(state: LoginState.initial);
+  }
+
+  bool isLoading() => state == LoginState.loading;
+  bool isSuccess() => state == LoginState.success;
+  bool isError() => state == LoginState.error;
+
+  LoginRiverpodState copyWith({
+    LoginState? state,
+    String? error,
+    UserModel? user,
+    bool? isPasswordVisible,
+  }) {
+    return LoginRiverpodState(
+      state: state ?? this.state,
+      error: error ?? this.error,
+      user: user ?? this.user,
+      isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
+    );
+  }
+}

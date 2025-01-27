@@ -23,6 +23,8 @@ Future<Either<Failure, T>> executeTryAndCatchForRepository<T>(
     return left(Failure(e.message));
   } on PostgrestException catch (e) {
     return left(Failure(e.message));
+  } on AuthException catch (e) {
+    return left(Failure(e.message));
   } on TypeError catch (e) {
     return left(Failure(
         'Type error: ${e.toString()}. This might be due to incorrect data structure.'));
@@ -51,6 +53,8 @@ Future<T> executeTryAndCatchForDataLayer<T>(Future<T> Function() action) async {
     } else {
       throw NoInternetException();
     }
+  } on AuthException catch (e) {
+    throw AuthException(e.message);
   } on PostgrestException catch (e) {
     throw PostgrestException(message: e.message);
   } on TimeoutException catch (e) {

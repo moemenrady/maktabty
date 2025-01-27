@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/comman/entitys/user_model.dart';
-import '../../../../core/erorr/exception.dart';
 import '../../../../core/utils/try_and_catch.dart';
 
 final supabaseClientProvider =
@@ -12,18 +11,21 @@ final authRemoteDataSourceProvider = Provider.autoDispose<AuthRemoteDataSource>(
 
 abstract interface class AuthRemoteDataSource {
   Session? get currentUserSession;
-  Future<Map<String, dynamic>> signUpWithPhone({
-    required String phone,
+  Future<Map<String, dynamic>> signUpWithEmail({
+    required String email,
     required String name,
+    required String password,
   });
-  Future<Map<String, dynamic>> signInWithPhone({
-    required String phone,
-  });
-  Future<Map<String, dynamic>> verifyOTP({
-    required String phone,
-    required String otp,
-  });
+
   Future<Map<String, dynamic>?> getCurrentUserData();
+  Future<void> createUserProfile({
+    required UserModel user,
+  });
+
+  Future<void> loginWithEmail({
+    required String email,
+    required String password,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -34,60 +36,42 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Session? get currentUserSession => supabaseClient.auth.currentSession;
 
   @override
-  Future<Map<String, dynamic>> signInWithPhone({required String phone}) async {
-    return executeTryAndCatchForDataLayer(() async {
-      final response = await supabaseClient.auth.signInWithOtp(
-        phone: phone,
-      );
-      // if (response.session == null) {
-      //   throw const ServerException('Failed to send OTP');
-      // }
-      return {
-        'id': " response.user!.id",
-        'phone': phone,
-        'name': "response.user?.userMetadata?['name']" ?? '',
-      };
-    });
-  }
-
-  @override
-  Future<Map<String, dynamic>> signUpWithPhone({
-    required String phone,
+  Future<Map<String, dynamic>> signUpWithEmail({
+    required String email,
     required String name,
+    required String password,
   }) async {
     return executeTryAndCatchForDataLayer(() async {
-      final response = await supabaseClient.auth.signInWithOtp(
-        phone: phone,
-        data: {'name': name},
+      // await supabaseClient.auth.signInWithOtp(
+      //   email: email,
+      //   emailRedirectTo: 'https://lockapp.site/redirect_page.html',
+      // );
+
+      await supabaseClient.auth.signUp(
+        email: email,
+        password: password,
       );
 
       return {
-        'id': "response",
-        'phone': phone,
+        'email': email,
         'name': name,
+        'password': password,
       };
     });
   }
 
   @override
-  Future<Map<String, dynamic>> verifyOTP({
-    required String phone,
-    required String otp,
+  Future<void> createUserProfile({
+    required UserModel user,
   }) async {
     return executeTryAndCatchForDataLayer(() async {
-      final response = await supabaseClient.auth.verifyOTP(
-        phone: phone,
-        token: otp,
-        type: OtpType.sms,
-      );
-      if (response.session == null) {
-        throw const ServerException('Invalid OTP');
-      }
-      return {
-        'id': response.user!.id,
-        'phone': phone,
-        'name': response.user?.userMetadata?['name'] ?? '',
+      final userData = {
+        'email': user.email,
+        'name': user.name,
+        'password': user.password,
       };
+
+      await supabaseClient.from('users').insert(userData);
     });
   }
 
@@ -96,12 +80,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return executeTryAndCatchForDataLayer(() async {
       if (currentUserSession != null) {
         return await supabaseClient
-            .from('profiles')
+            .from('users')
             .select()
             .eq('id', currentUserSession!.user.id)
             .single();
       }
       return null;
     });
+  }
+
+  @override
+  Future<void> loginWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    await supabaseClient.auth.signInWithPassword(
+      email: email,
+      password: password,
+    );
   }
 }

@@ -1,39 +1,44 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class CustompassTxtFiels extends StatefulWidget {
+class CustompassTxtFiels extends StatelessWidget {
   final String hinttxt;
   final TextEditingController mycontroller;
+  final Function(String)? onFieldSubmitted;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
+  final bool obscureText;
+  final VoidCallback onToggleVisibility;
 
   const CustompassTxtFiels({
     super.key,
     required this.hinttxt,
     required this.mycontroller,
+    this.onFieldSubmitted,
+    this.textInputAction,
+    this.focusNode,
+    required this.obscureText,
+    required this.onToggleVisibility,
   });
-
-  @override
-  State<CustompassTxtFiels> createState() => _CustomTextFieldState();
-}
-
-class _CustomTextFieldState extends State<CustompassTxtFiels> {
-  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 380,
       child: TextSelectionTheme(
-        
         data: const TextSelectionThemeData(
           selectionColor: Colors.grey,
         ),
         child: TextFormField(
-          controller: widget.mycontroller,
-          obscureText: _obscureText,
+          controller: mycontroller,
+          focusNode: focusNode,
+          textInputAction: textInputAction,
+          onFieldSubmitted: onFieldSubmitted,
+          obscureText: obscureText,
           cursorColor: Colors.black,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.all(15),
-            hintText: widget.hinttxt,
+            hintText: hinttxt,
             hintStyle: const TextStyle(
               color: Color.fromARGB(255, 168, 168, 168),
               fontSize: 16,
@@ -52,19 +57,14 @@ class _CustomTextFieldState extends State<CustompassTxtFiels> {
                 color: Color.fromARGB(255, 172, 172, 172),
               ),
             ),
-            // Eye icon for toggling visibility
             suffixIcon: IconButton(
               icon: Icon(
-                _obscureText
+                obscureText
                     ? Icons.visibility_off_outlined
                     : Icons.visibility_outlined,
                 color: Colors.grey,
               ),
-              onPressed: () {
-                setState(() {
-                  _obscureText = !_obscureText;
-                });
-              },
+              onPressed: onToggleVisibility,
             ),
           ),
         ),
