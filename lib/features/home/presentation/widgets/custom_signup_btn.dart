@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/text_style.dart';
-import '../../../auth/data/_auth_service.dart';
 import '../../../auth/presentation/screens/signup_screen.dart';
 
 class CustomSignupBtn extends StatelessWidget {
