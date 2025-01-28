@@ -75,8 +75,7 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          //home: const MainBar(),
-          home: const AuthGate(),
+          home: const MainBar(),
         );
       },
     );
