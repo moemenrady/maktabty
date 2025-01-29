@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../../core/comman/entitys/oders_summary_model.dart';
 import '../../../data/models/user_order_model.dart';
 import '../../../data/repository/orders_repository.dart';
@@ -8,7 +9,7 @@ final userOrdersProvider = StateNotifierProvider.autoDispose<UserOrdersRiverpod,
     UserOrdersRiverpodState>(
   (ref) => UserOrdersRiverpod(
     repository: ref.watch(ordersRepositoryProvider),
-  )..getUserOrders(),
+  )..getUserOrders(ref.watch(appUserRiverpodProvider).user!.id),
 );
 
 class UserOrdersRiverpod extends StateNotifier<UserOrdersRiverpodState> {
@@ -62,10 +63,10 @@ class UserOrdersRiverpod extends StateNotifier<UserOrdersRiverpodState> {
     }).toList();
   }
 
-  Future<void> getUserOrders() async {
+  Future<void> getUserOrders(int? userId) async {
     state = state.copyWith(state: UserOrdersState.loading);
 
-    final result = await repository.fetchOrderSummaryForUser(userId: 1);
+    final result = await repository.fetchOrderSummaryForUser(userId: userId!);
 
     result.fold(
       (failure) => state = state.copyWith(

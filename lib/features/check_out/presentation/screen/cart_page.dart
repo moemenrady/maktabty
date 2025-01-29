@@ -6,10 +6,12 @@ import 'package:mktabte/features/check_out/presentation/riverpods/check_out/chec
 import 'package:mktabte/features/check_out/presentation/screen/check_out_screen.dart';
 import 'package:mktabte/features/check_out/presentation/widget/cart_page/custom_cart_button.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/theme/text_style.dart';
 import '../widget/cart_page/cart_address_button_sheet_dialog.dart';
 import '../widget/cart_page/cart_state_listner.dart';
 import '../widget/cart_page/custom_cart_card.dart';
+import '../widget/cart_page/address_selection_sheet.dart';
 
 class CartPage extends ConsumerWidget {
   const CartPage({super.key});
@@ -20,7 +22,7 @@ class CartPage extends ConsumerWidget {
     final state = ref.watch(checkOutRiverpodProvider);
 
     ref.listen(checkOutRiverpodProvider, (previous, next) {
-      cartStateListner(context, checkOutController, next);
+      cartStateListner(context, checkOutController, next, ref);
     });
 
     return Scaffold(
@@ -71,7 +73,10 @@ class CartPage extends ConsumerWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  Divider(color: Color(0xFFCACACA),thickness: 1,),
+                  const Divider(
+                    color: Color(0xFFCACACA),
+                    thickness: 1,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -84,7 +89,8 @@ class CartPage extends ConsumerWidget {
                       const Spacer(),
                       IconButton(
                           onPressed: () {
-                            showAddressBottomSheet(context, checkOutController);
+                            showAddressBottomSheet(
+                                context, checkOutController, ref);
                           },
                           icon: Image.asset(
                             "assets/images/edit_address_btn_img.png",
@@ -96,26 +102,41 @@ class CartPage extends ConsumerWidget {
                   Row(
                     children: [
                       Image.asset("assets/images/location_img.png"),
-                      SizedBox(
-                        width: 8.w,
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              state.selectedAddress?.address ??
+                                  "Select Address",
+                              style: TextStyles.Inter12regularlightBlack,
+                            ),
+                            if (state.selectedAddress != null)
+                              Text(
+                                '${state.selectedAddress!.address}, ${state.selectedAddress!.region}',
+                                style: TextStyles.Blinker12regularlightBlack,
+                              ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        "User location",
-                        style: TextStyles.Inter12regularlightBlack,
-                      ),
-                      const Spacer(),
                       IconButton(
-                          onPressed: () {},
-                          icon: Image.asset(
-                            "assets/images/arrow_right.png",
-                            height: 22.h,
-                          ))
+                        onPressed: () =>
+                            _showAddressSelectionSheet(context, ref),
+                        icon: Image.asset(
+                          "assets/images/arrow_right.png",
+                          height: 22.h,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 14.h,
                   ),
-                  Divider(color: Color(0xFFCACACA),thickness: 1,),
+                  const Divider(
+                    color: Color(0xFFCACACA),
+                    thickness: 1,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -145,7 +166,7 @@ class CartPage extends ConsumerWidget {
                   Row(
                     children: [
                       Text(
-                        "Delivery Fee",
+                        "Delivery Free",
                         style: TextStyles.Montserrat16regularBlack,
                       ),
                       const Spacer(),
@@ -158,7 +179,10 @@ class CartPage extends ConsumerWidget {
                   SizedBox(
                     height: 14.h,
                   ),
-                  Divider(color: Color(0xFFCACACA),thickness: 1,),
+                  const Divider(
+                    color: Color(0xFFCACACA),
+                    thickness: 1,
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -191,6 +215,22 @@ class CartPage extends ConsumerWidget {
                   // ),
                 ],
               ),
+      ),
+    );
+  }
+
+  void _showAddressSelectionSheet(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => AddressSelectionSheet(
+        addresses: ref.watch(checkOutRiverpodProvider).address,
+        onAddressSelected: (address) {
+          ref
+              .read(checkOutRiverpodProvider.notifier)
+              .setSelectedAddress(address);
+        },
       ),
     );
   }

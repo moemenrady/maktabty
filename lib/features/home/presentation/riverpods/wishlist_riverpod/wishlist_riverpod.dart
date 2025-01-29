@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../data/repository/home_repository.dart';
 import 'wishlist_state.dart';
 
@@ -6,7 +7,7 @@ final wishlistProvider =
     StateNotifierProvider.autoDispose<WishlistRiverpod, WishlistRiverpodState>(
   (ref) => WishlistRiverpod(
     repository: ref.watch(homeRepositoryProvider),
-  )..getUserFavorites(),
+  )..getUserFavorites(ref.watch(appUserRiverpodProvider).user!.id),
 );
 
 class WishlistRiverpod extends StateNotifier<WishlistRiverpodState> {
@@ -15,11 +16,10 @@ class WishlistRiverpod extends StateNotifier<WishlistRiverpodState> {
   WishlistRiverpod({required this.repository})
       : super(WishlistRiverpodState(state: WishlistState.initial));
 
-  Future<void> getUserFavorites() async {
+  Future<void> getUserFavorites(int? userId) async {
     state = state.copyWith(state: WishlistState.loading);
 
-    final result =
-        await repository.getUserFavorites(1); // Using hardcoded userId for now
+    final result = await repository.getUserFavorites(userId!);
 
     result.fold(
       (failure) => state = state.copyWith(
@@ -58,7 +58,7 @@ class WishlistRiverpod extends StateNotifier<WishlistRiverpodState> {
         await Future.delayed(const Duration(seconds: 1), () {
           state = state.copyWith(state: WishlistState.success);
         });
-        await getUserFavorites();
+        await getUserFavorites(userId);
       },
     );
   }

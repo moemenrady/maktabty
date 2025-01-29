@@ -18,9 +18,9 @@ class AuthController extends StateNotifier<AuthRiverpodState> {
   })  : _repository = repository,
         super(AuthRiverpodState.initial());
 
-  Future<void> getCurrentUser() async {
+  Future<void> getCurrentUser(String email) async {
     state = state.copyWith(state: AuthState.loading);
-    final result = await _repository.getCurrentUser();
+    final result = await _repository.getCurrentUser(email);
     result.fold(
       (failure) => state = state.copyWith(
         state: AuthState.error,

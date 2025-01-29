@@ -31,7 +31,8 @@ class HomePpage extends ConsumerWidget {
                   children: [
                     // Updated App Bar with new logo and text
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 14.h),
                       child: Row(
                         children: [
                           ClipRRect(

@@ -1,59 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/review_card.dart';
+import 'package:mktabte/features/home/presentation/screens/userwishlistscreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/theme/text_style.dart';
+import '../../../admin/presentation/screens/admin_control_user_orders.dart';
+import '../../../admin/presentation/screens/category_page.dart';
+import '../../../admin/presentation/screens/item_page.dart';
+import '../../../admin/presentation/screens/view_orders_summary.dart';
 import '../../../auth/data/_auth_service.dart';
-import '../../../auth/presentation/riverpod/login_state.dart';
-import '../../../auth/presentation/screens/login.dart';
+
+import '../../../orders/presentation/screens/user_orders_screen.dart';
 import '../widgets/custom_profile_option.dart';
 
 final supabase = Supabase.instance.client;
 
-class UserProfileScreen extends ConsumerStatefulWidget {
+class UserProfileScreen extends ConsumerWidget {
   const UserProfileScreen({super.key});
 
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    void logOut() {
+      ref.read(appUserRiverpodProvider.notifier).clearUserData();
+    }
 
-class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
-  final authservice = AuthService();
-
-  // Logout function
-  void logout(BuildContext context) async {
-    await authservice.signout();
-
-    // Check if the widget is still mounted before updating the state
-    // if (mounted) {
-    //   ref.read(loginStateProvider.notifier).logOut();
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => const LoginPage()),
-    //   );
-    // }
-  }
-
-  late String userName;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchUserName();
-  }
-
-  void fetchUserName() {
-    // Safely fetch the user name from the metadata
-    final name = authservice.getCurrentUserName();
-    setState(() {
-      userName = name ?? "Guest";
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final userName = authservice.getCurrentUserName(); // Get user's name
+    final userName =
+        ref.read(appUserRiverpodProvider).user?.name; // Get user's name
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(40.0),
@@ -69,7 +44,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                   height: 52.h,
                 ),
                 SizedBox(width: 10.w),
-                Text(userName ?? "Guest", style: TextStyles.Inter17mediumBlack),
+                Text(userName!, style: TextStyles.Inter17mediumBlack),
               ],
             ),
             SizedBox(height: 30.h),
@@ -78,47 +53,114 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             Expanded(
               child: ListView(
                 children: [
+                  //for admin
                   CustomProfileOption(
-                    OntapFN: () {},
-                    iconPath: "assets/images/dark_light_mode_icon.png",
-                    title: "Dark Mode",
+                    OntapFN: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CategoryPage()));
+                    },
+                    iconPath: "assets/images/setting_icon.png",
+                    title: "My Category",
                     textStyle: TextStyles.Inter15regularBlack,
                   ),
                   SizedBox(height: 18.h),
                   CustomProfileOption(
-                    OntapFN: () {},
-                    iconPath: "assets/images/Info_icon.png",
-                    title: "Account Information",
+                    OntapFN: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ItemPage()));
+                    },
+                    iconPath: "assets/images/setting_icon.png",
+                    title: "My Product",
                     textStyle: TextStyles.Inter15regularBlack,
                   ),
                   SizedBox(height: 18.h),
                   CustomProfileOption(
-                    OntapFN: () {},
+                    OntapFN: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ViewOrdersSummaryScreen()));
+                    },
+                    iconPath: "assets/images/setting_icon.png",
+                    title: "View Orders",
+                    textStyle: TextStyles.Inter15regularBlack,
+                  ),
+                  SizedBox(height: 18.h),
+                  CustomProfileOption(
+                    OntapFN: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const AdminControlUserOrders()));
+                    },
+                    iconPath: "assets/images/setting_icon.png",
+                    title: "Control User Orders",
+                    textStyle: TextStyles.Inter15regularBlack,
+                  ),
+                  SizedBox(height: 18.h),
+                  //for user
+                  // CustomProfileOption(
+                  //   OntapFN: () {},
+                  //   iconPath: "assets/images/dark_light_mode_icon.png",
+                  //   title: "Dark Mode",
+                  //   textStyle: TextStyles.Inter15regularBlack,
+                  // ),
+
+                  // SizedBox(height: 18.h),
+                  // CustomProfileOption(
+                  //   OntapFN: () {},
+                  //   iconPath: "assets/images/Info_icon.png",
+                  //   title: "Account Information",
+                  //   textStyle: TextStyles.Inter15regularBlack,
+                  // ),
+
+                  SizedBox(height: 18.h),
+                  CustomProfileOption(
+                    OntapFN: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UserOrdersScreen()),
+                      );
+                    },
                     iconPath: "assets/images/bag_icon.png",
                     title: "Order",
                     textStyle: TextStyles.Inter15regularBlack,
                   ),
+                  // SizedBox(height: 18.h),
+                  // CustomProfileOption(
+                  //   OntapFN: () {},
+                  //   iconPath: "assets/images/wallet_icon.png",
+                  //   title: "My Cards",
+                  //   textStyle: TextStyles.Inter15regularBlack,
+                  // ),
                   SizedBox(height: 18.h),
                   CustomProfileOption(
-                    OntapFN: () {},
-                    iconPath: "assets/images/wallet_icon.png",
-                    title: "My Cards",
-                    textStyle: TextStyles.Inter15regularBlack,
-                  ),
-                  SizedBox(height: 18.h),
-                  CustomProfileOption(
-                    OntapFN: () {},
+                    OntapFN: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const UserWishlistScreen()));
+                    },
                     iconPath: "assets/images/wishlist_icon.png",
                     title: "Wishlist",
                     textStyle: TextStyles.Inter15regularBlack,
                   ),
-                  SizedBox(height: 18.h),
-                  CustomProfileOption(
-                    OntapFN: () {},
-                    iconPath: "assets/images/setting_icon.png",
-                    title: "Settings",
-                    textStyle: TextStyles.Inter15regularBlack,
-                  ),
+
+                  // SizedBox(height: 18.h),
+                  // CustomProfileOption(
+                  //   OntapFN: () {},
+                  //   iconPath: "assets/images/setting_icon.png",
+                  //   title: "Settings",
+                  //   textStyle: TextStyles.Inter15regularBlack,
+                  // ),
                 ],
               ),
             ),
@@ -126,8 +168,7 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
             // Logout Button
             CustomProfileOption(
               OntapFN: () {
-                logout(
-                    context); // Logout function does not need ref, just the context
+                logOut();
               },
               iconPath: "assets/images/Logout.png",
               title: "Logout",

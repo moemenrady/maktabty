@@ -10,6 +10,8 @@ enum CheckOutStateStatus {
   error,
   successAddItemToCart,
   successRemoveItemFromCart,
+  successAddAddress,
+  successUpdateAddress,
 }
 
 extension CheckOutStateStatusX on CheckOutState {
@@ -21,6 +23,9 @@ extension CheckOutStateStatusX on CheckOutState {
       status == CheckOutStateStatus.successAddItemToCart;
   bool isSuccessRemoveItemFromCart() =>
       status == CheckOutStateStatus.successRemoveItemFromCart;
+  bool isSuccessAddAddress() => status == CheckOutStateStatus.successAddAddress;
+  bool isSuccessUpdateAddress() =>
+      status == CheckOutStateStatus.successUpdateAddress;
 }
 
 class CheckOutState {
@@ -29,12 +34,14 @@ class CheckOutState {
   final List<CartItemsModel> cartItems;
   final List<AddressModel> address;
   final String errorMessage;
+  final AddressModel? selectedAddress;
   CheckOutState({
     required this.status,
     required this.totalPrice,
     required this.cartItems,
     required this.address,
     required this.errorMessage,
+    this.selectedAddress,
   });
 
   CheckOutState copyWith({
@@ -43,6 +50,7 @@ class CheckOutState {
     List<AddressModel>? address,
     String? errorMessage,
     double? totalPrice,
+    AddressModel? selectedAddress,
   }) {
     return CheckOutState(
       status: status ?? this.status,
@@ -50,6 +58,7 @@ class CheckOutState {
       address: address ?? this.address,
       errorMessage: errorMessage ?? this.errorMessage,
       totalPrice: totalPrice ?? this.totalPrice,
+      selectedAddress: selectedAddress ?? this.selectedAddress,
     );
   }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
+import '../../../../core/utils/show_snack_bar.dart';
 import '../../model/cart_items_model.dart';
 import '../riverpods/check_out/check_out_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -73,12 +75,17 @@ class CheckOutScreen extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  if (checkOutState.state.selectedAddress == null) {
+                    showSnackBar(context, 'Please select a delivery address');
+                    return;
+                  }
+
                   ref.read(checkOutRiverpodProvider.notifier).checkOut(
-                      1,
+                      ref.read(appUserRiverpodProvider).user!.id!,
                       checkOutState.state.cartItems
                           .map((e) => e.toMap())
                           .toList(),
-                      1,
+                      checkOutState.state.selectedAddress!.id,
                       "Purches");
                 },
                 style: ElevatedButton.styleFrom(
