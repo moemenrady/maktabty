@@ -5,7 +5,6 @@ import 'package:mktabte/features/check_out/presentation/riverpods/check_out/chec
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 import 'package:mktabte/features/check_out/presentation/screen/check_out_screen.dart';
 import 'package:mktabte/features/check_out/presentation/widget/cart_page/custom_cart_button.dart';
-import 'package:mktabte/features/check_out/presentation/widget/cart_page/user_all_addresses.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/theme/text_style.dart';
@@ -17,31 +16,10 @@ import '../widget/cart_page/address_selection_sheet.dart';
 class CartPage extends ConsumerWidget {
   const CartPage({super.key});
 
-  Future<void> allAddressesFunction(BuildContext context, WidgetRef ref) async {
-    // Open the modal and wait for the selected address
-    final result = await showModalBottomSheet<Map<String, String>>(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      isScrollControlled: true,
-      builder: (context) {
-        return const UserAllAddresses();
-      },
-    );
-
-    // Update the state with the selected location using Riverpod
-    if (result != null) {
-      ref.read(selectedLocationProvider.notifier).state =
-          "${result['region']} - ${result['address']}";
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checkOutController = ref.watch(checkOutRiverpodProvider.notifier);
     final state = ref.watch(checkOutRiverpodProvider);
-    final selectedLocation = ref.watch(selectedLocationProvider);
 
     ref.listen(checkOutRiverpodProvider, (previous, next) {
       cartStateListner(context, checkOutController, next, ref);
@@ -69,12 +47,9 @@ class CartPage extends ConsumerWidget {
                           style: TextStyles.blinker20SemiBoldBlack,
                         ),
                         const Spacer(),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Edit",
-                            style: TextStyles.blinker16RegularLightBlue,
-                          ),
+                        Text(
+                          "Edit",
+                          style: TextStyles.blinker16RegularLightBlue,
                         ),
                       ],
                     ),
@@ -124,7 +99,6 @@ class CartPage extends ConsumerWidget {
                           ))
                     ],
                   ),
-
                   Row(
                     children: [
                       Image.asset("assets/images/location_img.png"),
