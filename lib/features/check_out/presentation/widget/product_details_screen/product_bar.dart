@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 
+import '../../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../admin/data/model/item_model.dart';
 import '../../../../home/presentation/screens/cartscreen.dart';
 import '../../riverpods/check_out/check_out_riverpod.dart';
@@ -57,7 +58,12 @@ class ProductBar extends ConsumerWidget {
                                   onPressed: () {
                                     ref
                                         .read(checkOutRiverpodProvider.notifier)
-                                        .addItemToCart(item.id, 1);
+                                        .addItemToCart(
+                                            item.id,
+                                            ref
+                                                .read(appUserRiverpodProvider)
+                                                .user!
+                                                .id!);
                                   },
                                   child: const Text(
                                     "Add to cart",
@@ -99,7 +105,7 @@ class ProductBar extends ConsumerWidget {
                     Container(
                       height: 45,
                       decoration: BoxDecoration(
-                        color: const Color(0xF68B3B),
+                        color: const Color(0x00f68b3b),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.grey.shade300),
                       ),

@@ -4,6 +4,9 @@ enum LoginState {
   initial,
   loading,
   success,
+  notLoggedIn,
+  saveUserData,
+  finish,
   error,
 }
 

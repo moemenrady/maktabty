@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:tuple/tuple.dart';
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../admin/data/model/item_model.dart';
+import '../controllers/items_search_controller.dart';
 import '../riverpods/items_river_pod/items_riverpod.dart';
 import '../riverpods/items_river_pod/items_riverpod_state.dart';
 import '../widgets/category/custom_category_card.dart';
 import '../widgets/home/custom_search_bar.dart';
+import '../widgets/category/items_search_bar.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {
   final int categoryId;
@@ -19,47 +22,81 @@ class CategoryScreen extends ConsumerStatefulWidget {
 }
 
 class _CategoryScreenState extends ConsumerState<CategoryScreen> {
+  late final ItemsSearchController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = ItemsSearchController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userId = ref.watch(appUserRiverpodProvider).user!.id!;
+    final itemsProvider =
+        itemsRiverpodProvider(Tuple2(widget.categoryId, userId));
+    final state = ref.watch(itemsProvider);
+
+    // Update search controller when items change
+    ref.listen(itemsProvider, (previous, next) {
+      if (next.items != previous?.items) {
+        _searchController.setItems(next.items);
+      }
+    });
+
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
           await ref
-              .read(
-                  itemsRiverpodProvider(Tuple2(widget.categoryId, 1)).notifier)
-              .getItemsWithFavoritesForCategory(widget.categoryId, 1);
+              .read(itemsProvider.notifier)
+              .getItemsWithFavoritesForCategory(widget.categoryId, userId);
         },
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
               CustomAppBar(
-                  txt: widget.categoryName, hasArrow: true, hasIcons: true),
+                txt: widget.categoryName,
+                hasArrow: true,
+                hasIcons: true,
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: CustomSearchBar(),
+                child: ItemsSearchBar(
+                  onChanged: _searchController.updateSearchQuery,
+                ),
               ),
               const SizedBox(height: 8),
-              Consumer(
-                builder: (context, ref, child) {
-                  final state = ref.watch(
-                      itemsRiverpodProvider(Tuple2(widget.categoryId, 1)));
-                  final items = ref.watch(
-                    itemsRiverpodProvider(Tuple2(widget.categoryId, 1))
-                        .select((state) => state.items),
-                  );
-                  final controller = ref.read(
-                      itemsRiverpodProvider(Tuple2(widget.categoryId, 1))
-                          .notifier);
-                  return Expanded(
-                    child: Column(
+              Expanded(
+                child: ListenableBuilder(
+                  listenable: _searchController,
+                  builder: (context, _) {
+                    if (state.isLoading()) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (state.isError()) {
+                      return Center(
+                          child:
+                              Text(state.errorMessage ?? 'An error occurred'));
+                    }
+
+                    final filteredItems = _searchController.filteredItems;
+
+                    return Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: [
                               Text(
-                                "${items.length} Items",
+                                "${filteredItems.length} Items",
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'Montserrat',
@@ -67,35 +104,48 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                 ),
                               ),
                               const Spacer(),
-                              child!
+                              _buildSortButton(),
+                              _buildFilterButton(),
                             ],
                           ),
                         ),
                         Expanded(
-                          child: _buildContent(
-                            state.isLoading(),
-                            state.isError(),
-                            state.errorMessage,
-                            items,
-                            (index) {
-                              controller.addToFavorites(
-                                  1, items[index].id, widget.categoryId);
-                            },
-                            (index) {
-                              controller.removeFromFavorites(
-                                  1, items[index].id, widget.categoryId);
-                            },
-                          ),
+                          child: filteredItems.isEmpty
+                              ? const Center(child: Text('No items found'))
+                              : GridView.builder(
+                                  padding: const EdgeInsets.all(10.0),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 8.0,
+                                    mainAxisSpacing: 8.0,
+                                    childAspectRatio: 0.6,
+                                  ),
+                                  itemCount: filteredItems.length,
+                                  itemBuilder: (context, index) {
+                                    final item = filteredItems[index];
+                                    return CustomCategoryCard(
+                                      item: item,
+                                      index: index,
+                                      onAddToFavourite: () {
+                                        ref
+                                            .read(itemsProvider.notifier)
+                                            .addToFavorites(userId, item.id,
+                                                widget.categoryId);
+                                      },
+                                      onRemoveFromFavourite: () {
+                                        ref
+                                            .read(itemsProvider.notifier)
+                                            .removeFromFavorites(userId,
+                                                item.id, widget.categoryId);
+                                      },
+                                    );
+                                  },
+                                ),
                         ),
                       ],
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    _buildSortButton(),
-                    _buildFilterButton(),
-                  ],
+                    );
+                  },
                 ),
               ),
             ],
@@ -105,49 +155,48 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
     );
   }
 
-  Widget _buildContent(
-      bool isLoading,
-      bool isError,
-      String? errorMessage,
-      List<ItemModel>? items,
-      void Function(int index) onAddToFavourite,
-      void Function(int index) onRemoveFromFavourite) {
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (isError) {
-      return Center(child: Text(errorMessage ?? 'An error occurred'));
-    }
-
-    if (items == null || items.isEmpty) {
-      return const Center(child: Text('No items found'));
-    }
-
-    return GridView.builder(
-      padding: const EdgeInsets.all(10.0),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
-        childAspectRatio: 0.6,
-      ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return CustomCategoryCard(
-            item: item,
-            index: index,
-            onAddToFavourite: () => onAddToFavourite(index),
-            onRemoveFromFavourite: () => onRemoveFromFavourite(index));
-      },
-    );
-  }
-
   Widget _buildSortButton() {
     return InkWell(
       onTap: () {
-        print("Sort tapped");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Sort By'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: const Text('Name (A-Z)'),
+                  onTap: () {
+                    _searchController.updateSortOrder('name_asc');
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Name (Z-A)'),
+                  onTap: () {
+                    _searchController.updateSortOrder('name_desc');
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Price (Low-High)'),
+                  onTap: () {
+                    _searchController.updateSortOrder('price_asc');
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Price (High-Low)'),
+                  onTap: () {
+                    _searchController.updateSortOrder('price_desc');
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -177,7 +226,47 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
   Widget _buildFilterButton() {
     return InkWell(
       onTap: () {
-        print("Filter tapped");
+        showDialog(
+          context: context,
+          builder: (context) {
+            double? tempMinPrice = _searchController.minPrice;
+            double? tempMaxPrice = _searchController.maxPrice;
+            return AlertDialog(
+              title: const Text('Filter by Price'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    decoration:
+                        const InputDecoration(labelText: 'Minimum Price'),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) => tempMinPrice = double.tryParse(value),
+                    controller: TextEditingController(
+                        text: _searchController.minPrice?.toString() ?? ''),
+                  ),
+                  TextField(
+                    decoration:
+                        const InputDecoration(labelText: 'Maximum Price'),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) => tempMaxPrice = double.tryParse(value),
+                    controller: TextEditingController(
+                        text: _searchController.maxPrice?.toString() ?? ''),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    _searchController.updatePriceRange(
+                        tempMinPrice, tempMaxPrice);
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Apply'),
+                ),
+              ],
+            );
+          },
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

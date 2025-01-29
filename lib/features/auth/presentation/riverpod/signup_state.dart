@@ -4,6 +4,7 @@ enum SignupState {
   initial,
   loading,
   success,
+  emailAlreadyExists,
   error,
   successCreateEmail,
   sucessSaveEmailInSupabaseDatabase,
@@ -34,6 +35,7 @@ class SignupRiverpodState {
   bool isSuccessCreateEmail() => state == SignupState.successCreateEmail;
   bool isSuccessSaveEmailInSupabaseDatabase() =>
       state == SignupState.sucessSaveEmailInSupabaseDatabase;
+  bool isEmailAlreadyExists() => state == SignupState.emailAlreadyExists;
 
   SignupRiverpodState copyWith({
     SignupState? state,

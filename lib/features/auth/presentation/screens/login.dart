@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mktabte/core/comman/app_user/app_user_state.dart';
 import 'package:mktabte/features/auth/data/_auth_service.dart';
 import 'package:mktabte/features/auth/presentation/screens/forget_pass_screen.dart';
 import 'package:mktabte/features/auth/presentation/screens/signup_screen.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_txt_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
+import '../../../../core/comman/entitys/user_model.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../../../home/presentation/widgets/custom_signup_btn.dart';
@@ -53,17 +56,50 @@ class _LoginState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appUserRiverpod = ref.read(appUserRiverpodProvider.notifier);
+
     ref.listen(loginControllerProvider, (previous, next) {
       if (next.isError()) {
         showSnackBar(context, next.error!);
       } else if (next.isSuccess()) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MainBar()),
-        );
+        appUserRiverpod.getUser(_emailController.text);
       }
     });
 
+    ref.listen(appUserRiverpodProvider, (previous, next) {
+      print("AppUserState: ${next.state}"); // Debug print
+
+      if (next.isGettedData()) {
+        appUserRiverpod.saveUserData(next.user);
+      }
+      if (next.isFailureGetData()) {
+        final user = UserModel(
+          email: _emailController.text,
+          password: _passController.text,
+          name: _emailController.text,
+        );
+        appUserRiverpod.saveUserToSupabase(user);
+      }
+      if (next.isFailureSaveUserDataInSupabase()) {
+        showSnackBar(context, next.errorMessage!);
+      }
+      if (next.isSaveUserDataInSupabase()) {
+        appUserRiverpod.getUser(_emailController.text);
+      }
+      if (next.isSuccess()) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MainBar()),
+          );
+        });
+      }
+      if (next.isError()) {
+        showSnackBar(context, next.errorMessage!);
+      }
+    });
+
+    final appUserState = ref.watch(appUserRiverpodProvider);
     final state = ref.watch(loginControllerProvider);
 
     return Scaffold(
@@ -155,9 +191,11 @@ class _LoginState extends ConsumerState<LoginPage> {
                     btnHeight: 48,
                     btnradious: 15,
                     bgclr: const Color(0xFFF68B3B),
-                    btnName: state.isLoading() ? "Loading..." : "Log in",
+                    btnName: state.isLoading() || appUserState.isLoading()
+                        ? "Loading..."
+                        : "Log in",
                     onPress: () {
-                      if (state.isLoading()) {
+                      if (state.isLoading() || appUserState.isLoading()) {
                         return;
                       }
                       _login();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../../core/theme/text_style.dart';
 import '../../../model/cart_items_model.dart';
 import '../../riverpods/check_out/check_out_riverpod.dart';
@@ -53,20 +54,20 @@ class CustomCartCard extends ConsumerWidget {
             ),
           ),
           _buildOutlinedButton("assets/images/arrow_down.png", () {
-            checkOutRiverpod.removeOneItemFromCart(
-                "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
+            checkOutRiverpod.removeOneItemFromCart(cartItemsModel.itemId,
+                ref.read(appUserRiverpodProvider).user!.id!);
           }),
           _buildQtyColumn("${cartItemsModel.itemCount}"),
           _buildOutlinedButton("assets/images/arrow_up.png", () {
-            checkOutRiverpod.addItemToCart(
-                "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
+            checkOutRiverpod.addItemToCart(cartItemsModel.itemId,
+                ref.read(appUserRiverpodProvider).user!.id!);
           }),
           _buildPriceColumn("\$${cartItemsModel.totalPricePerItem}"),
           Padding(
             padding: EdgeInsets.only(bottom: 40.h),
             child: _buildOutlinedButton("assets/images/delete.png", () {
-              checkOutRiverpod.removeItemFromCart(
-                  "8aad2a80-b210-11ef-a14c-af15a5030040", 1);
+              checkOutRiverpod.removeItemFromCart(cartItemsModel.itemId,
+                  ref.read(appUserRiverpodProvider).user!.id!);
             }),
           ),
         ],

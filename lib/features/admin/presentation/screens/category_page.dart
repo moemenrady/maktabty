@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktabte/features/admin/presentation/screens/add_category.dart';
 import 'package:mktabte/features/admin/presentation/screens/update_category_page.dart';
 import '../../../../core/utils/show_dialog.dart';
 import '../riverpods/category_riverpod/category_riverpod.dart';
@@ -16,6 +17,15 @@ class CategoryPage extends ConsumerWidget {
     }
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AddNewCategoryPage()));
+        },
+      ),
       appBar: AppBar(title: const Text('Categories')),
       body: ListView.builder(
         itemCount: categories.length,
@@ -29,7 +39,6 @@ class CategoryPage extends ConsumerWidget {
                   context, ref, () => deleteCategory(category.id)),
             ),
             onTap: () {
-              //TODO: Navigate to update category page
               Navigator.push(
                 context,
                 MaterialPageRoute(

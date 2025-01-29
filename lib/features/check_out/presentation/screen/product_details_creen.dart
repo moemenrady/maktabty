@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_riverpod.dart';
+import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/product_bar.dart';
 import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/review_card.dart';
 
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../admin/data/model/item_model.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class ProductDetailsScreen extends ConsumerWidget {
   final ItemModel item;
   const ProductDetailsScreen({super.key, required this.item});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(checkOutRiverpodProvider, (previous, next) {
+      if (next.isSuccessAddItemToCart()) {
+        ref
+            .read(checkOutRiverpodProvider.notifier)
+            .getCartItems(ref.read(appUserRiverpodProvider).user!.id!);
+      }
+    });
     return Scaffold(
       body: Stack(
         children: [
@@ -37,7 +48,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         },
                       )),
                 ),
-          
+
                 // Product title and price
                 Text(
                   item.name,
@@ -57,7 +68,7 @@ class ProductDetailsScreen extends StatelessWidget {
                 //     style: TextStyles.Roboto20mediumBlack,
                 //   ),
                 // ),
-          
+
                 // const SizedBox(
                 //   height: 5,
                 // ),
@@ -83,7 +94,7 @@ class ProductDetailsScreen extends StatelessWidget {
                 // const SizedBox(
                 //   height: 5,
                 // ),
-          
+
                 // Text("Size", style: TextStyles.Inter18SemiBoldlightBlack),
                 // const Row(
                 //   mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +122,9 @@ class ProductDetailsScreen extends StatelessWidget {
                 //   height: 5,
                 // ),
                 // // Review card
-                SizedBox(height: 3.h,),
+                SizedBox(
+                  height: 3.h,
+                ),
                 Text("Description", style: TextStyles.Blinker20semiBoldBlack),
                 const SizedBox(
                   height: 5,
@@ -119,7 +132,9 @@ class ProductDetailsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-                Text("product desckription product desckription product desckription product desckription", style: TextStyles.Blinker16regularlightBlack),
+                Text(
+                    "product desckription product desckription product desckription product desckription",
+                    style: TextStyles.Blinker16regularlightBlack),
                 const SizedBox(
                   height: 7,
                 ),
@@ -132,7 +147,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     Expanded(child: ReviewCard()),
                   ],
                 ),
-          
+
                 // ProductBar widget in the bottom
                 Expanded(
                   child: Align(

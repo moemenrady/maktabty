@@ -3,31 +3,25 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/auth_test.dart';
+import 'package:mktabte/core/comman/app_user/app_user_state.dart';
 import 'package:mktabte/core/comman/entitys/categories.dart';
 import 'package:mktabte/features/auth/presentation/screens/onboarding.dart';
 import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
 import 'package:mktabte/features/home/presentation/screens/cartscreen.dart';
-import 'package:mktabte/features/home/presentation/screens/home.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/comman/app_user/app_user_riverpod.dart';
 import 'core/utils/custom_error_screen.dart';
-import 'features/admin/presentation/screens/add_items.dart';
-import 'features/admin/presentation/screens/admin_control_user_orders.dart';
-import 'features/admin/presentation/screens/item_page.dart';
-import 'features/admin/presentation/screens/view_orders_summary.dart';
-import 'features/auth/data/auth_gate.dart';
+
 import 'features/auth/presentation/screens/login.dart';
-import 'features/auth/presentation/screens/signup_screen.dart';
-import 'features/check_out/presentation/screen/product_details_creen.dart';
-import 'features/home/presentation/screens/allcategriesscreen.dart';
-import 'features/home/presentation/screens/category.dart';
-import 'features/home/presentation/screens/userwishlistscreen.dart';
+
 import 'features/home/presentation/widgets/mainbar.dart';
-import 'features/orders/presentation/screens/user_orders_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  PaintingBinding.instance.imageCache.maximumSize = 1000;
+
   await Supabase.initialize(
     url: 'https://gwzvpnetxlpqpjsemttw.supabase.co',
     anonKey:
@@ -56,11 +50,34 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(appUserRiverpodProvider.notifier).isFirstInstallation();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final state = ref.watch(appUserRiverpodProvider);
+
+    // Add listener for debugging
+    ref.listen(appUserRiverpodProvider, (previous, next) {
+      print('AppUserState changed from ${previous?.state} to ${next.state}');
+      if (next.user != null) {
+        print('User: ${next.user!.email}');
+      }
+    });
+
     return ScreenUtilInit(
       designSize: const Size(390, 849),
       builder: (context, child) {
@@ -75,7 +92,17 @@ class MyApp extends StatelessWidget {
             ),
             useMaterial3: true,
           ),
-          home: const MainBar(),
+          home: state.isLoading()
+              ? const Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : state.isNotInstalled()
+                  ? const Onboard()
+                  : state.isGettedDataFromLocalStorage() || state.user != null
+                      ? const MainBar()
+                      : const LoginPage(),
         );
       },
     );

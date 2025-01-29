@@ -15,19 +15,6 @@ class AddressBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _AddressBottomSheetState extends ConsumerState<AddressBottomSheet> {
-  final List<String> cairoRegions = [
-    'Nasr City',
-    'Maadi',
-    'Heliopolis',
-    'Downtown',
-    'Zamalek',
-    '6th of October',
-    'New Cairo',
-    'Dokki',
-    'Mohandessin',
-    'Giza',
-  ];
-
   String? selectedRegion;
   final addressController = TextEditingController();
 
@@ -144,3 +131,16 @@ class _AddressBottomSheetState extends ConsumerState<AddressBottomSheet> {
           );
   }
 }
+
+final List<String> cairoRegions = [
+  'Nasr City',
+  'Maadi',
+  'Heliopolis',
+  'Downtown',
+  'Zamalek',
+  '6th of October',
+  'New Cairo',
+  'Dokki',
+  'Mohandessin',
+  'Giza',
+];

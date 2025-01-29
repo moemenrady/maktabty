@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_guest_wishlist_card.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_txt_btn.dart';
 import 'package:mktabte/features/home/presentation/widgets/mainbar.dart';
 
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/functions/navigate.dart';
 import '../../../../core/theme/text_style.dart';
 import 'login.dart';
-
 
 List imgs = [
   "assets/images/onboard1.png",
@@ -25,15 +26,19 @@ List subtitles = [
   "No fees, free shipping and amazing customer service. We’ll get you your package within 2 business days no questions asked!"
 ];
 
-class Onboard extends StatefulWidget {
+class Onboard extends ConsumerStatefulWidget {
   const Onboard({super.key});
 
   @override
-  State<Onboard> createState() => _OnboardState();
+  ConsumerState<Onboard> createState() => _OnboardState();
 }
 
-class _OnboardState extends State<Onboard> {
+class _OnboardState extends ConsumerState<Onboard> {
   late PageController _pageController;
+
+  void markAsInstalled() {
+    ref.read(appUserRiverpodProvider.notifier).saveInstallationFlag();
+  }
 
   @override
   void initState() {
@@ -56,10 +61,10 @@ class _OnboardState extends State<Onboard> {
           TextButton(
             child: const Text(
               'Skip',
-              style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0), fontSize: 19),
+              style:
+                  TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 19),
             ),
-            onPressed: () => {NavigateFN(context, () => const LoginPage())},
+            onPressed: () => {markAsInstalled()},
           ),
         ],
       ),
@@ -111,7 +116,9 @@ class _OnboardState extends State<Onboard> {
                               color: Colors.grey,
                             ),
                           ),
-                          const Spacer(flex: 3,),
+                          const Spacer(
+                            flex: 3,
+                          ),
                           if (i == 0 || i == 1)
                             Row(
                               children: [
@@ -137,24 +144,52 @@ class _OnboardState extends State<Onboard> {
                                 const Spacer()
                               ],
                             ),
-                          SizedBox(height: 18.h,),
+                          SizedBox(
+                            height: 18.h,
+                          ),
                           if (i == 0 || i == 1)
-                          CustomTxtBtn(btnName: "Next", onPress: () {
-                                _pageController.nextPage(
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.ease);
-                              }, bgclr: Color(0xFFF68B3B), btnradious: 15, btnWidth: 327, btnHeight: 48, txtstyle: TextStyles.Lato16extraBoldBlack),
-                            
-                            if (i == 2)
+                            CustomTxtBtn(
+                                btnName: "Next",
+                                onPress: () {
+                                  _pageController.nextPage(
+                                      duration:
+                                          const Duration(milliseconds: 250),
+                                      curve: Curves.ease);
+                                },
+                                bgclr: const Color(0xFFF68B3B),
+                                btnradious: 15,
+                                btnWidth: 327,
+                                btnHeight: 48,
+                                txtstyle: TextStyles.Lato16extraBoldBlack),
+                          if (i == 2)
                             Column(
                               children: [
-                                CustomTxtBtn(btnName: "Sign me up!", onPress: () {NavigateFN(context, () => const LoginPage());}, bgclr: Color(0xFFF68B3B), btnradious: 15, btnWidth: 327, btnHeight: 48, txtstyle: TextStyles.Lato16extraBoldBlack),
-                                
+                                CustomTxtBtn(
+                                    btnName: "Sign me up!",
+                                    onPress: () {
+                                      markAsInstalled();
+                                    },
+                                    bgclr: const Color(0xFFF68B3B),
+                                    btnradious: 15,
+                                    btnWidth: 327,
+                                    btnHeight: 48,
+                                    txtstyle: TextStyles.Lato16extraBoldBlack),
                                 SizedBox(height: 10.h),
-                                CustomTxtBtn(btnName: "Ask me later", onPress: () {NavigateFN(context, () => const MainBar());}, bgclr: Color(0xFFE8E8E8), btnradious: 15, btnWidth: 327, btnHeight: 48, txtstyle: TextStyles.Lato16boldlightBlack),
+                                CustomTxtBtn(
+                                    btnName: "Ask me later",
+                                    onPress: () {
+                                      markAsInstalled();
+                                    },
+                                    bgclr: const Color(0xFFE8E8E8),
+                                    btnradious: 15,
+                                    btnWidth: 327,
+                                    btnHeight: 48,
+                                    txtstyle: TextStyles.Lato16boldlightBlack),
                               ],
                             ),
-                          SizedBox(height: 20.h,),
+                          SizedBox(
+                            height: 20.h,
+                          ),
                         ],
                       );
                     },

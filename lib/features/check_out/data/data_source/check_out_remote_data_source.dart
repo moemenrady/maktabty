@@ -20,10 +20,11 @@ abstract interface class CheckOutRemoteDataSource {
   Future<void> removeOneItemFromCart(String itemId, int userId);
   Future<List<Map<String, dynamic>>> getCartItems(int userId);
   Future<void> clearCart(int userId);
-  Future<void> addAddress(AddressModel address);
+  Future<Map<String, dynamic>> addAddress(AddressModel address);
   Future<List<Map<String, dynamic>>> getAddress(int userId);
   Future<void> checkOut(int userId, List<Map<String, dynamic>> orderItems,
       int addressId, String transactionType);
+  Future<void> updateAddress(AddressModel address);
 }
 
 class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
@@ -87,9 +88,21 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
   }
 
   @override
-  Future<void> addAddress(AddressModel address) async {
+  Future<Map<String, dynamic>> addAddress(AddressModel address) async {
     return executeTryAndCatchForDataLayer(() async {
-      return await supabaseClient.from("address").insert(address.toMap());
+      final now = DateTime.now().toIso8601String();
+      final addressData = {
+        ...address.toMap(),
+        'created_at': now,
+        'updated_at': now,
+      };
+
+      final response = await supabaseClient
+          .from("address")
+          .insert(addressData)
+          .select()
+          .single();
+      return response;
     });
   }
 
@@ -118,6 +131,17 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
         'address_id': addressId,
         'transaction_type': transactionType,
       });
+    });
+  }
+
+  @override
+  Future<void> updateAddress(AddressModel address) async {
+    return executeTryAndCatchForDataLayer(() async {
+      await supabaseClient.from('address').update({
+        'address': address.address,
+        'region': address.region,
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', address.id!);
     });
   }
 }

@@ -59,10 +59,17 @@ class SignupController extends StateNotifier<SignupRiverpodState> {
   }) async {
     final result = await _repository.createUserProfile(user: user);
     result.fold(
-      (failure) => state = state.copyWith(
-        state: SignupState.error,
-        error: failure.message,
-      ),
+      (failure) {
+        print(failure.message);
+
+        state = state.copyWith(
+          state: SignupState.error,
+          error: failure.message
+                  .contains('duplicate key value violates unique constraint')
+              ? "Email Already Exists"
+              : failure.message,
+        );
+      },
       (_) => state = state.copyWith(
         state: SignupState.sucessSaveEmailInSupabaseDatabase,
       ),

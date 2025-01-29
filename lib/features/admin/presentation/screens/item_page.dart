@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mktabte/features/admin/presentation/screens/add_category.dart';
+import 'package:mktabte/features/admin/presentation/screens/add_items.dart';
 import '../../../../core/utils/show_dialog.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
@@ -17,6 +19,15 @@ class ItemPage extends ConsumerWidget {
     return DefaultTabController(
       length: categories.length,
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AddNewItemPage()));
+          },
+        ),
         appBar: AppBar(
           title: const Text('Items'),
           bottom: TabBar(

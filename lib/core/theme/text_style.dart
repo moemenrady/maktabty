@@ -327,4 +327,25 @@ class TextStyles {
     fontFamily: "Roboto",
     color: AppPallete.lightGrey,
   );
+
+  static TextStyle blinker14Boldwhite = TextStyle(
+    fontSize: 14.h,
+    fontWeight: FontWeightHelper.bold,
+    fontFamily: "Blinker",
+    color: AppPallete.white,
+  );
+
+  static TextStyle blinker12regularGreen = TextStyle(
+    fontSize: 12.h,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Blinker",
+    color: AppPallete.greenColor,
+  );
+
+  static TextStyle Blinker16semiBoldBlack = TextStyle(
+    fontSize: 16.h,
+    fontWeight: FontWeightHelper.semiBold,
+    fontFamily: "Blinker",
+    color: AppPallete.blackForText,
+  );
 }

@@ -44,9 +44,10 @@ class CheckOutRepository {
     });
   }
 
-  Future<Either<Failure, void>> addAddress(AddressModel address) async {
+  Future<Either<Failure, AddressModel>> addAddress(AddressModel address) async {
     return executeTryAndCatchForRepository(() async {
-      return await _checkOutRemoteDataSource.addAddress(address);
+      final newAddress = await _checkOutRemoteDataSource.addAddress(address);
+      return AddressModel.fromMap(newAddress);
     });
   }
 
@@ -66,6 +67,12 @@ class CheckOutRepository {
     return executeTryAndCatchForRepository(() async {
       return await _checkOutRemoteDataSource.checkOut(
           userId, orderItems, addressId, transactionType);
+    });
+  }
+
+  Future<Either<Failure, void>> updateAddress(AddressModel address) async {
+    return executeTryAndCatchForRepository(() async {
+      return await _checkOutRemoteDataSource.updateAddress(address);
     });
   }
 }

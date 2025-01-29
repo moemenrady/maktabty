@@ -17,7 +17,7 @@ abstract interface class AuthRemoteDataSource {
     required String password,
   });
 
-  Future<Map<String, dynamic>?> getCurrentUserData();
+  Future<Map<String, dynamic>?> getCurrentUserData(String email);
   Future<void> createUserProfile({
     required UserModel user,
   });
@@ -26,6 +26,8 @@ abstract interface class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
+  Future<void> signOut();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -42,11 +44,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
   }) async {
     return executeTryAndCatchForDataLayer(() async {
-      // await supabaseClient.auth.signInWithOtp(
-      //   email: email,
-      //   emailRedirectTo: 'https://lockapp.site/redirect_page.html',
-      // );
-
       await supabaseClient.auth.signUp(
         email: email,
         password: password,
@@ -76,13 +73,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>?> getCurrentUserData() async {
+  Future<Map<String, dynamic>?> getCurrentUserData(String email) async {
     return executeTryAndCatchForDataLayer(() async {
       if (currentUserSession != null) {
         return await supabaseClient
             .from('users')
             .select()
-            .eq('id', currentUserSession!.user.id)
+            .eq("email", email)
+            // .eq('id', currentUserSession!.user.id)
             .single();
       }
       return null;
@@ -98,5 +96,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       email: email,
       password: password,
     );
+  }
+
+  @override
+  Future<void> signOut() async {
+    await supabaseClient.auth.signOut();
   }
 }

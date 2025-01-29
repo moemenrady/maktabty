@@ -3,53 +3,72 @@ import 'dart:convert';
 
 class AddressModel {
   final int? id;
-  final String? region;
-  final String? address;
-  final int? userId;
+  final int userId;
+  final String address;
+  final String region;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
   AddressModel({
     this.id,
-    this.region,
-    this.address,
-    this.userId,
+    required this.userId,
+    required this.address,
+    required this.region,
+    this.createdAt,
+    this.updatedAt,
   });
 
   AddressModel copyWith({
     int? id,
-    String? region,
-    String? address,
     int? userId,
+    String? address,
+    String? region,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return AddressModel(
       id: id ?? this.id,
-      region: region ?? this.region,
-      address: address ?? this.address,
       userId: userId ?? this.userId,
+      address: address ?? this.address,
+      region: region ?? this.region,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
   Map<String, dynamic> toMap() {
+    // For new addresses (id is null), exclude id and add current timestamp
     if (id == null) {
-      return <String, dynamic>{
-        'region': region,
-        'address': address,
+      final now = DateTime.now().toIso8601String();
+      return {
         'user_id': userId,
-      };
-    } else {
-      return <String, dynamic>{
-        'id': id,
-        'region': region,
         'address': address,
-        'user_id': userId,
+        'region': region,
+        'created_at': now,
+        'updated_at': now,
       };
     }
+    // For existing addresses (id is not null), include id
+    return {
+      'id': id,
+      'user_id': userId,
+      'address': address,
+      'region': region,
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
+    };
   }
 
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
-      id: map['id'] as int? ?? 0,
-      region: map['region'] as String? ?? '',
-      address: map['address'] as String? ?? '',
-      userId: map['user_id'] as int? ?? 0,
+      id: map['id']?.toInt() ?? 0,
+      userId: map['user_id']?.toInt() ?? 0,
+      address: map['address'] ?? '',
+      region: map['region'] ?? '',
+      createdAt:
+          map['created_at'] != null ? DateTime.parse(map['created_at']) : null,
+      updatedAt:
+          map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
     );
   }
 
@@ -60,7 +79,7 @@ class AddressModel {
 
   @override
   String toString() {
-    return 'AddressModel(id: $id, region: $region, address: $address, userId: $userId)';
+    return 'AddressModel(id: $id, region: $region, address: $address, userId: $userId, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -70,11 +89,18 @@ class AddressModel {
     return other.id == id &&
         other.region == region &&
         other.address == address &&
-        other.userId == userId;
+        other.userId == userId &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ region.hashCode ^ address.hashCode ^ userId.hashCode;
+    return id.hashCode ^
+        region.hashCode ^
+        address.hashCode ^
+        userId.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode;
   }
 }

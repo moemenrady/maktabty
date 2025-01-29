@@ -58,18 +58,42 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         );
   }
 
+  void _showVerificationDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Sign Up Successful'),
+        content: const Text(
+          'Your account has been created successfully. Please check your email to verify your account before logging in.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(signupControllerProvider, (previous, next) {
       if (next.error != null) {
         showSnackBar(context, next.error!);
       } else if (next.isSuccessCreateEmail()) {
-        showSnackBar(context, 'Please check your email for OTP');
         ref.read(signupControllerProvider.notifier).createUserProfile(
               user: next.user!,
             );
       } else if (next.isSuccessSaveEmailInSupabaseDatabase()) {
-        showSnackBar(context, 'User created successfully');
+        _showVerificationDialog();
       }
     });
 

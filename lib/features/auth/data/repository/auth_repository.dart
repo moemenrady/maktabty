@@ -42,9 +42,9 @@ class AuthRepository {
     });
   }
 
-  Future<Either<Failure, UserModel?>> getCurrentUser() async {
+  Future<Either<Failure, UserModel?>> getCurrentUser(String email) async {
     return executeTryAndCatchForRepository(() async {
-      final userData = await remoteDataSource.getCurrentUserData();
+      final userData = await remoteDataSource.getCurrentUserData(email);
       if (userData == null) return null;
       return UserModel.fromMap(userData);
     });
@@ -56,6 +56,12 @@ class AuthRepository {
   }) async {
     return executeTryAndCatchForRepository(() async {
       await remoteDataSource.loginWithEmail(email: email, password: password);
+    });
+  }
+
+  Future<Either<Failure, void>> signOut() async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.signOut();
     });
   }
 }
