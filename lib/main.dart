@@ -69,12 +69,15 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(appUserRiverpodProvider);
-
+    final appUserRiverpod = ref.read(appUserRiverpodProvider.notifier);
     // Add listener for debugging
     ref.listen(appUserRiverpodProvider, (previous, next) {
       print('AppUserState changed from ${previous?.state} to ${next.state}');
       if (next.user != null) {
         print('User: ${next.user!.email}');
+      }
+      if (next.isInstalled()) {
+        appUserRiverpod.isUserLoggedIn();
       }
     });
 
@@ -100,7 +103,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                 )
               : state.isNotInstalled()
                   ? const Onboard()
-                  : state.isGettedDataFromLocalStorage() || state.user != null
+                  : state.isGettedDataFromLocalStorage()
                       ? const MainBar()
                       : const LoginPage(),
         );

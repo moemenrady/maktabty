@@ -49,8 +49,7 @@ class AddNewItemPage extends ConsumerWidget {
         showSnackBar(context, next.error ?? "");
       } else if (next.isSuccess()) {
         showSnackBar(context, 'Item added successfully');
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const ItemPage()));
+        Navigator.pop(context);
       }
     });
 

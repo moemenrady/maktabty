@@ -39,7 +39,8 @@ class WishlistRiverpod extends StateNotifier<WishlistRiverpodState> {
     result.fold(
       (failure) => state = state.copyWith(
           state: WishlistState.error, errorMessage: failure.message),
-      (items) => state = state.copyWith(state: WishlistState.success),
+      (items) =>
+          state = state.copyWith(state: WishlistState.successAddItemToCart),
     );
   }
 
@@ -56,9 +57,9 @@ class WishlistRiverpod extends StateNotifier<WishlistRiverpodState> {
       ),
       (_) async {
         await Future.delayed(const Duration(seconds: 1), () {
-          state = state.copyWith(state: WishlistState.success);
+          state = state.copyWith(
+              state: WishlistState.successRemoveItemFromFavourate);
         });
-        await getUserFavorites(userId);
       },
     );
   }

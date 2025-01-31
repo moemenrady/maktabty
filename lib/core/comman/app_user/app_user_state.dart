@@ -7,6 +7,7 @@ enum AppUserStates {
   loading,
   success,
   faliureGetData,
+  saveDataInLocalStorage,
   gettedDataFromLocalStorage,
   saveUserDataInSupabase,
   failureSaveUserDataInSupabase,
@@ -42,6 +43,8 @@ extension AppUserStateX on AppUserRiverpodState {
       state == AppUserStates.saveUserDataInSupabase;
   bool isFailureSaveUserDataInSupabase() =>
       state == AppUserStates.failureSaveUserDataInSupabase;
+  bool isSaveDataInLocalStorage() =>
+      state == AppUserStates.saveDataInLocalStorage;
 }
 
 class AppUserRiverpodState {

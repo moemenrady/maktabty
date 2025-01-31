@@ -130,7 +130,7 @@ class CheckOutRiverpod extends StateNotifier<CheckOutState> {
           status: CheckOutStateStatus.error, errorMessage: failure.message);
     }, (success) {
       print("success");
-      state = state.copyWith(status: CheckOutStateStatus.success);
+      state = state.copyWith(status: CheckOutStateStatus.successCheckOut);
     });
   }
 

@@ -5,6 +5,8 @@ enum WishlistState {
   loading,
   success,
   error,
+  successAddItemToCart,
+  successRemoveItemFromFavourate,
 }
 
 class WishlistRiverpodState {
@@ -21,6 +23,9 @@ class WishlistRiverpodState {
   bool isLoading() => state == WishlistState.loading;
   bool isSuccess() => state == WishlistState.success;
   bool isError() => state == WishlistState.error;
+  bool isSuccessAddItemToCart() => state == WishlistState.successAddItemToCart;
+  bool isSuccessRemoveItemFromFavourate() =>
+      state == WishlistState.successRemoveItemFromFavourate;
 
   WishlistRiverpodState copyWith({
     WishlistState? state,

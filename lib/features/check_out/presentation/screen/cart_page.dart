@@ -205,10 +205,18 @@ class CartPage extends ConsumerWidget {
 
                   CustomCartButton(
                       onpressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  CheckOutScreen(cartItems: state.cartItems)))),
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CheckOutScreen(
+                                          cartItems: state.cartItems)))
+                              .then((value) {
+                            ref
+                                .read(checkOutRiverpodProvider.notifier)
+                                .getCartItems(ref
+                                    .watch(appUserRiverpodProvider)
+                                    .user!
+                                    .id!);
+                          })),
                   // CustomCartButton(
                   //   onpressed: () =>
                   //       _showAddressBottomSheet(context, checkOutController),

@@ -10,7 +10,7 @@ import 'item_list_state.dart';
 import 'item_list_view_model.dart';
 
 final itemListProvider =
-    StateNotifierProvider<ItemListController, ItemListState>((ref) {
+    StateNotifierProvider.autoDispose<ItemListController, ItemListState>((ref) {
   final repository = ref.watch(adminRepositoryProvider);
   final controller = ItemListController(repository: repository);
   Future.microtask(() => controller.fetchItems());

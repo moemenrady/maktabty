@@ -86,7 +86,7 @@ class _LoginState extends ConsumerState<LoginPage> {
       if (next.isSaveUserDataInSupabase()) {
         appUserRiverpod.getUser(_emailController.text);
       }
-      if (next.isSuccess()) {
+      if (next.isSaveDataInLocalStorage()) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(
             context,
@@ -170,7 +170,7 @@ class _LoginState extends ConsumerState<LoginPage> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const ForgetPassScreen(),

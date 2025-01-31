@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../../model/cart_items_model.dart';
 import '../riverpods/check_out/check_out_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/utils/check_out_dialog.dart';
 
 class CheckOutScreen extends ConsumerWidget {
   final List<CartItemsModel> cartItems;
@@ -12,6 +14,11 @@ class CheckOutScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checkOutState = ref.read(checkOutRiverpodProvider.notifier);
+    ref.listen(checkOutRiverpodProvider, (previous, next) {
+      if (next.isSuccessCheckOut()) {
+        showCheckoutSuccessDialog(context);
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),

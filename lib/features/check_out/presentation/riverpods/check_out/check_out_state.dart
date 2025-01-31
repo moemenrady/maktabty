@@ -11,6 +11,7 @@ enum CheckOutStateStatus {
   successAddItemToCart,
   successRemoveItemFromCart,
   successAddAddress,
+  successCheckOut,
   successUpdateAddress,
 }
 
@@ -26,6 +27,7 @@ extension CheckOutStateStatusX on CheckOutState {
   bool isSuccessAddAddress() => status == CheckOutStateStatus.successAddAddress;
   bool isSuccessUpdateAddress() =>
       status == CheckOutStateStatus.successUpdateAddress;
+  bool isSuccessCheckOut() => status == CheckOutStateStatus.successCheckOut;
 }
 
 class CheckOutState {

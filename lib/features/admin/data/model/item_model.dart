@@ -57,7 +57,6 @@ class ItemModel {
       'updated_at': createdAt,
       'wholesale_price': wholesalePrice,
       'retail_price': retailPrice,
-      'is_favourite': isFavourite,
     };
   }
 

@@ -31,9 +31,10 @@ class AppUserRiverpod extends StateNotifier<AppUserRiverpodState> {
         ),
         (r) {
           state = state.copyWith(
-            state: AppUserStates.gettedDataFromLocalStorage,
+            state: AppUserStates.saveDataInLocalStorage,
             user: user,
           );
+          getStoredUserData();
         },
       );
     }
@@ -64,7 +65,11 @@ class AppUserRiverpod extends StateNotifier<AppUserRiverpodState> {
       ),
       (r) async {
         if (r != null) {
-          await saveUserData(r);
+          state = state.copyWith(
+            state: AppUserStates.gettedData,
+            user: r,
+          );
+          saveUserData(r);
         } else {
           state = state.copyWith(
             state: AppUserStates.failure,
@@ -84,7 +89,11 @@ class AppUserRiverpod extends StateNotifier<AppUserRiverpodState> {
         errorMessage: l,
       ),
       (r) async {
-        await saveUserData(r);
+        state = state.copyWith(
+          state: AppUserStates.loggedIn,
+          user: r,
+        );
+        getStoredUserData();
       },
     );
   }
@@ -119,22 +128,21 @@ class AppUserRiverpod extends StateNotifier<AppUserRiverpodState> {
   }
 
   Future<void> isFirstInstallation() async {
-    if (state.isLoading()) return; // Prevent multiple calls
+    if (state.isLoading()) return;
 
     state = state.copyWith(state: AppUserStates.loading);
     final res = await SecureStorageHelper.isFirstInstallation();
 
     if (mounted) {
-      // Check if the provider is still mounted
       res.fold(
           (l) => state = state.copyWith(
                 state: AppUserStates.notInstalled,
                 errorMessage: l,
-              ), (r) {
+              ), (r) async {
         state = state.copyWith(
           state: AppUserStates.installed,
         );
-        isUserLoggedIn();
+        await isUserLoggedIn();
       });
     }
   }

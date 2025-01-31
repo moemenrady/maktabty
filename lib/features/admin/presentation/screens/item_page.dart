@@ -23,9 +23,12 @@ class ItemPage extends ConsumerWidget {
           child: const Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AddNewItemPage()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AddNewItemPage()))
+                .then((value) {
+              ref.read(itemListProvider.notifier).fetchItems();
+            });
           },
         ),
         appBar: AppBar(

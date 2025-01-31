@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../admin/data/model/item_model.dart';
+import '../../../check_out/presentation/screen/product_details_creen.dart';
 import '../../data/repository/home_repository.dart';
 import '../riverpods/wishlist_riverpod/wishlist_riverpod.dart';
 
@@ -27,17 +29,26 @@ class CustomWishlistCard extends ConsumerWidget {
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
                   children: [
-                    Container(
-                      width: 88.w,
-                      height: 88.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        image: DecorationImage(
-                          image: NetworkImage(item.imageUrl),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                    InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductDetailsScreen(item: item)),
+                          );
+                        },
+                        child: Container(
+                          width: 88.w,
+                          height: 88.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                              image: NetworkImage(item.imageUrl),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )),
                     const SizedBox(width: 16.0),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,10 +72,14 @@ class CustomWishlistCard extends ConsumerWidget {
                           ),
                           child: InkWell(
                             onTap: () async {
-                              // Add to cart
                               await ref
                                   .read(wishlistProvider.notifier)
-                                  .addItemToCart(item.id, 1);
+                                  .addItemToCart(
+                                      item.id,
+                                      ref
+                                          .read(appUserRiverpodProvider)
+                                          .user!
+                                          .id!);
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -93,10 +108,8 @@ class CustomWishlistCard extends ConsumerWidget {
                 left: 88.w,
                 child: InkWell(
                   onTap: () {
-                    // Remove from favorites
-                    ref
-                        .read(wishlistProvider.notifier)
-                        .removeFromFavorites(1, item.id);
+                    ref.read(wishlistProvider.notifier).removeFromFavorites(
+                        ref.read(appUserRiverpodProvider).user!.id!, item.id);
                   },
                   child: Image.asset(
                     "assets/images/heart.png",
