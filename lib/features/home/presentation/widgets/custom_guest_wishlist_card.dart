@@ -40,10 +40,10 @@ class CustomGuestWishlistCard extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyles.Lato16mediumlightBlack,
             ),
-            Spacer(),
+            const Spacer(),
             CustomTxtBtn(
               txtstyle: TextStyles.Lato16boldBlack,
-              bgclr: Color(0xFFFF9E56),
+              bgclr: const Color(0xFFFF9E56),
               btnHeight: 48,
               btnWidth: 327,
               btnName: "Login now",
@@ -52,7 +52,7 @@ class CustomGuestWishlistCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+                    builder: (context) => const LoginPage(),
                   ),
                 );
               },

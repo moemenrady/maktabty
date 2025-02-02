@@ -9,7 +9,7 @@ class CustomWlHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-                  color: Color(0xFFF68B3B),
+                  color: const Color(0xFFF68B3B),
                   height: 251.h,
                   width: double.infinity,
                   child: Padding(

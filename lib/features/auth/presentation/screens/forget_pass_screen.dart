@@ -51,7 +51,7 @@ class ForgetPassScreen extends StatelessWidget {
                 hinttxt: "Enter your Phone Number", mycontroller: phNum),
             const SizedBox(height: 70),
             CustomTxtBtn(txtstyle: TextStyles.Lato16extraBoldBlack,
-              bgclr: Color(0xFFF39754),btnHeight: 60,btnWidth: 345,btnradious: 14,
+              bgclr: const Color(0xFFF39754),btnHeight: 60,btnWidth: 345,btnradious: 14,
               btnName: "Continue",
               onPress: () {
                 if (phNum.text.isEmpty) {

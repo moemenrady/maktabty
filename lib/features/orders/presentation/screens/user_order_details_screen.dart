@@ -5,7 +5,6 @@ import '../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../data/models/user_order_model.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 class UserOrderDetailsScreen extends StatelessWidget {

@@ -9,7 +9,7 @@ class CustomGuestProfileButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Divider(
+      const Divider(
               color: Color(0xFFCBCBD4),
             ),
             InkWell(
@@ -20,14 +20,14 @@ class CustomGuestProfileButtons extends StatelessWidget {
                 child: Row(
                   children: [
                     Text("Settings", style: TextStyles.Lato16extraBoldBlack),
-                    Spacer(),
+                    const Spacer(),
                     Image.asset("assets/images/setting_icon.png",
                         width: 25.w, height: 25.h),
                   ],
                 ),
               ),
             ),
-            Divider(
+            const Divider(
               color: Color(0xFFCBCBD4),
             ),
             InkWell(
@@ -38,14 +38,14 @@ class CustomGuestProfileButtons extends StatelessWidget {
                 child: Row(
                   children: [
                     Text("Need help?", style: TextStyles.Lato16extraBoldBlack),
-                    Spacer(),
+                    const Spacer(),
                     Image.asset("assets/images/Info_icon.png",
                         width: 25.w, height: 25.h),
                   ],
                 ),
               ),
             ),
-            Divider(
+            const Divider(
               color: Color.fromARGB(255, 0, 0, 0),
             ),
     ],);

@@ -23,11 +23,11 @@ class AuthGate extends StatelessWidget {
 
         if (session != null) {
           // If session exists, the user is logged in
-          return MainBar();
+          return const MainBar();
         } else {
           // If session is null, the user is not logged in
           //return SignupWithPhoneScreen();
-          return Onboard();
+          return const Onboard();
         }
       },
     );
