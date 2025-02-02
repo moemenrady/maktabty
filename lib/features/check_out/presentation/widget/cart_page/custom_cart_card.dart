@@ -16,62 +16,71 @@ class CustomCartCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checkOutRiverpod = ref.read(checkOutRiverpodProvider.notifier);
-    return SizedBox(
-      height: 72.h,
-      width: 343.w,
-      child: Row(
-        children: [
-          Container(
-            height: 72.h,
-            width: 72.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.r),
-              image: DecorationImage(
-                  image: NetworkImage(cartItemsModel.itemImage),
-                  fit: BoxFit.fill),
-            ),
-          ),
-          SizedBox(width: 16.w),
-          Padding(
-            padding: EdgeInsets.all(10.h),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 133.w, maxHeight: 42.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    cartItemsModel.itemName,
-                    style: TextStyles.blinker20SemiBoldBlack,
-                    overflow: TextOverflow.fade,
+    return Column(
+      children: [
+        SizedBox(
+          height: 72.h,
+          width: double.infinity.w,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                Container(
+                  height: 70.h,
+                  width: 70.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24.r),
+                    image: DecorationImage(
+                        image: NetworkImage(cartItemsModel.itemImage),
+                        fit: BoxFit.fill),
                   ),
-                  Text(
-                    "Product Description",
-                    style: TextStyles.blinker14RegularDarkGrey,
-                    overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(width: 5.w),
+                Padding(
+                  padding: EdgeInsets.all(5.h),
+                  child: SizedBox(
+                    width: 130.w,
+                    //constraints: BoxConstraints(maxWidth: 120.w, maxHeight: 55.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          cartItemsModel.itemName,
+                          style: TextStyles.blinker20SemiBoldBlack,
+                          overflow: TextOverflow.fade,softWrap: false,
+                        ),
+                        Text(
+                          "Product Category",
+                          style: TextStyles.blinker14RegularDarkGrey,
+                          overflow: TextOverflow.ellipsis,softWrap: false,
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          _buildOutlinedButton("assets/images/arrow_down.png", () {
-            checkOutRiverpod.removeOneItemFromCart(cartItemsModel.itemId,
-                ref.read(appUserRiverpodProvider).user!.id!);
-          }),
-          _buildQtyColumn("${cartItemsModel.itemCount}"),
-          _buildOutlinedButton("assets/images/arrow_up.png", () {
-            checkOutRiverpod.addItemToCart(cartItemsModel.itemId,
-                ref.read(appUserRiverpodProvider).user!.id!);
-          }),
-          _buildPriceColumn("\$${cartItemsModel.totalPricePerItem}"),
-          Padding(
-            padding: EdgeInsets.only(bottom: 40.h),
-            child: _buildOutlinedButton("assets/images/delete.png", () {
-              checkOutRiverpod.removeItemFromCart(cartItemsModel.itemId,
+                ),
+                _buildOutlinedButton("assets/images/arrow_down.png", () {
+                  checkOutRiverpod.removeOneItemFromCart(cartItemsModel.itemId,
+                      ref.read(appUserRiverpodProvider).user!.id!);
+                }),
+                _buildQtyColumn("${cartItemsModel.itemCount}"),
+                              _buildOutlinedButton("assets/images/arrow_up.png", () {
+                                checkOutRiverpod.addItemToCart(cartItemsModel.itemId,
                   ref.read(appUserRiverpodProvider).user!.id!);
-            }),
+                              }),
+                              _buildPriceColumn("${cartItemsModel.totalPricePerItem}"),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 40.h),
+                                child: _buildOutlinedButton("assets/images/delete.png", () {
+                checkOutRiverpod.removeItemFromCart(cartItemsModel.itemId,
+                    ref.read(appUserRiverpodProvider).user!.id!);
+                                }),
+                              ),
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+        SizedBox(height: 12.h,),
+      ],
     );
   }
 
@@ -89,7 +98,7 @@ class CustomCartCard extends ConsumerWidget {
   Column _buildQtyColumn(String content) {
     return Column(
       children: [
-        Text(content, style: TextStyles.blinker20SemiBoldLightBlack),
+        Text(content, style: TextStyles.blinker20SemiBoldLightBlack,softWrap: false,),
         Text("Qty", style: TextStyles.blinker14RegularDarkGrey),
       ],
     );
@@ -98,7 +107,7 @@ class CustomCartCard extends ConsumerWidget {
   Column _buildPriceColumn(String content) {
     return Column(
       children: [
-        Text(content, style: TextStyles.blinker20SemiBoldLightBlack),
+        Text(content, style: TextStyles.blinker20SemiBoldLightBlack,softWrap: false,),
         Text("Price", style: TextStyles.blinker14RegularDarkGrey),
       ],
     );
