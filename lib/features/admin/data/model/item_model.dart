@@ -3,6 +3,7 @@ import 'dart:convert';
 class ItemModel {
   final String id;
   final String name;
+  final String description;
   final int categoryId;
   final String imageUrl;
   final int quantity;
@@ -14,6 +15,8 @@ class ItemModel {
   ItemModel({
     this.id = '',
     this.name = '',
+    this.description =
+        'One of the best products quality and price , you can buy it now',
     this.categoryId = 0,
     this.imageUrl = '',
     this.quantity = 0,
@@ -26,6 +29,7 @@ class ItemModel {
   ItemModel copyWith({
     String? id,
     String? name,
+    String? description,
     int? categoryId,
     String? imageUrl,
     int? quantity,
@@ -37,6 +41,7 @@ class ItemModel {
     return ItemModel(
       id: id ?? this.id,
       name: name ?? this.name,
+      description: description ?? this.description,
       categoryId: categoryId ?? this.categoryId,
       imageUrl: imageUrl ?? this.imageUrl,
       quantity: quantity ?? this.quantity,
@@ -51,6 +56,7 @@ class ItemModel {
     return {
       'id': id,
       'name': name,
+      'description': description,
       'category_id': categoryId,
       'image_url': imageUrl,
       'quantity': quantity,
@@ -64,6 +70,8 @@ class ItemModel {
     return ItemModel(
       id: map['id'] as String? ?? '',
       name: map['name'] as String? ?? '',
+      description: map['description'] as String? ??
+          'One of the best products quality and price , you can buy it now',
       categoryId: map['category_id'] as int? ?? 0,
       imageUrl: map['image_url'] as String? ?? '',
       quantity: map['quantity'] as int? ?? 0,
@@ -81,7 +89,7 @@ class ItemModel {
 
   @override
   String toString() {
-    return 'ItemModel(id: $id, name: $name, categoryId: $categoryId, imageUrl: $imageUrl, quantity: $quantity, createdAt: $createdAt, isFavourite: $isFavourite)';
+    return 'ItemModel(id: $id, name: $name, description: $description, categoryId: $categoryId, imageUrl: $imageUrl, quantity: $quantity, createdAt: $createdAt, isFavourite: $isFavourite)';
   }
 
   @override
@@ -90,6 +98,7 @@ class ItemModel {
 
     return other.id == id &&
         other.name == name &&
+        other.description == description &&
         other.categoryId == categoryId &&
         other.imageUrl == imageUrl &&
         other.quantity == quantity &&
@@ -101,6 +110,7 @@ class ItemModel {
   int get hashCode {
     return id.hashCode ^
         name.hashCode ^
+        description.hashCode ^
         categoryId.hashCode ^
         imageUrl.hashCode ^
         quantity.hashCode ^

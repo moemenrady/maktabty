@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../../../../core/comman/app_user/app_user_riverpod.dart';
+import '../../../../../core/theme/text_style.dart';
 import '../../../../admin/data/model/item_model.dart';
+import '../../../../home/presentation/riverpods/items_river_pod/items_riverpod.dart';
 import '../../riverpods/check_out/check_out_riverpod.dart';
 import '../../screen/cart_page.dart';
 
@@ -14,120 +17,87 @@ class ProductBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: Stack(children: [
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 3,
-          child: Container(
-            height: 60.h,
-            width: 296.w,
-            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                        height: 45,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF68B3B),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Consumer(builder: (context, ref, child) {
-                          final checkOutState =
-                              ref.watch(checkOutRiverpodProvider);
-                          return checkOutState.isLoading()
-                              ? const Center(child: CircularProgressIndicator())
-                              : TextButton(
-                                  onPressed: () {
-                                    ref
-                                        .read(checkOutRiverpodProvider.notifier)
-                                        .addItemToCart(
-                                            item.id,
-                                            ref
-                                                .read(appUserRiverpodProvider)
-                                                .user!
-                                                .id!);
-                                  },
-                                  child: const Text(
-                                    "Add to cart",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                );
-                        })),
-                    Container(
-                      width: 150,
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF68B3B),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CartPage()));
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              "assets/images/Add_Item_Cart.png",
-                              width: 18.w,
-                              height: 18.h,
-                            ),
-                            const SizedBox(width: 5),
-                            const Text(
-                              "Go To Cart",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: const Color(0x00f68b3b),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey.shade300),
-                      ),
-                      child: InkWell(
-                        onTap: () {},
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor:
-                              const Color.fromARGB(69, 235, 122, 147)
-                                  .withOpacity(0.8),
-                          child: const Icon(
-                            Icons.favorite_border_outlined,
-                            color: Color(0xFFB05A1B),
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
+    return Container(
+      height: 90.h,
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
           ),
-        ),
-      ]),
+        ],
+      ),
+      child: Row(
+        children: [
+          Consumer(builder: (context, ref, child) {
+            final checkOutState = ref.watch(checkOutRiverpodProvider);
+            return checkOutState.isLoading()
+                ? const Center(child: CircularProgressIndicator())
+                : Expanded(
+                    child: ElevatedButton(
+                    onPressed: () {
+                      ref.read(checkOutRiverpodProvider.notifier).addItemToCart(
+                          item.id, ref.read(appUserRiverpodProvider).user!.id!);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFF68B3B),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.r),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
+                    ),
+                    child: Text(
+                      "Add to cart",
+                      style: TextStyles.blinker14Boldwhite,
+                    ),
+                  ));
+          }),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const CartPage()));
+              },
+              icon: Image.asset(
+                "assets/images/Add_Item_Cart.png",
+                width: 18.w,
+                height: 18.h,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Go To Cart",
+                style: TextStyles.blinker14Boldwhite,
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFF68B3B),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25.r),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 12.h),
+              ),
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              color: item.isFavourite
+                  ? const Color(0xFFF68B3B).withOpacity(0.1)
+                  : Colors.grey.shade100,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              item.isFavourite ? Icons.favorite : Icons.favorite_border,
+              color: item.isFavourite ? const Color(0xFFF68B3B) : Colors.grey,
+              size: 24.w,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

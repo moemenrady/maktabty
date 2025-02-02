@@ -33,6 +33,7 @@ class AddNewItemPage extends ConsumerWidget {
               imageUrl:
                   'https://gwzvpnetxlpqpjsemttw.supabase.co/storage/v1/object/public/item_images/philip-oroni-VfOGf5RWkeg-unsplash.jpg',
               createdAt: DateTime.now().toIso8601String(),
+              description: viewModel.contentController.text.trim(),
             ),
             controller.image,
           );

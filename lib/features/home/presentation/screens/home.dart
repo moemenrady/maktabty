@@ -1,11 +1,13 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/core/utils/show_snack_bar.dart';
 import 'package:mktabte/features/home/presentation/riverpods/home_river_pod/home_riverpod_state.dart';
-import 'package:mktabte/features/home/presentation/screens/cartscreen.dart';
+import 'package:mktabte/features/home/presentation/screens/allcategriesscreen.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../admin/data/model/item_model.dart';
+import '../../../check_out/presentation/screen/cart_page.dart';
 import '../../../check_out/presentation/screen/product_details_creen.dart';
 import '../riverpods/home_river_pod/home_riverpod.dart';
 import '../widgets/home/custom_home_advertising.dart';
@@ -85,17 +87,19 @@ class HomePpage extends ConsumerWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const CartScreen()),
+                                  builder: (context) => const CartPage(),
+                                ),
                               );
                             },
                           ),
                         ],
                       ),
                     ),
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: const CustomSearchBar(),
+                    ZoomIn(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: const CustomSearchBar(),
+                      ),
                     ),
 
                     SizedBox(height: 24.h),
@@ -149,7 +153,14 @@ class HomePpage extends ConsumerWidget {
                                 ),
                                 const Spacer(),
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CategryScreen()),
+                                    );
+                                  },
                                   child: Text(
                                     'See all',
                                     style:
@@ -170,16 +181,18 @@ class HomePpage extends ConsumerWidget {
 
                     SizedBox(height: 6.h),
                     // Category Chips
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: CategoryChips(
-                        categories: homeState.categories ?? [],
-                        selectedCategory: homeState.selectedCategory,
-                        onCategorySelected: (category) {
-                          ref
-                              .read(homeRiverpodProvider.notifier)
-                              .selectCategory(category!);
-                        },
+                    ZoomIn(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: CategoryChips(
+                          categories: homeState.categories ?? [],
+                          selectedCategory: homeState.selectedCategory,
+                          onCategorySelected: (category) {
+                            ref
+                                .read(homeRiverpodProvider.notifier)
+                                .selectCategory(category!);
+                          },
+                        ),
                       ),
                     ),
 
@@ -193,24 +206,27 @@ class HomePpage extends ConsumerWidget {
                               ),
                             ),
                           )
-                        : Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: homeState.selectedCategory != null
-                                  ? homeState.categoryItems.length
-                                  : homeState.bestSellingItems.length,
-                              itemBuilder: (context, index) {
-                                final item = homeState.selectedCategory != null
-                                    ? homeState.categoryItems[index]
-                                    : homeState.bestSellingItems[index];
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 8.h, horizontal: 8.w),
-                                  child: _buildProductCard(context, item),
-                                );
-                              },
+                        : ZoomIn(
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: homeState.selectedCategory != null
+                                    ? homeState.categoryItems.length
+                                    : homeState.bestSellingItems.length,
+                                itemBuilder: (context, index) {
+                                  final item =
+                                      homeState.selectedCategory != null
+                                          ? homeState.categoryItems[index]
+                                          : homeState.bestSellingItems[index];
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8.h, horizontal: 8.w),
+                                    child: _buildProductCard(context, item),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                   ],

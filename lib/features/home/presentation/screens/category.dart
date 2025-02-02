@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
@@ -121,22 +122,35 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                   itemCount: filteredItems.length,
                                   itemBuilder: (context, index) {
                                     final item = filteredItems[index];
-                                    return CustomCategoryCard(
-                                      item: item,
-                                      index: index,
-                                      onAddToFavourite: () {
-                                        ref
-                                            .read(itemsProvider.notifier)
-                                            .addToFavorites(userId, item.id,
-                                                widget.categoryId);
-                                      },
-                                      onRemoveFromFavourite: () {
-                                        ref
-                                            .read(itemsProvider.notifier)
-                                            .removeFromFavorites(userId,
-                                                item.id, widget.categoryId);
-                                      },
-                                    );
+                                    return index % 2 == 0
+                                        ? FadeInLeft(
+                                            child: CustomCategoryCard(
+                                            item: item,
+                                            index: index,
+                                            onAddToFavourite: () {
+                                              ref
+                                                  .read(itemsProvider.notifier)
+                                                  .addToFavorites(
+                                                      userId,
+                                                      item.id,
+                                                      widget.categoryId);
+                                            },
+                                            onRemoveFromFavourite: () {
+                                              ref
+                                                  .read(itemsProvider.notifier)
+                                                  .removeFromFavorites(
+                                                      userId,
+                                                      item.id,
+                                                      widget.categoryId);
+                                            },
+                                          ))
+                                        : FadeInRight(
+                                            child: CustomCategoryCard(
+                                            item: item,
+                                            index: index,
+                                            onAddToFavourite: () {},
+                                            onRemoveFromFavourite: () {},
+                                          ));
                                   },
                                 ),
                         ),

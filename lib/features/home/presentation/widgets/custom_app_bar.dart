@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mktabte/core/theme/text_style.dart';
 import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
 
+import '../../../../core/utils/show_snack_bar.dart';
+
 class CustomAppBar extends StatelessWidget {
   final String txt;
   final bool hasArrow;
@@ -35,16 +37,21 @@ class CustomAppBar extends StatelessWidget {
         ),
         if (hasIcons) ...[
           IconButton(
-            onPressed: () {},
-            icon: Image.asset("assets/images/btns/black_notification_btn_img.png"),
+            onPressed: () {
+              showSnackBar(context, "You dont have any notifications");
+            },
+            icon: Image.asset(
+                "assets/images/btns/black_notification_btn_img.png"),
           ),
           IconButton(
-            onPressed: () {Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CartPage(),
-          ),
-        );},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartPage(),
+                ),
+              );
+            },
             icon: Image.asset("assets/images/btns/black_cart_btn_img.png"),
           ),
         ],

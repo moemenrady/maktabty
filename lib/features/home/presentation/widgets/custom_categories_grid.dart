@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/home/presentation/riverpods/categories_river_pod/categories_riverpod_state.dart';
 
 import '../../../../core/comman/entitys/categories.dart';
+import '../../../../core/comman/widgets/custom_cached_network_image_provider.dart';
 import '../../../../core/theme/text_style.dart';
 import '../screens/category.dart';
 
@@ -65,10 +66,8 @@ class CustomCategoriesGrid extends ConsumerWidget {
                             topRight: Radius.circular(20.r),
                             bottomLeft: Radius.circular(0.r),
                             bottomRight: Radius.circular(0.r)),
-                        child: Image.network(
-                          category.imageUrl,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
+                        child: CustomCachedNetworkImageProvider(
+                          imageUrl: category.imageUrl,
                         ),
                       ),
                     ),

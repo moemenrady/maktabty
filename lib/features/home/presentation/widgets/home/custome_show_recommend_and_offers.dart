@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +12,8 @@ class CustomeShowRecommendAndOffers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterCarousel(
+    return FadeInRight(
+        child: FlutterCarousel(
       items: items.map((item) {
         return GestureDetector(
           onTap: () => Navigator.push(
@@ -187,6 +189,6 @@ class CustomeShowRecommendAndOffers extends StatelessWidget {
         autoPlayInterval: const Duration(seconds: 3),
         slideIndicator: const CircularSlideIndicator(),
       ),
-    );
+    ));
   }
 }
