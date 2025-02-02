@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../data/repository/admin_repository.dart';
 import 'add_category_state.dart';
-import 'add_category_view_model.dart';
 
 final addCategoryRiverpodProvider =
     StateNotifierProvider.autoDispose<AddCategoryNotifier, AddCategoryState>(

@@ -53,12 +53,12 @@ class ReviewCard extends StatelessWidget {
                         child: Row(
                           children: [
                             Image.asset("assets/images/user1.png"),
-                            Spacer(),
+                            const Spacer(),
                             Text(
                               names[index],
                               style: TextStyles.Blinker14semiBoldBlack,
                             ),
-                            Spacer(),
+                            const Spacer(),
                           ],
                         ),
                       )

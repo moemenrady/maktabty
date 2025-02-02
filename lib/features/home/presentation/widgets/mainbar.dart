@@ -188,10 +188,10 @@ class _MainBarState extends State<MainBar> {
           activeScreen = const CartPage();
         }
         if (_selectedScreenIndex == 3) {
-          activeScreen = user != null ? UserWishlistScreen() : GuestWifhlistScreen();
+          activeScreen = user != null ? const UserWishlistScreen() : const GuestWifhlistScreen();
         }
         if (_selectedScreenIndex == 4) {
-          activeScreen = user != null ? UserProfileScreen() : const GuestProfileScreen();
+          activeScreen = user != null ? const UserProfileScreen() : const GuestProfileScreen();
         }
 
         // Return the main scaffold with bottom navigation bar

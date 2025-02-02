@@ -4,7 +4,7 @@ import 'package:mktabte/core/theme/text_style.dart';
 class CustomTxtBtnSize extends StatefulWidget {
   final String str;
 
-  const CustomTxtBtnSize({Key? key, required this.str}) : super(key: key);
+  const CustomTxtBtnSize({super.key, required this.str});
   @override
   _CustomTxtBtnState createState() => _CustomTxtBtnState();
 }

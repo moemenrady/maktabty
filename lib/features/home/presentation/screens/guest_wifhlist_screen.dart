@@ -48,8 +48,8 @@ class GuestWifhlistScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomWlHeader(),
-                Spacer(),
+                const CustomWlHeader(),
+                const Spacer(),
                 Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: Text(
@@ -57,7 +57,7 @@ class GuestWifhlistScreen extends StatelessWidget {
                     style: TextStyles.Lato12extraboldBlack,
                   ),
                 ),
-                CustomGuestTrendingWl(),
+                const CustomGuestTrendingWl(),
                 SizedBox(
                   height: 30.h,
                 )
@@ -68,7 +68,7 @@ class GuestWifhlistScreen extends StatelessWidget {
                 left: (MediaQuery.of(context).size.width - 327.w) / 2,
                 width: 327.w,
                 height: 320.h,
-                child: CustomGuestWishlistCard())
+                child: const CustomGuestWishlistCard())
           ],
         ),
       ),

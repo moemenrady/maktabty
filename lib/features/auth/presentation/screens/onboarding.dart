@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/auth/presentation/screens/signup_screen.dart';
-import 'package:mktabte/features/home/presentation/widgets/custom_guest_wishlist_card.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_txt_btn.dart';
-import 'package:mktabte/features/home/presentation/widgets/mainbar.dart';
 
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
-import '../../../../core/functions/navigate.dart';
 import '../../../../core/theme/text_style.dart';
-import 'login.dart';
 
 List imgs = [
   "assets/images/onboard1.png",

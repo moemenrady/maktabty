@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mktabte/core/comman/app_user/app_user_state.dart';
 import 'package:mktabte/features/auth/data/_auth_service.dart';
 import 'package:mktabte/features/auth/presentation/screens/forget_pass_screen.dart';
-import 'package:mktabte/features/auth/presentation/screens/signup_screen.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_txt_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +14,6 @@ import '../../../home/presentation/widgets/custom_txt_btn.dart';
 import '../../../home/presentation/widgets/custompass_txt_fiels.dart';
 import '../../../home/presentation/widgets/mainbar.dart';
 import '../riverpod/login_riverpod.dart';
-import '../riverpod/login_state.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
