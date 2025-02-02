@@ -60,7 +60,7 @@ class CartPage extends ConsumerWidget {
                   state.cartItems.isNotEmpty
                       ? SizedBox(
                           height: 318.h,
-                          width: 343.w,
+                          width: double.infinity.w,
                           child: ListView.builder(
                             itemCount: state.cartItems.length,
                             itemBuilder: (context, index) {
