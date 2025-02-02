@@ -87,13 +87,16 @@ class CheckOutScreen extends ConsumerWidget {
                     return;
                   }
 
+                  // Convert cart items to proper format
+                  final orderItems = checkOutState.state.cartItems
+                      .map((item) => item.toMap())
+                      .toList();
+
                   ref.read(checkOutRiverpodProvider.notifier).checkOut(
                       ref.read(appUserRiverpodProvider).user!.id!,
-                      checkOutState.state.cartItems
-                          .map((e) => e.toMap())
-                          .toList(),
+                      orderItems,
                       checkOutState.state.selectedAddress!.id,
-                      "Purches");
+                      "Purchase");
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,

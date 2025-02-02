@@ -79,7 +79,12 @@ class CheckOutRiverpod extends StateNotifier<CheckOutState> {
           status: CheckOutStateStatus.error, errorMessage: failure.message);
     }, (success) {
       final totalPrice = success.fold(
-          0.0, (previous, element) => previous + element.totalPricePerItem);
+          0.0,
+          (previous, element) =>
+              previous +
+              (element.totalPricePerItem is int
+                  ? (element.totalPricePerItem as int).toDouble()
+                  : element.totalPricePerItem));
       state = state.copyWith(
           status: CheckOutStateStatus.success,
           cartItems: success,
@@ -119,19 +124,44 @@ class CheckOutRiverpod extends StateNotifier<CheckOutState> {
     });
   }
 
-  Future<void> checkOut(int userId, List<Map<String, dynamic>> orderItems,
-      int? addressId, String transactionType) async {
+  Future<void> checkOut(
+    int userId,
+    List<Map<String, dynamic>> orderItems,
+    int? addressId,
+    String transactionType,
+  ) async {
     state = state.copyWith(status: CheckOutStateStatus.loading);
+
+    // Convert the order items to ensure integer prices
+    final convertedOrderItems = orderItems.map((item) {
+      return {
+        ...item,
+        'item_price': (item['item_price'] as double).toInt(),
+        'total_price_per_item':
+            (item['total_price_per_item'] as double).toInt(),
+      };
+    }).toList();
+
     final result = await _checkOutRepository.checkOut(
-        userId, orderItems, addressId!, transactionType);
-    result.fold((failure) {
-      print(failure.message);
-      state = state.copyWith(
-          status: CheckOutStateStatus.error, errorMessage: failure.message);
-    }, (success) {
-      print("success");
-      state = state.copyWith(status: CheckOutStateStatus.successCheckOut);
-    });
+      userId,
+      convertedOrderItems,
+      addressId!,
+      transactionType,
+    );
+
+    result.fold(
+      (failure) {
+        print(failure.message);
+        state = state.copyWith(
+          status: CheckOutStateStatus.error,
+          errorMessage: failure.message,
+        );
+      },
+      (success) {
+        print("success");
+        state = state.copyWith(status: CheckOutStateStatus.successCheckOut);
+      },
+    );
   }
 
   void setSelectedAddress(AddressModel address) {

@@ -124,7 +124,7 @@ class _ItemGridState extends ConsumerState<_ItemGrid> {
                   padding: const EdgeInsets.all(16),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.50,
+                    childAspectRatio: 0.45,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                   ),

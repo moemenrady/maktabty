@@ -56,10 +56,14 @@ class CartItemsModel {
       itemId: map['item_id'] as String? ?? "",
       itemCount: map['item_count'] as int? ?? 0,
       itemName: map['item_name'] as String? ?? "",
-      itemPrice: map['item_price'] as double? ?? 0,
+      itemPrice: map['item_price'] is int
+          ? (map['item_price'] as int).toDouble()
+          : (map['item_price'] as num?)?.toDouble() ?? 0.0,
       itemQuantity: map['item_quantity'] as int? ?? 0,
       itemImage: map['item_image'] as String? ?? "",
-      totalPricePerItem: map['total_price_per_item'] as double? ?? 0,
+      totalPricePerItem: map['total_price_per_item'] is int
+          ? (map['total_price_per_item'] as int).toDouble()
+          : (map['total_price_per_item'] as num?)?.toDouble() ?? 0.0,
     );
   }
 

@@ -37,6 +37,7 @@ class CheckOutState {
   final List<AddressModel> address;
   final String errorMessage;
   final AddressModel? selectedAddress;
+
   CheckOutState({
     required this.status,
     required this.totalPrice,
@@ -45,6 +46,16 @@ class CheckOutState {
     required this.errorMessage,
     this.selectedAddress,
   });
+
+  factory CheckOutState.initial() {
+    return CheckOutState(
+      status: CheckOutStateStatus.initial,
+      totalPrice: 0.0,
+      cartItems: [],
+      address: [],
+      errorMessage: '',
+    );
+  }
 
   CheckOutState copyWith({
     CheckOutStateStatus? status,
