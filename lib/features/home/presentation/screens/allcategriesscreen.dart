@@ -5,7 +5,6 @@ import 'package:mktabte/features/home/presentation/riverpods/categories_river_po
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import '../riverpods/categories_river_pod/categories_riverpod.dart';
 import '../widgets/custom_categories_grid.dart';
-import '../widgets/home/custom_search_bar.dart';
 import '../widgets/categories/categories_search_bar.dart';
 import '../controllers/categories_search_controller.dart';
 

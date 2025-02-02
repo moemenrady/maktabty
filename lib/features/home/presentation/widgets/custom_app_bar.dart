@@ -7,7 +7,7 @@ class CustomAppBar extends StatelessWidget {
   final bool hasArrow;
   final bool hasIcons;
 
-  CustomAppBar({
+  const CustomAppBar({
     super.key,
     required this.txt,
     required this.hasArrow,
@@ -42,7 +42,7 @@ class CustomAppBar extends StatelessWidget {
             onPressed: () {Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CartPage(),
+            builder: (context) => const CartPage(),
           ),
         );},
             icon: Image.asset("assets/images/btns/black_cart_btn_img.png"),

@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mktabte/auth_test.dart';
 import 'package:mktabte/core/comman/app_user/app_user_state.dart';
-import 'package:mktabte/core/comman/entitys/categories.dart';
 import 'package:mktabte/features/auth/presentation/screens/onboarding.dart';
-import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
-import 'package:mktabte/features/home/presentation/screens/cartscreen.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 

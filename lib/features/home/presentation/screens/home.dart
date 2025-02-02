@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/home/presentation/riverpods/home_river_pod/home_riverpod_state.dart';
-import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../admin/data/model/item_model.dart';
 import '../../../check_out/presentation/screen/product_details_creen.dart';

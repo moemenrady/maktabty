@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/review_card.dart';
 import 'package:mktabte/features/home/presentation/screens/userwishlistscreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,7 +10,6 @@ import '../../../admin/presentation/screens/admin_control_user_orders.dart';
 import '../../../admin/presentation/screens/category_page.dart';
 import '../../../admin/presentation/screens/item_page.dart';
 import '../../../admin/presentation/screens/view_orders_summary.dart';
-import '../../../auth/data/_auth_service.dart';
 
 import '../../../orders/presentation/screens/user_orders_screen.dart';
 import '../widgets/custom_profile_option.dart';

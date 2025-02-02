@@ -10,9 +10,9 @@ class CustomProductRate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
                   children: [
-                    Roundedcontainer(img: "assets/images/Star Rating.png", clr: Color.fromARGB(118, 255, 128, 55), num: "4.0"),
+                    Roundedcontainer(img: "assets/images/Star Rating.png", clr: const Color.fromARGB(118, 255, 128, 55), num: "4.0"),
                     const SizedBox(width: 5),
-                    Roundedcontainer(img: "assets/images/like_icon.png", clr: Color.fromARGB(157, 31, 124, 253), num: "3.9"),
+                    Roundedcontainer(img: "assets/images/like_icon.png", clr: const Color.fromARGB(157, 31, 124, 253), num: "3.9"),
                     
                     
                     const SizedBox(width: 5),

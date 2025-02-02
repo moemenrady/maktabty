@@ -6,7 +6,7 @@ class Roundedcontainer extends StatelessWidget {
  final String img;
  final String num;
  final Color clr;
-   Roundedcontainer({super.key, required this.img, required this.clr, required this.num});
+   const Roundedcontainer({super.key, required this.img, required this.clr, required this.num});
 
   @override
   Widget build(BuildContext context) {

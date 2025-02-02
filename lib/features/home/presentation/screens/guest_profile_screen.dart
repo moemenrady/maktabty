@@ -35,7 +35,7 @@ class GuestProfileScreen extends StatelessWidget {
             Center(
               child: CustomTxtBtn(
                 txtstyle: TextStyles.Lato16boldBlack,
-                bgclr: Color(0xFFFF9E56),
+                bgclr: const Color(0xFFFF9E56),
                 btnHeight: 48,
                 btnWidth: 327,
                 btnName: "Login",
@@ -44,7 +44,7 @@ class GuestProfileScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LoginPage(),
+                      builder: (context) => const LoginPage(),
                     ),
                   );
                 },
@@ -53,11 +53,11 @@ class GuestProfileScreen extends StatelessWidget {
             SizedBox(
               height: 30.h,
             ),
-            CustomSignupBtn(),
+            const CustomSignupBtn(),
             SizedBox(
               height: 30.h,
             ),
-            CustomGuestProfileButtons()
+            const CustomGuestProfileButtons()
           ],
         ),
       ),

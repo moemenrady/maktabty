@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mktabte/features/auth/presentation/riverpod/auth_state.dart';
 import 'package:mktabte/features/auth/presentation/riverpod/signup_riverpod.dart';
 import 'package:mktabte/features/auth/presentation/screens/login.dart';
-import 'package:riverpod/src/framework.dart';
 
 import '../../../../core/theme/text_style.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../../../home/presentation/widgets/custom_txt_btn.dart';
 import '../../../home/presentation/widgets/custom_txt_field.dart';
 import '../../../home/presentation/widgets/custompass_txt_fiels.dart';
-import '../riverpod/login_state.dart';
-import '../riverpod/auth_riverpod.dart';
-import '../../../../core/comman/entitys/user_model.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});

@@ -3,12 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:tuple/tuple.dart';
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
-import '../../../admin/data/model/item_model.dart';
 import '../controllers/items_search_controller.dart';
 import '../riverpods/items_river_pod/items_riverpod.dart';
-import '../riverpods/items_river_pod/items_riverpod_state.dart';
 import '../widgets/category/custom_category_card.dart';
-import '../widgets/home/custom_search_bar.dart';
 import '../widgets/category/items_search_bar.dart';
 
 class CategoryScreen extends ConsumerStatefulWidget {

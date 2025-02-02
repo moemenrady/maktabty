@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/comman/app_user/app_user_riverpod.dart';
-import '../../../../../core/comman/entitys/oders_summary_model.dart';
 import '../../../data/models/user_order_model.dart';
 import '../../../data/repository/orders_repository.dart';
 import 'user_orders_state.dart';
