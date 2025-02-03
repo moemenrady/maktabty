@@ -1,12 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mktabte/features/home/presentation/riverpods/home_river_pod/home_riverpod_state.dart';
 
+import '../../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../../core/comman/entitys/categories.dart';
 import '../../../data/repository/home_repository.dart';
 
 final homeRiverpodProvider =
     StateNotifierProvider.autoDispose<HomeRiverpod, HomeRiverpodState>((ref) {
   final riverpod = HomeRiverpod(repository: ref.watch(homeRepositoryProvider));
+  ref.read(appUserRiverpodProvider.notifier).saveInstallationFlagWithGuest();
   riverpod.getAllData();
   return riverpod;
 });

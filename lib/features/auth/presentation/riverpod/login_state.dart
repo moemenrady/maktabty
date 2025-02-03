@@ -6,6 +6,8 @@ enum LoginState {
   success,
   notLoggedIn,
   saveUserData,
+  loginAsGuest,
+  loginAsGuestSuccess,
   finish,
   error,
 }
@@ -30,6 +32,8 @@ class LoginRiverpodState {
   bool isLoading() => state == LoginState.loading;
   bool isSuccess() => state == LoginState.success;
   bool isError() => state == LoginState.error;
+  bool isLoginAsGuest() => state == LoginState.loginAsGuest;
+  bool isLoginAsGuestSuccess() => state == LoginState.loginAsGuestSuccess;
 
   LoginRiverpodState copyWith({
     LoginState? state,

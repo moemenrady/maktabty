@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
+import 'package:mktabte/features/check_out/presentation/screen/update_user_phone.dart';
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../../model/cart_items_model.dart';
@@ -14,11 +15,41 @@ class CheckOutScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checkOutState = ref.read(checkOutRiverpodProvider.notifier);
+    final userState = ref.watch(appUserRiverpodProvider);
+
     ref.listen(checkOutRiverpodProvider, (previous, next) {
       if (next.isSuccessCheckOut()) {
         showCheckoutSuccessDialog(context);
       }
     });
+
+    void handleCheckout() {
+      if (userState.user?.phone == 0) {
+        // Navigate to phone update screen if phone is not set
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UpdateUserPhoneScreen(),
+          ),
+        );
+        return;
+      }
+
+      if (checkOutState.state.selectedAddress == null) {
+        showSnackBar(context, 'Please select a delivery address');
+        return;
+      }
+
+      final orderItems =
+          checkOutState.state.cartItems.map((item) => item.toMap()).toList();
+
+      ref.read(checkOutRiverpodProvider.notifier).checkOut(
+          ref.read(appUserRiverpodProvider).user!.id!,
+          orderItems,
+          checkOutState.state.selectedAddress!.id,
+          "Purchase");
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Checkout'),
@@ -81,23 +112,7 @@ class CheckOutScreen extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  if (checkOutState.state.selectedAddress == null) {
-                    showSnackBar(context, 'Please select a delivery address');
-                    return;
-                  }
-
-                  // Convert cart items to proper format
-                  final orderItems = checkOutState.state.cartItems
-                      .map((item) => item.toMap())
-                      .toList();
-
-                  ref.read(checkOutRiverpodProvider.notifier).checkOut(
-                      ref.read(appUserRiverpodProvider).user!.id!,
-                      orderItems,
-                      checkOutState.state.selectedAddress!.id,
-                      "Purchase");
-                },
+                onPressed: handleCheckout,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
                   padding: const EdgeInsets.symmetric(vertical: 16),

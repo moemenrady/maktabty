@@ -12,6 +12,8 @@ enum AppUserStates {
   saveUserDataInSupabase,
   failureSaveUserDataInSupabase,
   failure,
+  updateUserPhoneNumberInSupabase,
+  updateUserPhoneNumberInLocalStorage,
   notLoggedIn,
   loggedIn,
   signOut,
@@ -37,6 +39,10 @@ extension AppUserStateX on AppUserRiverpodState {
   bool isFailureSaveData() => state == AppUserStates.failureSaveData;
   bool isClearUserData() => state == AppUserStates.clearUserData;
   bool isFailureGetData() => state == AppUserStates.faliureGetData;
+  bool isUpdateUserPhoneNumberInSupabase() =>
+      state == AppUserStates.updateUserPhoneNumberInSupabase;
+  bool isUpdateUserPhoneNumberInLocalStorage() =>
+      state == AppUserStates.updateUserPhoneNumberInLocalStorage;
   bool isGettedDataFromLocalStorage() =>
       state == AppUserStates.gettedDataFromLocalStorage;
   bool isSaveUserDataInSupabase() =>

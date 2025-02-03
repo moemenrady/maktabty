@@ -47,9 +47,10 @@ class CartPage extends ConsumerWidget {
                           style: TextStyles.blinker20SemiBoldBlack,
                         ),
                         const Spacer(),
-                        Text(
-                          "Edit",
-                          style: TextStyles.blinker16RegularLightBlue,
+                        Icon(
+                          Icons.shopping_cart_outlined,
+                          color: const Color.fromARGB(255, 56, 119, 255),
+                          size: 24.0,
                         ),
                       ],
                     ),

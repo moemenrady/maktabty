@@ -8,7 +8,6 @@
 // import '../screens/home.dart';
 // import '../screens/user_profile_screen.dart';
 
-
 // class MainBar extends StatefulWidget {
 //   const MainBar({super.key});
 
@@ -136,28 +135,28 @@
 //   }
 // }
 
-
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:mktabte/features/check_out/presentation/screen/cart_page.dart';
 import 'package:mktabte/features/home/presentation/screens/userwishlistscreen.dart';
 
+import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../screens/allcategriesscreen.dart';
 import '../screens/guest_profile_screen.dart';
 import '../screens/guest_wifhlist_screen.dart';
 import '../screens/home.dart';
 import '../screens/user_profile_screen.dart';
 
-class MainBar extends StatefulWidget {
+class MainBar extends ConsumerStatefulWidget {
   const MainBar({super.key});
 
   @override
-  State<MainBar> createState() => _MainBarState();
+  ConsumerState<MainBar> createState() => _MainBarState();
 }
 
-class _MainBarState extends State<MainBar> {
+class _MainBarState extends ConsumerState<MainBar> {
   int _selectedScreenIndex = 0;
 
   void _selectScreen(int index) {
@@ -168,6 +167,8 @@ class _MainBarState extends State<MainBar> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.read(appUserRiverpodProvider);
+
     return StreamBuilder<AuthState>(
       stream: Supabase.instance.client.auth.onAuthStateChange,
       builder: (context, snapshot) {
@@ -177,7 +178,7 @@ class _MainBarState extends State<MainBar> {
         }
 
         // Get the current user
-        final user = snapshot.data?.session?.user;
+
         Widget activeScreen = const HomePpage();
 
         // Set the active screen based on the selected index
@@ -188,12 +189,15 @@ class _MainBarState extends State<MainBar> {
           activeScreen = const CartPage();
         }
         if (_selectedScreenIndex == 3) {
-          activeScreen = user != null ? const UserWishlistScreen() : const GuestWifhlistScreen();
+          activeScreen = user.user!.name != "Guest"
+              ? const UserWishlistScreen()
+              : const GuestWifhlistScreen();
         }
         if (_selectedScreenIndex == 4) {
-          activeScreen = user != null ? const UserProfileScreen() : const GuestProfileScreen();
+          activeScreen = user.user!.name != "Guest"
+              ? const UserProfileScreen()
+              : const GuestProfileScreen();
         }
-
         // Return the main scaffold with bottom navigation bar
         return Scaffold(
           body: Stack(
@@ -222,8 +226,10 @@ class _MainBarState extends State<MainBar> {
                     child: BottomNavigationBar(
                       onTap: _selectScreen,
                       currentIndex: _selectedScreenIndex,
-                      unselectedItemColor: const Color.fromARGB(255, 141, 141, 141),
-                      selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
+                      unselectedItemColor:
+                          const Color.fromARGB(255, 141, 141, 141),
+                      selectedItemColor:
+                          const Color.fromARGB(255, 255, 255, 255),
                       backgroundColor: Colors.transparent,
                       items: [
                         BottomNavigationBarItem(

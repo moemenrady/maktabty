@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/auth/presentation/riverpod/login_riverpod.dart';
 import 'package:mktabte/features/auth/presentation/screens/signup_screen.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_txt_btn.dart';
 
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
+import '../../../../core/comman/entitys/user_model.dart';
 import '../../../../core/theme/text_style.dart';
+import '../../../../core/utils/show_snack_bar.dart';
 
 List imgs = [
   "assets/images/onboard1.png",
@@ -51,6 +54,17 @@ class _OnboardState extends ConsumerState<Onboard> {
 
   @override
   Widget build(BuildContext context) {
+    final appUserRiverpod = ref.read(appUserRiverpodProvider.notifier);
+
+    ref.listen(loginControllerProvider, (previous, next) {
+      if (next.isError()) {
+        showSnackBar(context, next.error!);
+      } else if (next.isLoginAsGuestSuccess()) {
+        appUserRiverpod.saveUserData(
+            UserModel(name: "Guest", email: "Guest", password: "Guest"));
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -61,7 +75,8 @@ class _OnboardState extends ConsumerState<Onboard> {
               style:
                   TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 19),
             ),
-            onPressed: () => {markAsInstalled()},
+            onPressed: () =>
+                {ref.read(loginControllerProvider.notifier).loginAsGuest()},
           ),
         ],
       ),
@@ -179,16 +194,22 @@ class _OnboardState extends ConsumerState<Onboard> {
                                     btnHeight: 48,
                                     txtstyle: TextStyles.Lato16extraBoldBlack),
                                 SizedBox(height: 10.h),
-                                CustomTxtBtn(
-                                    btnName: "Ask me later",
-                                    onPress: () {
-                                      markAsInstalled();
-                                    },
-                                    bgclr: const Color(0xFFE8E8E8),
-                                    btnradious: 15,
-                                    btnWidth: 327,
-                                    btnHeight: 48,
-                                    txtstyle: TextStyles.Lato16boldlightBlack),
+                                ref.watch(loginControllerProvider).isLoading()
+                                    ? CircularProgressIndicator()
+                                    : CustomTxtBtn(
+                                        btnName: "Ask me later",
+                                        onPress: () {
+                                          ref
+                                              .read(loginControllerProvider
+                                                  .notifier)
+                                              .loginAsGuest();
+                                        },
+                                        bgclr: const Color(0xFFE8E8E8),
+                                        btnradious: 15,
+                                        btnWidth: 327,
+                                        btnHeight: 48,
+                                        txtstyle:
+                                            TextStyles.Lato16boldlightBlack),
                               ],
                             ),
                           SizedBox(

@@ -43,4 +43,17 @@ class LoginController extends StateNotifier<LoginRiverpodState> {
       isPasswordVisible: !state.isPasswordVisible,
     );
   }
+
+  Future<void> loginAsGuest() async {
+    state = state.copyWith(state: LoginState.loading);
+    final result = await _repository.loginAsGuest();
+
+    result.fold(
+      (failure) => state = state.copyWith(
+        state: LoginState.error,
+        error: failure.message,
+      ),
+      (user) => state = state.copyWith(state: LoginState.loginAsGuestSuccess),
+    );
+  }
 }

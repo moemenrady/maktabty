@@ -161,6 +161,10 @@ class AppUserRiverpod extends StateNotifier<AppUserRiverpodState> {
     );
   }
 
+  Future<void> saveInstallationFlagWithGuest() async {
+    await SecureStorageHelper.saveInstalltionFlag();
+  }
+
   Future<void> clearUserData() async {
     state = state.copyWith(state: AppUserStates.loading);
     final res = await SecureStorageHelper.removeUserData();
@@ -192,5 +196,34 @@ class AppUserRiverpod extends StateNotifier<AppUserRiverpodState> {
         ),
       );
     }
+  }
+
+  Future<void> updateUserPhoneNumber(int phoneNumber) async {
+    final res = await _authRepository.updateUserPhoneNumber(
+        phoneNumber: phoneNumber, userId: state.user?.id);
+    res.fold(
+        (l) => state = state.copyWith(
+              state: AppUserStates.failure,
+              errorMessage: l.message,
+            ), (r) {
+      state = state.copyWith(
+        state: AppUserStates.updateUserPhoneNumberInSupabase,
+      );
+    });
+  }
+
+  Future<void> updateUserPhoneNumberInLocalStorage(int phoneNumber) async {
+    final res = await SecureStorageHelper.saveUserData(
+        state.user!.copyWith(phone: phoneNumber));
+    res.fold(
+      (l) => state = state.copyWith(
+        state: AppUserStates.failure,
+        errorMessage: l,
+      ),
+      (r) => state = state.copyWith(
+        state: AppUserStates.updateUserPhoneNumberInLocalStorage,
+        user: state.user!.copyWith(phone: phoneNumber),
+      ),
+    );
   }
 }

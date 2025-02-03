@@ -27,7 +27,10 @@ abstract interface class AuthRemoteDataSource {
     required String password,
   });
 
+  Future<void> loginAsGuest();
+
   Future<void> signOut();
+  Future<void> updateUserPhoneNumber({required int phoneNumber, int? userId});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -101,5 +104,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> signOut() async {
     await supabaseClient.auth.signOut();
+  }
+
+  @override
+  Future<void> loginAsGuest() async {
+    await supabaseClient.auth.signInAnonymously();
+  }
+
+  @override
+  Future<void> updateUserPhoneNumber(
+      {required int phoneNumber, int? userId}) async {
+    await supabaseClient.from('users').update({
+      'phone': phoneNumber,
+    }).eq('id', userId!);
   }
 }

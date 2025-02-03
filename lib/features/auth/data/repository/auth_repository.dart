@@ -64,4 +64,20 @@ class AuthRepository {
       await remoteDataSource.signOut();
     });
   }
+
+  Future<Either<Failure, void>> loginAsGuest() async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.loginAsGuest();
+    });
+  }
+
+  Future<Either<Failure, void>> updateUserPhoneNumber({
+    required int phoneNumber,
+    int? userId,
+  }) async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.updateUserPhoneNumber(
+          phoneNumber: phoneNumber, userId: userId);
+    });
+  }
 }
