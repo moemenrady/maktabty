@@ -290,10 +290,12 @@ class AdminOrderDetailsScreen extends ConsumerWidget {
                         },
                         child: Row(
                           children: [
-                            Text(
-                              '#${item.itemId}',
-                              style: TextStyles.Blinker14regular.copyWith(
-                                color: AppPallete.lightGrey,
+                            Expanded(
+                              child: Text(
+                                '#${item.itemId}',
+                                style: TextStyles.Blinker14regular.copyWith(
+                                  color: AppPallete.lightGrey,
+                                ),overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Gap.w4,
