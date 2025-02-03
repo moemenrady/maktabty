@@ -275,17 +275,22 @@ class HomePpage extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          '${item.name} Sales',
-                          style: TextStyles.blinker20SemiBoldwhite,
+                        SizedBox(
+                          width: 155.w,
+                          child: Text(
+                            '${item.name} Sales',
+                            style: TextStyles.blinker20SemiBoldwhite,overflow: TextOverflow.fade,maxLines: 1,
+                          ),
                         ),
                         const VerticalDivider(
                           color: Colors.white,
                           thickness: 1,
                         ),
-                        Text(
-                          'EGP${item.retailPrice}',
-                          style: TextStyles.blinker20SemiBoldwhite,
+                        Expanded(
+                          child: Text(
+                            'EGP${item.retailPrice}',
+                            style: TextStyles.blinker20SemiBoldwhite,overflow: TextOverflow.fade,maxLines: 1,
+                          ),
                         ),
                         Image.asset(
                           "assets/images/btns/selected_cart_btn_img.png",

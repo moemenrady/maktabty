@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/core/comman/helpers/gap.dart';
 import 'package:mktabte/features/admin/presentation/screens/add_items.dart';
 import '../../../../core/utils/show_dialog.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -68,31 +70,29 @@ class _ItemGridState extends ConsumerState<_ItemGrid> {
     return Column(
       children: [
         // Summary Card
-        Card(
-          margin: const EdgeInsets.all(16),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total Retail: EGP ${viewModel.calculateTotalRetailPrice(filteredItems).toStringAsFixed(2)}',
-                      style: AppTextStyles.summaryText,
-                    ),
-                    Text(
-                      'Total Wholesale: EGP ${viewModel.calculateTotalWholesalePrice(filteredItems).toStringAsFixed(2)}',
-                      style: AppTextStyles.summaryText,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Total Profit: EGP ${viewModel.calculateTotalProfit(filteredItems).toStringAsFixed(2)}',
-                  style: AppTextStyles.summaryProfit,
-                ),
-              ],
+        SizedBox(
+          width: double.infinity.w,
+          child: Card(
+            margin: const EdgeInsets.all(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(
+                    'Total Retail: EGP ${viewModel.calculateTotalRetailPrice(filteredItems).toStringAsFixed(2)}',
+                    style: AppTextStyles.summaryText,
+                  ),
+                  Text(
+                    'Total Wholesale: EGP ${viewModel.calculateTotalWholesalePrice(filteredItems).toStringAsFixed(2)}',
+                    style: AppTextStyles.summaryText,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Total Profit: EGP ${viewModel.calculateTotalProfit(filteredItems).toStringAsFixed(2)}',
+                    style: AppTextStyles.summaryProfit,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -123,7 +123,7 @@ class _ItemGridState extends ConsumerState<_ItemGrid> {
                   padding: const EdgeInsets.all(16),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.45,
+                    childAspectRatio: 0.48,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                   ),
@@ -153,7 +153,7 @@ class _ItemGridState extends ConsumerState<_ItemGrid> {
                                 top: Radius.circular(12),
                               ),
                               child: AspectRatio(
-                                aspectRatio: 1,
+                                aspectRatio: 1.5,
                                 child: Image.network(
                                   item.imageUrl,
                                   fit: BoxFit.cover,
