@@ -10,6 +10,7 @@ import 'package:mktabte/features/check_out/presentation/widget/product_details_s
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/comman/widgets/custom_cached_network_image_provider.dart';
 import '../../../../core/theme/text_style.dart';
+import '../../../../core/utils/show_snack_bar.dart';
 import '../../../admin/data/model/item_model.dart';
 import '../../../../core/comman/widgets/animated_price_widget.dart';
 
@@ -21,9 +22,10 @@ class ProductDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(checkOutRiverpodProvider, (previous, next) {
       if (next.isSuccessAddItemToCart()) {
-        ref
-            .read(checkOutRiverpodProvider.notifier)
-            .getCartItems(ref.read(appUserRiverpodProvider).user!.id!);
+        showSnackBar(
+          context,
+          "Item added to cart",
+        );
       }
     });
 

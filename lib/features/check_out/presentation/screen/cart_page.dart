@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/core/utils/show_snack_bar.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_riverpod.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 import 'package:mktabte/features/check_out/presentation/screen/check_out_screen.dart';
@@ -24,6 +25,22 @@ class CartPage extends ConsumerWidget {
     ref.listen(checkOutRiverpodProvider, (previous, next) {
       cartStateListner(context, checkOutController, next, ref);
     });
+
+    void checkGuestAndGoToCheckOut() {
+      if (ref.read(appUserRiverpodProvider).user?.name == "Guest") {
+        showSnackBar(context, "Please login to add to cart");
+      } else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    CheckOutScreen(cartItems: state.cartItems))).then((value) {
+          ref
+              .read(checkOutRiverpodProvider.notifier)
+              .getCartItems(ref.watch(appUserRiverpodProvider).user!.id!);
+        });
+      }
+    }
 
     return Scaffold(
       body: Padding(
@@ -205,19 +222,7 @@ class CartPage extends ConsumerWidget {
                   ),
 
                   CustomCartButton(
-                      onpressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CheckOutScreen(
-                                          cartItems: state.cartItems)))
-                              .then((value) {
-                            ref
-                                .read(checkOutRiverpodProvider.notifier)
-                                .getCartItems(ref
-                                    .watch(appUserRiverpodProvider)
-                                    .user!
-                                    .id!);
-                          })),
+                      onpressed: () => checkGuestAndGoToCheckOut()),
                   // CustomCartButton(
                   //   onpressed: () =>
                   //       _showAddressBottomSheet(context, checkOutController),

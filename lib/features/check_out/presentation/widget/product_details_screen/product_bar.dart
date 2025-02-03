@@ -6,6 +6,7 @@ import 'package:tuple/tuple.dart';
 
 import '../../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../../core/theme/text_style.dart';
+import '../../../../../core/utils/show_snack_bar.dart';
 import '../../../../admin/data/model/item_model.dart';
 import '../../../../home/presentation/riverpods/items_river_pod/items_riverpod.dart';
 import '../../riverpods/check_out/check_out_riverpod.dart';
@@ -17,6 +18,15 @@ class ProductBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    void checkGuest() {
+      if (ref.read(appUserRiverpodProvider).user?.name == "Guest") {
+        showSnackBar(context, "Please login to add to cart");
+      } else {
+        ref.read(checkOutRiverpodProvider.notifier).addItemToCart(
+            item.id, ref.read(appUserRiverpodProvider).user!.id!);
+      }
+    }
+
     return Container(
       height: 90.h,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -38,10 +48,7 @@ class ProductBar extends ConsumerWidget {
                 ? const Center(child: CircularProgressIndicator())
                 : Expanded(
                     child: ElevatedButton(
-                    onPressed: () {
-                      ref.read(checkOutRiverpodProvider.notifier).addItemToCart(
-                          item.id, ref.read(appUserRiverpodProvider).user!.id!);
-                    },
+                    onPressed: () => checkGuest(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF68B3B),
                       shape: RoundedRectangleBorder(
