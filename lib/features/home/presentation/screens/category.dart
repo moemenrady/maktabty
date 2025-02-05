@@ -148,8 +148,22 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                             child: CustomCategoryCard(
                                             item: item,
                                             index: index,
-                                            onAddToFavourite: () {},
-                                            onRemoveFromFavourite: () {},
+                                            onAddToFavourite: () {
+                                              ref
+                                                  .read(itemsProvider.notifier)
+                                                  .addToFavorites(
+                                                      userId,
+                                                      item.id,
+                                                      widget.categoryId);
+                                            },
+                                            onRemoveFromFavourite: () {
+                                              ref
+                                                  .read(itemsProvider.notifier)
+                                                  .removeFromFavorites(
+                                                      userId,
+                                                      item.id,
+                                                      widget.categoryId);
+                                            },
                                           ));
                                   },
                                 ),

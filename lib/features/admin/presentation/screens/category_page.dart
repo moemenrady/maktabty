@@ -44,7 +44,9 @@ class CategoryPage extends ConsumerWidget {
                 MaterialPageRoute(
                   builder: (context) => UpdateCategoryPage(category: category),
                 ),
-              );
+              ).then((value) {
+                ref.read(categoryListProvider.notifier).fetchCategories();
+              });
             },
           );
         },

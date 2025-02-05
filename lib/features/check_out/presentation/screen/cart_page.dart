@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,8 @@ import '../widget/cart_page/custom_cart_card.dart';
 import '../widget/cart_page/address_selection_sheet.dart';
 
 class CartPage extends ConsumerWidget {
-  const CartPage({super.key});
+  final bool fromHomeScreen;
+  const CartPage({super.key, required this.fromHomeScreen});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,7 +57,7 @@ class CartPage extends ConsumerWidget {
                   children: [
                     CustomAppBar(
                       txt: "Cart",
-                      hasArrow: true,
+                      hasArrow: !fromHomeScreen,
                       hasIcons: false,
                     ),
                     Padding(
@@ -85,8 +87,10 @@ class CartPage extends ConsumerWidget {
                             child: ListView.builder(
                               itemCount: state.cartItems.length,
                               itemBuilder: (context, index) {
-                                return CustomCartCard(
-                                  cartItemsModel: state.cartItems[index],
+                                return ElasticInUp(
+                                  child: CustomCartCard(
+                                    cartItemsModel: state.cartItems[index],
+                                  ),
                                 );
                               },
                             ))
@@ -223,10 +227,12 @@ class CartPage extends ConsumerWidget {
                     SizedBox(
                       height: 14.h,
                     ),
-        
+
                     CustomCartButton(
                         onpressed: () => checkGuestAndGoToCheckOut()),
-                        SizedBox(height: 50.h,),
+                    SizedBox(
+                      height: 50.h,
+                    ),
                     // CustomCartButton(
                     //   onpressed: () =>
                     //       _showAddressBottomSheet(context, checkOutController),

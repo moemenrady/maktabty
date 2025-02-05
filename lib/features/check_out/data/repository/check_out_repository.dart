@@ -5,6 +5,7 @@ import '../../../../core/utils/try_and_catch.dart';
 import '../../model/adress_model.dart';
 import '../../model/cart_items_model.dart';
 import '../data_source/check_out_remote_data_source.dart';
+import '../../model/rating_model.dart';
 
 final checkOutRepositoryProvider = Provider<CheckOutRepository>((ref) {
   return CheckOutRepository(ref.read(checkOutRemoteDataSourceProvider));
@@ -73,6 +74,31 @@ class CheckOutRepository {
   Future<Either<Failure, void>> updateAddress(AddressModel address) async {
     return executeTryAndCatchForRepository(() async {
       return await _checkOutRemoteDataSource.updateAddress(address);
+    });
+  }
+
+  Future<Either<Failure, void>> addRating(RatingModel rating) async {
+    return executeTryAndCatchForRepository(() async {
+      return await _checkOutRemoteDataSource.addRating(rating);
+    });
+  }
+
+  Future<Either<Failure, List<RatingModel>>> getRatings(String itemId) async {
+    return executeTryAndCatchForRepository(() async {
+      final result = await _checkOutRemoteDataSource.getRatings(itemId);
+      return result.map((e) => RatingModel.fromMap(e)).toList();
+    });
+  }
+
+  Future<Either<Failure, void>> updateRating(RatingModel rating) async {
+    return executeTryAndCatchForRepository(() async {
+      return await _checkOutRemoteDataSource.updateRating(rating);
+    });
+  }
+
+  Future<Either<Failure, void>> deleteRating(int ratingId) async {
+    return executeTryAndCatchForRepository(() async {
+      return await _checkOutRemoteDataSource.deleteRating(ratingId);
     });
   }
 }

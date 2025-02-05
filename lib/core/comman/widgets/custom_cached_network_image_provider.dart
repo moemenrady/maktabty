@@ -5,20 +5,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomCachedNetworkImageProvider extends StatelessWidget {
   final String imageUrl;
+  final double? width;
+  final double? height;
+  final BoxFit fit;
 
-  const CustomCachedNetworkImageProvider({super.key, required this.imageUrl});
+  const CustomCachedNetworkImageProvider({
+    super.key,
+    required this.imageUrl,
+    this.width,
+    this.height,
+    this.fit = BoxFit.cover,
+  });
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       cacheManager: CacheManager(Config(
-        'ground_image',
+        'item_image',
         stalePeriod: const Duration(days: 3),
         maxNrOfCacheObjects: 200,
       )),
-      width: 323.w,
-      fit: BoxFit.cover,
-      height: 170.h,
+      width: width ?? 323.w,
+      height: height ?? 170.h,
+      fit: fit,
       imageUrl: imageUrl,
       progressIndicatorBuilder: (context, url, downloadProgress) {
         return Center(

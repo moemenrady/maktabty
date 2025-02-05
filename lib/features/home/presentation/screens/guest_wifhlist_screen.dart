@@ -8,14 +8,14 @@ import '../widgets/custom_guest_wishlist_card.dart';
 
 final List<Map<String, String>> guestwishListItems = [
   {
-    "image": "assets/images/blackcontroller.png",
-    "title": "Black Controller",
-    "price": "\$150"
+    "image": "assets/images/wishlist_guest_book1.png",
+    "title": "Large Book",
+    "price": "EGP 150"
   },
   {
-    "image": "assets/images/blackcontroller1.png",
-    "title": "Black Controller",
-    "price": "\$120"
+    "image": "assets/images/wishlist_guest_book2.png",
+    "title": "English Dictionary",
+    "price": "EGP 120"
   },
   {
     "image": "assets/images/whitecontroller.png",

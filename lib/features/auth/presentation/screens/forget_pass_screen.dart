@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/core/utils/show_snack_bar.dart';
 import 'package:mktabte/features/auth/presentation/screens/otp_verification_page.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:mktabte/main.dart';
@@ -7,16 +9,27 @@ import 'package:mktabte/main.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../home/presentation/widgets/custom_txt_btn.dart';
 import '../../../home/presentation/widgets/custom_txt_field.dart';
+import '../riverpod/auth_riverpod.dart';
+import '../riverpod/auth_state.dart';
 
-class ForgetPassScreen extends StatelessWidget {
+class ForgetPassScreen extends ConsumerWidget {
   const ForgetPassScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController phNum = TextEditingController();
+  Widget build(BuildContext context, WidgetRef ref) {
+    TextEditingController email = TextEditingController();
+
+    ref.listen(authControllerProvider, (previous, next) {
+      if (next.state == AuthState.success) {
+        showSnackBar(context, "Password reset link sent to your email");
+      }
+      if (next.state == AuthState.error) {
+        showSnackBar(context, next.error ?? "Something went wrong");
+      }
+    });
 
     return Scaffold(
-      //appBar: 
+      //appBar:
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -42,41 +55,37 @@ class ForgetPassScreen extends StatelessWidget {
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                    "Phone Number:",
-                    style: TextStyles.Lato14extraBoldBlack,
-                  ),
+                  "Email:",
+                  style: TextStyles.Lato14extraBoldBlack,
+                ),
               ),
             ),
-            CustomTextField(
-                hinttxt: "Enter your Phone Number", mycontroller: phNum),
+            CustomTextField(hinttxt: "Enter Your Email", mycontroller: email),
             const SizedBox(height: 70),
-            CustomTxtBtn(txtstyle: TextStyles.Lato16extraBoldBlack,
-              bgclr: const Color(0xFFF39754),btnHeight: 60,btnWidth: 345,btnradious: 14,
+            CustomTxtBtn(
+              txtstyle: TextStyles.Lato16extraBoldBlack,
+              bgclr: const Color(0xFFF39754),
+              btnHeight: 60,
+              btnWidth: 345,
+              btnradious: 14,
               btnName: "Continue",
               onPress: () {
-                if (phNum.text.isEmpty) {
+                if (email.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Phone Number can't be empty."),
+                      content: Text("Email can't be empty."),
                     ),
                   );
-                } 
-                else if(phNum.text.length!=11){
-                   ScaffoldMessenger.of(context).showSnackBar(
+                } else if (!email.text.contains('@')) {
+                  ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Phone Number should be 11 number."),
+                      content: Text("Email should be valid."),
                     ),
                   );
-                }
-                else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OTPVerificationPage(
-                        phone: phNum.text,
-                      ),
-                    ),
-                  );
+                } else {
+                  ref
+                      .read(authControllerProvider.notifier)
+                      .forgetPassword(email: email.text);
                 }
               },
             ),

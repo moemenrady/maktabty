@@ -80,4 +80,10 @@ class AuthRepository {
           phoneNumber: phoneNumber, userId: userId);
     });
   }
+
+  Future<Either<Failure, void>> forgetPassword({required String email}) async {
+    return executeTryAndCatchForRepository(() async {
+      await remoteDataSource.forgetPassword(email: email);
+    });
+  }
 }

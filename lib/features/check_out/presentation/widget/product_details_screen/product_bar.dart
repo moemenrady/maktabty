@@ -66,8 +66,11 @@ class ProductBar extends ConsumerWidget {
           Expanded(
             child: ElevatedButton.icon(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const CartPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const CartPage(fromHomeScreen: false)));
               },
               icon: Image.asset(
                 "assets/images/Add_Item_Cart.png",

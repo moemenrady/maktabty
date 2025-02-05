@@ -6,6 +6,7 @@ class CartItemsModel {
   final int itemCount;
   final String itemName;
   final String itemImage;
+  final String categoryName;
   final int itemQuantity;
   final double itemPrice;
   final double totalPricePerItem;
@@ -14,6 +15,7 @@ class CartItemsModel {
     this.itemCount = 0,
     this.itemName = "",
     this.itemImage = "",
+    this.categoryName = "",
     this.itemQuantity = 0,
     this.itemPrice = 0,
     this.totalPricePerItem = 0,
@@ -24,6 +26,7 @@ class CartItemsModel {
     int? itemCount,
     String? itemName,
     String? itemImage,
+    String? categoryName,
     int? itemQuantity,
     double? itemPrice,
     double? totalPricePerItem,
@@ -33,6 +36,7 @@ class CartItemsModel {
       itemCount: itemCount ?? this.itemCount,
       itemName: itemName ?? this.itemName,
       itemImage: itemImage ?? this.itemImage,
+      categoryName: categoryName ?? this.categoryName,
       itemQuantity: itemQuantity ?? this.itemQuantity,
       itemPrice: itemPrice ?? this.itemPrice,
       totalPricePerItem: totalPricePerItem ?? this.totalPricePerItem,
@@ -43,6 +47,7 @@ class CartItemsModel {
     return <String, dynamic>{
       'item_id': itemId,
       'item_count': itemCount,
+      'name': categoryName,
       'item_name': itemName,
       'item_price': itemPrice,
       'item_quantity': itemQuantity,
@@ -59,6 +64,7 @@ class CartItemsModel {
       itemPrice: map['item_price'] is int
           ? (map['item_price'] as int).toDouble()
           : (map['item_price'] as num?)?.toDouble() ?? 0.0,
+      categoryName: map['name'] as String? ?? "",
       itemQuantity: map['item_quantity'] as int? ?? 0,
       itemImage: map['item_image'] as String? ?? "",
       totalPricePerItem: map['total_price_per_item'] is int
@@ -74,7 +80,7 @@ class CartItemsModel {
 
   @override
   String toString() {
-    return 'CartItemsModel(itemId: $itemId, itemCount: $itemCount, itemName: $itemName, itemPrice: $itemPrice, itemQuantity: $itemQuantity, itemImage: $itemImage, totalPricePerItem: $totalPricePerItem)';
+    return 'CartItemsModel(itemId: $itemId, itemCount: $itemCount, itemName: $itemName, categoryName: $categoryName, itemPrice: $itemPrice, itemQuantity: $itemQuantity, itemImage: $itemImage, totalPricePerItem: $totalPricePerItem)';
   }
 
   @override
@@ -84,6 +90,7 @@ class CartItemsModel {
     return other.itemId == itemId &&
         other.itemCount == itemCount &&
         other.itemName == itemName &&
+        other.categoryName == categoryName &&
         other.itemPrice == itemPrice &&
         other.itemQuantity == itemQuantity &&
         other.itemImage == itemImage &&
@@ -95,6 +102,7 @@ class CartItemsModel {
     return itemId.hashCode ^
         itemCount.hashCode ^
         itemName.hashCode ^
+        categoryName.hashCode ^
         itemPrice.hashCode ^
         itemQuantity.hashCode ^
         itemImage.hashCode ^

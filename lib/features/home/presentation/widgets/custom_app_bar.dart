@@ -48,7 +48,7 @@ class CustomAppBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CartPage(),
+                  builder: (context) => const CartPage(fromHomeScreen: false),
                 ),
               );
             },

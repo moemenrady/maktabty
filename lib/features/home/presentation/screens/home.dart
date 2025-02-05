@@ -87,7 +87,8 @@ class HomePpage extends ConsumerWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const CartPage(),
+                                  builder: (context) =>
+                                      const CartPage(fromHomeScreen: false),
                                 ),
                               );
                             },
@@ -279,7 +280,9 @@ class HomePpage extends ConsumerWidget {
                           width: 155.w,
                           child: Text(
                             '${item.name} Sales',
-                            style: TextStyles.blinker20SemiBoldwhite,overflow: TextOverflow.fade,maxLines: 1,
+                            style: TextStyles.blinker20SemiBoldwhite,
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
                           ),
                         ),
                         const VerticalDivider(
@@ -289,7 +292,9 @@ class HomePpage extends ConsumerWidget {
                         Expanded(
                           child: Text(
                             'EGP${item.retailPrice}',
-                            style: TextStyles.blinker20SemiBoldwhite,overflow: TextOverflow.fade,maxLines: 1,
+                            style: TextStyles.blinker20SemiBoldwhite,
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
                           ),
                         ),
                         Image.asset(

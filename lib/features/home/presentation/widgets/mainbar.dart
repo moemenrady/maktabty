@@ -186,7 +186,9 @@ class _MainBarState extends ConsumerState<MainBar> {
           activeScreen = const CategryScreen();
         }
         if (_selectedScreenIndex == 2) {
-          activeScreen = const CartPage();
+          activeScreen = const CartPage(
+            fromHomeScreen: true,
+          );
         }
         if (_selectedScreenIndex == 3) {
           activeScreen = user.user!.name != "Guest"

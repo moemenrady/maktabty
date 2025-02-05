@@ -3,6 +3,7 @@ import 'package:mktabte/core/utils/try_and_catch.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../model/adress_model.dart';
+import '../../model/rating_model.dart';
 
 final supabaseClientProvider =
     Provider<SupabaseClient>((ref) => Supabase.instance.client);
@@ -23,6 +24,10 @@ abstract interface class CheckOutRemoteDataSource {
   Future<void> checkOut(int userId, List<Map<String, dynamic>> orderItems,
       int addressId, String transactionType);
   Future<void> updateAddress(AddressModel address);
+  Future<void> addRating(RatingModel rating);
+  Future<List<Map<String, dynamic>>> getRatings(String itemId);
+  Future<void> updateRating(RatingModel rating);
+  Future<void> deleteRating(int ratingId);
 }
 
 class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
@@ -140,6 +145,41 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
         'region': address.region,
         'updated_at': DateTime.now().toIso8601String(),
       }).eq('id', address.id!);
+    });
+  }
+
+  @override
+  Future<void> addRating(RatingModel rating) async {
+    return executeTryAndCatchForDataLayer(() async {
+      await supabaseClient.from("ratings").insert(rating.toMap());
+    });
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getRatings(String itemId) async {
+    return executeTryAndCatchForDataLayer(() async {
+      return await supabaseClient
+          .from("ratings")
+          .select()
+          .eq("item_id", itemId)
+          .order('created_at', ascending: false);
+    });
+  }
+
+  @override
+  Future<void> updateRating(RatingModel rating) async {
+    return executeTryAndCatchForDataLayer(() async {
+      await supabaseClient.from("ratings").update({
+        'rate': rating.rate,
+        'comment': rating.comment,
+      }).eq('id', rating.id);
+    });
+  }
+
+  @override
+  Future<void> deleteRating(int ratingId) async {
+    return executeTryAndCatchForDataLayer(() async {
+      await supabaseClient.from("ratings").delete().eq('id', ratingId);
     });
   }
 }

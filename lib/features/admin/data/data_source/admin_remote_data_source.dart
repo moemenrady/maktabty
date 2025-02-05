@@ -186,8 +186,8 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
           .select()
           .gte('order_created_at',
               startDate.toIso8601String()) // Filter for start date
-          .lte('order_created_at',
-              endDate.toIso8601String()); // Filter for end date
+          .lte('order_created_at', endDate.toIso8601String())
+          .order('order_created_at', ascending: false); // Filter for end date
 
       // Map the response to a list of OrderSummary objects
       return response;

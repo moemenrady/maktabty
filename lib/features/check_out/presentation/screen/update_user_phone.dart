@@ -97,15 +97,15 @@ class _UpdateUserPhoneScreenState extends ConsumerState<UpdateUserPhoneScreen> {
                     ),
                   ),
                 ),
-                // validator: (value) {
-                //   if (value == null || value.isEmpty) {
-                //     return 'Please enter your phone number';
-                //   }
-                //   if (value.length != 10) {
-                //     return 'Phone number must be 10 digits';
-                //   }
-                //   return null;
-                // },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your phone number';
+                  }
+                  if (value.length != 10) {
+                    return 'Phone number must be 10 digits';
+                  }
+                  return null;
+                },
               ),
               SizedBox(height: 24.h),
               SizedBox(

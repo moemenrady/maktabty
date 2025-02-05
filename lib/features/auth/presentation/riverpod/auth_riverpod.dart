@@ -72,4 +72,19 @@ class AuthController extends StateNotifier<AuthRiverpodState> {
       ),
     );
   }
+
+  Future<void> forgetPassword({required String email}) async {
+    state = state.copyWith(state: AuthState.loading);
+    final result = await _repository.forgetPassword(email: email);
+    result.fold(
+      (failure) => state = state.copyWith(
+        state: AuthState.error,
+        error: failure.message,
+      ),
+      (success) => state = state.copyWith(
+        state: AuthState.success,
+        isSuccess: true,
+      ),
+    );
+  }
 }

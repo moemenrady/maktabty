@@ -348,4 +348,18 @@ class TextStyles {
     fontFamily: "Blinker",
     color: AppPallete.blackForText,
   );
+
+  static TextStyle Blinker24semiBoldBlack = TextStyle(
+    fontSize: 24.h,
+    fontWeight: FontWeightHelper.semiBold,
+    fontFamily: "Blinker",
+    color: AppPallete.blackForText,
+  );
+
+  static TextStyle Blinker12regularBlack = TextStyle(
+    fontSize: 12.h,
+    fontWeight: FontWeightHelper.regular,
+    fontFamily: "Blinker",
+    color: AppPallete.blackForText,
+  );
 }

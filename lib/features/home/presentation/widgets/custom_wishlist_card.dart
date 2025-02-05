@@ -1,8 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
+import '../../../../core/comman/widgets/custom_cached_network_image_provider.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../admin/data/model/item_model.dart';
 import '../../../check_out/presentation/screen/product_details_creen.dart';
@@ -22,7 +24,8 @@ class CustomWishlistCard extends ConsumerWidget {
         itemCount: wishListItems.length,
         itemBuilder: (context, index) {
           final item = wishListItems[index];
-          return Stack(
+          return FadeInDown(
+              child: Stack(
             children: [
               Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -37,15 +40,13 @@ class CustomWishlistCard extends ConsumerWidget {
                                     ProductDetailsScreen(item: item)),
                           );
                         },
-                        child: Container(
-                          width: 88.w,
-                          height: 88.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            image: DecorationImage(
-                              image: NetworkImage(item.imageUrl),
-                              fit: BoxFit.cover,
-                            ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: CustomCachedNetworkImageProvider(
+                            imageUrl: item.imageUrl,
+                            width: 88.w,
+                            height: 88.h,
+                            fit: BoxFit.cover,
                           ),
                         )),
                     const SizedBox(width: 16.0),
@@ -118,7 +119,7 @@ class CustomWishlistCard extends ConsumerWidget {
                 ),
               )
             ],
-          );
+          ));
         },
       ),
     );

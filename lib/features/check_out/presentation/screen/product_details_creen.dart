@@ -13,6 +13,8 @@ import '../../../../core/theme/text_style.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../../../admin/data/model/item_model.dart';
 import '../../../../core/comman/widgets/animated_price_widget.dart';
+import '../riverpods/rating/rating_riverpod.dart';
+import '../widget/product_details_screen/custom_rating_section.dart';
 
 class ProductDetailsScreen extends ConsumerWidget {
   final ItemModel item;
@@ -26,6 +28,15 @@ class ProductDetailsScreen extends ConsumerWidget {
           context,
           "Item added to cart",
         );
+      }
+    });
+
+    ref.listen(ratingProvider(item.id), (previous, next) {
+      if (next.isSuccessAddRating()) {
+        showSnackBar(context, "Rating added successfully");
+      } else if (next.isError()) {
+        showSnackBar(context, next.errorMessage ?? "Error");
+        print(next.errorMessage);
       }
     });
 
@@ -124,42 +135,8 @@ class ProductDetailsScreen extends ConsumerWidget {
                         style: TextStyles.Blinker20semiBoldBlack,
                       ),
                       SizedBox(height: 16.h),
-                      Container(
-                        padding: EdgeInsets.all(20.w),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
-                          borderRadius: BorderRadius.circular(15.r),
-                          border: Border.all(
-                            color: Colors.grey.shade200,
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: List.generate(
-                                  5,
-                                  (index) => Icon(
-                                        Icons.star,
-                                        color: Colors.yellow,
-                                        size: 24.w, // Adjust the size as needed
-                                      )),
-                            ),
-                            SizedBox(height: 16.h),
-                            Text(
-                              'No Reviews Yet',
-                              style: TextStyles.Blinker18semiBoldBlack,
-                            ),
-                            SizedBox(height: 8.h),
-                            Text(
-                              'Be the first to review this product',
-                              style: TextStyles.Blinker14regular.copyWith(
-                                color: Colors.grey,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                      CustomRatingSection(
+                        item: item,
                       ),
                       SizedBox(height: 100.h), // Space for bottom bar
                     ],

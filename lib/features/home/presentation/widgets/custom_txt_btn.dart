@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/auth/presentation/riverpod/auth_riverpod.dart';
+import 'package:mktabte/features/auth/presentation/riverpod/auth_state.dart';
 
-class CustomTxtBtn extends StatelessWidget {
+class CustomTxtBtn extends ConsumerWidget {
   final String btnName;
   final Function onPress;
   final Color bgclr;
   final double btnradious;
   final double btnWidth;
   final double btnHeight;
+
   final TextStyle txtstyle;
 
   const CustomTxtBtn({
@@ -17,11 +21,12 @@ class CustomTxtBtn extends StatelessWidget {
     required this.bgclr,
     required this.btnradious,
     required this.btnWidth,
-    required this.btnHeight, required this.txtstyle,
+    required this.btnHeight,
+    required this.txtstyle,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
       onTap: () {
         onPress();
@@ -34,10 +39,14 @@ class CustomTxtBtn extends StatelessWidget {
           borderRadius: BorderRadius.circular(btnradious.r),
         ),
         child: Center(
-          child: Text(
-            btnName,
-            style: txtstyle,
-          ),
+          child: ref.watch(authControllerProvider).state == AuthState.loading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Text(
+                  btnName,
+                  style: txtstyle,
+                ),
         ),
       ),
     );

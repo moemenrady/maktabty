@@ -31,6 +31,8 @@ abstract interface class AuthRemoteDataSource {
 
   Future<void> signOut();
   Future<void> updateUserPhoneNumber({required int phoneNumber, int? userId});
+
+  Future<void> forgetPassword({required String email});
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -50,6 +52,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       await supabaseClient.auth.signUp(
         email: email,
         password: password,
+        emailRedirectTo: "https://lockapp.site/redirect_page.html",
       );
 
       return {
@@ -117,5 +120,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     await supabaseClient.from('users').update({
       'phone': phoneNumber,
     }).eq('id', userId!);
+  }
+
+  @override
+  Future<void> forgetPassword({required String email}) async {
+    await supabaseClient.auth.resetPasswordForEmail(
+      email,
+      redirectTo:
+          'https://lockapp.site/web_forget_password_for_flutter/forget_password.html',
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,50 +40,53 @@ class CustomCategoriesGrid extends ConsumerWidget {
           itemCount: categories.length,
           itemBuilder: (context, index) {
             final category = categories[index];
-            return InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CategoryScreen(
-                      categoryId: category.id,
-                      categoryName: category.name,
-                    ),
-                  ),
-                );
-              },
-              child: Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.r),
-                            topRight: Radius.circular(20.r),
-                            bottomLeft: Radius.circular(0.r),
-                            bottomRight: Radius.circular(0.r)),
-                        child: CustomCachedNetworkImageProvider(
-                          imageUrl: category.imageUrl,
+            return FadeInLeft(
+                duration: Duration(
+                    milliseconds: index <= 4 ? (index + 1) * 900 : 1000),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoryScreen(
+                          categoryId: category.id,
+                          categoryName: category.name,
                         ),
                       ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(12.0.w),
-                      child: Center(
-                          child: Text(
-                        category.name,
-                        style: TextStyles.Roboto14mediumblackForText,
-                      )),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.r),
+                                topRight: Radius.circular(20.r),
+                                bottomLeft: Radius.circular(0.r),
+                                bottomRight: Radius.circular(0.r)),
+                            child: CustomCachedNetworkImageProvider(
+                              imageUrl: category.imageUrl,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(12.0.w),
+                          child: Center(
+                              child: Text(
+                            category.name,
+                            style: TextStyles.Roboto14mediumblackForText,
+                          )),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            );
+                  ),
+                ));
           },
         ),
       ),
