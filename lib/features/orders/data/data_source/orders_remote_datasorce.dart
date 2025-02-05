@@ -15,6 +15,8 @@ abstract class OrdersRemoteDataSource {
   Future<List<Map<String, dynamic>>> fetchOrderSummaryForUser({
     required int userId,
   });
+  Future<void> updateOrderState(String orderId, String newState);
+  Future<void> updateItemQuantities(List<Map<String, dynamic>> itemUpdates);
 }
 
 class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
@@ -34,6 +36,26 @@ class OrdersRemoteDataSourceImpl implements OrdersRemoteDataSource {
           .order('order_created_at', ascending: false);
       // Map the response to a list of OrderSummary objects
       return response;
+    });
+  }
+
+  @override
+  Future<void> updateOrderState(String orderId, String newState) async {
+    return executeTryAndCatchForDataLayer(() async {
+      await supabaseClient
+          .from('orders')
+          .update({'state': newState}).eq('id', orderId);
+    });
+  }
+
+  @override
+  Future<void> updateItemQuantities(
+      List<Map<String, dynamic>> itemUpdates) async {
+    return executeTryAndCatchForDataLayer(() async {
+      for (var update in itemUpdates) {
+        await supabaseClient.from('items').update(
+            {'quantity': update['new_quantity']}).eq('id', update['item_id']);
+      }
     });
   }
 }

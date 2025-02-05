@@ -23,8 +23,21 @@ class OrdersRepository {
     return executeTryAndCatchForRepository(() async {
       final result =
           await ordersRemoteDataSource.fetchOrderSummaryForUser(userId: userId);
-      final data = result.map((e) => UserOrderModel.fromMap(e)).toList();
-      return data;
+      return result.map((e) => UserOrderModel.fromMap(e)).toList();
+    });
+  }
+
+  Future<Either<Failure, void>> updateOrderState(
+      String orderId, String state) async {
+    return executeTryAndCatchForRepository(() async {
+      await ordersRemoteDataSource.updateOrderState(orderId, state);
+    });
+  }
+
+  Future<Either<Failure, void>> updateItemQuantities(
+      List<Map<String, dynamic>> itemUpdates) async {
+    return executeTryAndCatchForRepository(() async {
+      await ordersRemoteDataSource.updateItemQuantities(itemUpdates);
     });
   }
 }

@@ -30,7 +30,7 @@ class HomeRemoteDataSourceImpl extends HomeRemoteDataSource {
   @override
   Future<List<Map<String, dynamic>>> getAllCategories() async {
     return executeTryAndCatchForDataLayer(() async {
-      final categories = await client.from('categories').select('*').limit(5);
+      final categories = await client.from('categories').select('*');
       return List<Map<String, dynamic>>.from(categories);
     });
   }

@@ -96,4 +96,66 @@ class UserOrdersRiverpod extends StateNotifier<UserOrdersRiverpodState> {
 
     state = state.copyWith(filteredOrders: filtered);
   }
+
+  Future<void> cancelOrder(UserOrderModel order) async {
+    state = state.copyWith(state: UserOrdersState.loading);
+
+    // First try to update order state to cancelled
+    final orderUpdateResult =
+        await repository.updateOrderState(order.orderId, 'cancelled');
+
+    await orderUpdateResult.fold(
+      (failure) {
+        state = state.copyWith(
+          state: UserOrdersState.error,
+          errorMessage: failure.message,
+        );
+      },
+      (_) async {
+        // Prepare item quantity updates
+        final itemUpdates = order.items.map((item) {
+          return {
+            'item_id': item.itemId,
+            'new_quantity': item.quantity + item.itemCurrentQuantity,
+          };
+        }).toList();
+
+        // Try to update item quantities
+        final quantityUpdateResult =
+            await repository.updateItemQuantities(itemUpdates);
+
+        await quantityUpdateResult.fold(
+          (failure) async {
+            // If quantity update fails, rollback order state
+            final rollbackResult =
+                await repository.updateOrderState(order.orderId, 'preparing');
+
+            rollbackResult.fold(
+              (rollbackFailure) {
+                state = state.copyWith(
+                  state: UserOrdersState.error,
+                  errorMessage:
+                      'Critical error: Failed to rollback order state. Please contact support.',
+                );
+              },
+              (_) {
+                state = state.copyWith(
+                  state: UserOrdersState.error,
+                  errorMessage:
+                      'Failed to update item quantities. Order cancellation reversed.',
+                );
+              },
+            );
+          },
+          (_) async {
+            // Both updates successful
+            await getUserOrders(order.userId);
+            state = state.copyWith(
+              state: UserOrdersState.successCancelOrder,
+            );
+          },
+        );
+      },
+    );
+  }
 }

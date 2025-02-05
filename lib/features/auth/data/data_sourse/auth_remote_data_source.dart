@@ -126,8 +126,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<void> forgetPassword({required String email}) async {
     await supabaseClient.auth.resetPasswordForEmail(
       email,
-      redirectTo:
-          'https://lockapp.site/web_forget_password_for_flutter/forget_password.html',
+      redirectTo: 'https://lockapp.site/forget_password.html',
     );
   }
 }

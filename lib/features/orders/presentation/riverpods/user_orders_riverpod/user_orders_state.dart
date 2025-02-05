@@ -5,6 +5,7 @@ enum UserOrdersState {
   loading,
   success,
   error,
+  successCancelOrder,
 }
 
 class UserOrdersRiverpodState {
@@ -23,6 +24,7 @@ class UserOrdersRiverpodState {
   bool isLoading() => state == UserOrdersState.loading;
   bool isSuccess() => state == UserOrdersState.success;
   bool isError() => state == UserOrdersState.error;
+  bool isSuccessCancelOrder() => state == UserOrdersState.successCancelOrder;
 
   UserOrdersRiverpodState copyWith({
     UserOrdersState? state,

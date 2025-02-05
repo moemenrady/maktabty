@@ -6,6 +6,7 @@ class UserOrderModel {
   final String userName;
   final int addressId;
   final DateTime orderCreatedAt;
+  final int itemCurrentQuantity;
   final String itemId;
   final String itemName;
   final String imageUrl;
@@ -25,6 +26,7 @@ class UserOrderModel {
     this.totalPrice = 0.0,
     this.totalQuantity = 0,
     this.quantity = 0,
+    this.itemCurrentQuantity = 0,
     DateTime? orderCreatedAt,
     this.itemId = '',
     this.itemName = '',
@@ -39,6 +41,7 @@ class UserOrderModel {
     return UserOrderModel(
       orderId: map['order_id'] ?? '',
       userId: map['user_id'] ?? 0,
+      itemCurrentQuantity: map['item_stock_quantity'] ?? 0,
       address: map['address'] ?? '',
       quantity: map['quantity'] ?? 0,
       region: map['region'] ?? '',
@@ -64,6 +67,7 @@ class UserOrderModel {
       'address': address,
       'region': region,
       'user_name': userName,
+      'item_stock_quantity': itemCurrentQuantity,
       'adress_id': addressId,
       'order_created_at': orderCreatedAt.toIso8601String(),
       'item_id': itemId,
@@ -84,6 +88,7 @@ class UserOrderModel {
     String? region,
     int? totalQuantity,
     String? userName,
+    int? itemCurrentQuantity,
     int? addressId,
     DateTime? orderCreatedAt,
     String? itemId,
@@ -100,6 +105,7 @@ class UserOrderModel {
       userId: userId ?? this.userId,
       address: address ?? this.address,
       region: region ?? this.region,
+      itemCurrentQuantity: itemCurrentQuantity ?? this.itemCurrentQuantity,
       userName: userName ?? this.userName,
       totalQuantity: totalQuantity ?? this.totalQuantity,
       addressId: addressId ?? this.addressId,
@@ -124,6 +130,7 @@ class UserOrderModel {
     String? userName,
     int? totalQuantity,
     int? addressId,
+    int? itemCurrentQuantity,
     String? itemId,
     String? itemName,
     String? imageUrl,
@@ -142,6 +149,8 @@ class UserOrderModel {
         (itemId == null || this.itemId == itemId) &&
         (itemName == null || this.itemName == itemName) &&
         (imageUrl == null || this.imageUrl == imageUrl) &&
+        (itemCurrentQuantity == null ||
+            this.itemCurrentQuantity == itemCurrentQuantity) &&
         (orderState == null || this.orderState == orderState) &&
         (quantity == null || this.quantity == quantity) &&
         (totalPrice == null || this.totalPrice == totalPrice) &&
@@ -154,6 +163,6 @@ class UserOrderModel {
     return 'OrderSummary(orderId: $orderId, userId: $userId, address: $address, region: $region, '
         'userName: $userName, addressId: $addressId, orderCreatedAt: $orderCreatedAt, itemId: $itemId, '
         'itemName: $itemName, imageUrl: $imageUrl, itemPrice: $itemPrice, quantity: $quantity, '
-        'totalPrice: $totalPrice, totalQuantity: $totalQuantity, orderState: $orderState, items: $items)';
+        'itemCurrentQuantity: $itemCurrentQuantity, totalPrice: $totalPrice, totalQuantity: $totalQuantity, orderState: $orderState, items: $items)';
   }
 }

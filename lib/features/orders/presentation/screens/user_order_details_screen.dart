@@ -4,13 +4,95 @@ import '../../../../core/comman/helpers/gap.dart';
 import '../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
+import '../../../../core/utils/show_snack_bar.dart';
 import '../../data/models/user_order_model.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../features/orders/presentation/riverpods/user_orders_riverpod/user_orders_riverpod.dart';
 
-class UserOrderDetailsScreen extends StatelessWidget {
+class UserOrderDetailsScreen extends ConsumerWidget {
   final UserOrderModel order;
 
   const UserOrderDetailsScreen({super.key, required this.order});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(userOrdersProvider, (previous, next) {
+      if (next.isSuccessCancelOrder()) {
+        showSnackBar(
+            context, "Order cancelled successfully and inventory updated");
+        Navigator.pop(context);
+      } else if (next.isError()) {
+        showSnackBar(
+          context,
+          next.errorMessage ?? "An unexpected error occurred",
+        );
+      }
+    });
+
+    final state = ref.watch(userOrdersProvider);
+
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                _buildAppBar(context),
+                SliverToBoxAdapter(child: Gap.h20),
+                _buildOrderInfo(context),
+                SliverToBoxAdapter(child: Gap.h20),
+                _buildItemsList(),
+                SliverToBoxAdapter(child: Gap.h20),
+                _buildTotalSection(),
+                SliverToBoxAdapter(child: Gap.h20),
+              ],
+            ),
+            if (state.isLoading())
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
+          ],
+        ),
+      ),
+      floatingActionButton: order.orderState == "preparing"
+          ? FloatingActionButton.extended(
+              onPressed: state.isLoading()
+                  ? null
+                  : () => _showCancelConfirmation(context, ref),
+              backgroundColor: state.isLoading() ? Colors.grey : Colors.red,
+              label: const Text('Cancel Order'),
+              icon: const Icon(Icons.cancel),
+            )
+          : null,
+    );
+  }
+
+  void _showCancelConfirmation(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Cancel Order'),
+        content: const Text(
+          'Are you sure you want to cancel this order? This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ref.read(userOrdersProvider.notifier).cancelOrder(order);
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Yes, Cancel Order'),
+          ),
+        ],
+      ),
+    );
+  }
 
   OrderState get _orderState => order.orderState.toOrderState();
 
@@ -34,26 +116,6 @@ class UserOrderDetailsScreen extends StatelessWidget {
       case OrderState.cancelled:
         return 'Cancelled';
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            _buildAppBar(context),
-            SliverToBoxAdapter(child: Gap.h20),
-            _buildOrderInfo(context),
-            SliverToBoxAdapter(child: Gap.h20),
-            _buildItemsList(),
-            SliverToBoxAdapter(child: Gap.h20),
-            _buildTotalSection(),
-            SliverToBoxAdapter(child: Gap.h20),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildAppBar(BuildContext context) {
@@ -295,7 +357,7 @@ class UserOrderDetailsScreen extends StatelessWidget {
                   style: TextStyles.Blinker14regular,
                 ),
                 Text(
-                  order.items.length.toString(),
+                  order.totalQuantity.toString(),
                   style: TextStyles.Blinker16regularlightBlack,
                 ),
               ],
