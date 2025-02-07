@@ -127,8 +127,7 @@ class CheckOutRemoteDataSourceImpl implements CheckOutRemoteDataSource {
     String transactionType,
   ) async {
     return executeTryAndCatchForDataLayer(() async {
-      print(orderItems);
-      return await supabaseClient.rpc('place_orderss', params: {
+      await supabaseClient.rpc('place_orderss', params: {
         'user_id_input': userId,
         'order_items': orderItems,
         'address_id': addressId,
