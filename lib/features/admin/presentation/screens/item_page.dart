@@ -6,6 +6,7 @@ import 'package:mktabte/features/admin/presentation/screens/add_items.dart';
 import '../../../../core/utils/show_dialog.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
+import '../riverpods/item_riverpod/item_list_state.dart';
 import '../riverpods/item_riverpod/item_riverpod.dart';
 import 'update_item_page.dart';
 
@@ -40,11 +41,13 @@ class ItemPage extends ConsumerWidget {
                 categories.map((category) => Tab(text: category.name)).toList(),
           ),
         ),
-        body: TabBarView(
-          children: categories
-              .map((category) => _ItemGrid(categoryId: category.id))
-              .toList(),
-        ),
+        body: itemState.isLoading()
+            ? const Center(child: CircularProgressIndicator())
+            : TabBarView(
+                children: categories
+                    .map((category) => _ItemGrid(categoryId: category.id))
+                    .toList(),
+              ),
       ),
     );
   }
@@ -67,6 +70,16 @@ class _ItemGridState extends ConsumerState<_ItemGrid> {
     final filteredItems =
         viewModel.filterItems(itemsState.items, widget.categoryId);
 
+    ref.listen(itemListProvider, (previous, next) {
+      if (next.status == ItemListStateStatus.failure) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(next.error ?? 'Error'),
+          ),
+        );
+      }
+    });
     return Column(
       children: [
         // Summary Card
@@ -142,8 +155,9 @@ class _ItemGridState extends ConsumerState<_ItemGrid> {
                             MaterialPageRoute(
                               builder: (context) => UpdateItemPage(item: item),
                             ),
-                          );
-                          ref.read(itemListProvider.notifier).fetchItems();
+                          ).then((value) {
+                            ref.read(itemListProvider.notifier).fetchItems();
+                          });
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +239,7 @@ class _ItemGridState extends ConsumerState<_ItemGrid> {
                                   ref,
                                   () => ref
                                       .read(itemListProvider.notifier)
-                                      .deleteItem(item.id),
+                                      .deleteItem(item.id, item.imageUrl),
                                 ),
                               ),
                             ),

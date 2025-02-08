@@ -18,7 +18,7 @@ abstract interface class AdminRemoteDataSource {
     required String itemId,
   });
   Future<List<Map<String, dynamic>>> getAllItems();
-  Future<void> deleteItem(String itemId);
+  Future<void> deleteItem(String itemId, String imageUrl);
   Future<Map<String, dynamic>> addCategory(String name, String imageUrl);
   Future<List<Map<String, dynamic>>> getAllCategories();
   Future<void> deleteCategory(int categoryId);
@@ -36,6 +36,7 @@ abstract interface class AdminRemoteDataSource {
   });
   Future<List<Map<String, dynamic>>> fetchOrderSummaryForUser();
   Future<void> updateOrderState(String orderId, OrderState newState);
+  Future<void> updateItemQuantities(List<Map<String, dynamic>> itemUpdates);
 }
 
 class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
@@ -77,9 +78,14 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
   }
 
   @override
-  Future<void> deleteItem(String itemId) async {
+  Future<void> deleteItem(String itemId, String imageUrl) async {
     return executeTryAndCatchForDataLayer(() async {
-      await supabaseClient.storage.from('item_images').remove([itemId]);
+      if (imageUrl !=
+          'https://gwzvpnetxlpqpjsemttw.supabase.co/storage/v1/object/public/item_images//slider3.jpg') {
+        await supabaseClient.storage.from('item_images').remove([itemId]);
+      }
+
+      // After image is deleted, delete the item from the database
       await supabaseClient.from('items').delete().match({'id': itemId});
     });
   }
@@ -211,7 +217,18 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
     return executeTryAndCatchForDataLayer(() async {
       await supabaseClient
           .from('orders')
-          .update({'state': newState.name}).match({'id': orderId});
+          .update({'state': newState.name}).eq('id', orderId);
+    });
+  }
+
+  @override
+  Future<void> updateItemQuantities(
+      List<Map<String, dynamic>> itemUpdates) async {
+    return executeTryAndCatchForDataLayer(() async {
+      for (var update in itemUpdates) {
+        await supabaseClient.from('items').update(
+            {'quantity': update['new_quantity']}).eq('id', update['item_id']);
+      }
     });
   }
 }

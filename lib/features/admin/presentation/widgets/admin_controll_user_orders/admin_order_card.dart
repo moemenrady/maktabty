@@ -7,6 +7,7 @@ import '../../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../../core/theme/app_pallete.dart';
 import '../../../../../core/theme/text_style.dart';
 import '../../../../orders/data/models/user_order_model.dart';
+import '../../riverpods/admin_controll_user_orders/admin_controll_user_orders_riverpod.dart';
 import '../../screens/admin_order_details_screen.dart';
 
 class AdminOrderCard extends ConsumerWidget {
@@ -44,7 +45,7 @@ class AdminOrderCard extends ConsumerWidget {
         ),
         child: Column(
           children: [
-            _buildHeader(context),
+            _buildHeader(context, ref),
             _buildContent(),
             _buildFooter(),
           ],
@@ -53,7 +54,7 @@ class AdminOrderCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, WidgetRef ref) {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -98,7 +99,7 @@ class AdminOrderCard extends ConsumerWidget {
             ),
           ),
           const Spacer(),
-          _buildStateDropdown(context),
+          _buildStateDropdown(context, ref),
           Gap.w12,
           Text(
             order.orderCreatedAt.toString().split(' ')[0],
@@ -109,7 +110,7 @@ class AdminOrderCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildStateDropdown(BuildContext context) {
+  Widget _buildStateDropdown(BuildContext context, WidgetRef ref) {
     Color getStatusColor(OrderState status) {
       switch (status) {
         case OrderState.delivered:
@@ -121,7 +122,9 @@ class AdminOrderCard extends ConsumerWidget {
       }
     }
 
-    String getStatusText(OrderState status) {
+    String getStatusText(
+      OrderState status,
+    ) {
       switch (status) {
         case OrderState.delivered:
           return 'Delivered';
@@ -167,8 +170,45 @@ class AdminOrderCard extends ConsumerWidget {
           ],
         ),
       ),
-      onSelected: (OrderState newState) {
-        onStateChanged(order.orderId, newState);
+      onSelected: (OrderState? newState) async {
+        if (newState != null) {
+          if (newState == OrderState.cancelled) {
+            // Show confirmation dialog
+            final shouldCancel = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Cancel Order'),
+                content:
+                    const Text('Are you sure you want to cancel this order?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('Yes'),
+                  ),
+                ],
+              ),
+            );
+
+            if (shouldCancel == true) {
+              final itemUpdates = order.items.map((item) {
+                return {
+                  'item_id': item.itemId,
+                  'new_quantity': item.quantity + item.itemCurrentQuantity,
+                };
+              }).toList();
+
+              ref
+                  .read(adminControlUserOrdersProvider.notifier)
+                  .cancelOrder(order, itemUpdates);
+            }
+          } else {
+            onStateChanged(order.orderId, newState);
+          }
+        }
       },
       itemBuilder: (context) => OrderState.values.map((state) {
         return PopupMenuItem(

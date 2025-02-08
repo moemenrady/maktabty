@@ -5,9 +5,7 @@ import 'package:mktabte/features/check_out/presentation/riverpods/check_out/chec
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/product_bar.dart';
-import 'package:mktabte/features/check_out/presentation/widget/product_details_screen/review_card.dart';
 
-import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/comman/widgets/custom_cached_network_image_provider.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../../core/utils/show_snack_bar.dart';
@@ -95,6 +93,51 @@ class ProductDetailsScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
+
+                if (item.quantity < 5)
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: Colors.red.shade200),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.warning_amber_rounded,
+                          color: Colors.red,
+                          size: 20.w,
+                        ),
+                        SizedBox(width: 8.w),
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyles.Blinker14regular.copyWith(
+                                  color: Colors.red),
+                              children: [
+                                const TextSpan(
+                                  text: 'Only ',
+                                ),
+                                TextSpan(
+                                  text: '${item.quantity} items',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text:
+                                      ' left in stock ${item.quantity <= 0 ? "" : "- order soon"} ',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
                 Padding(
                   padding: EdgeInsets.all(16.w),

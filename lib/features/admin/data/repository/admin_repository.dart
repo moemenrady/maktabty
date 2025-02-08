@@ -85,9 +85,10 @@ class AdminRepository {
     });
   }
 
-  Future<Either<Failure, void>> deleteItem(String itemId) async {
+  Future<Either<Failure, void>> deleteItem(
+      String itemId, String imageUrl) async {
     return executeTryAndCatchForRepository(() async {
-      await adminRemoteDataSource.deleteItem(itemId);
+      await adminRemoteDataSource.deleteItem(itemId, imageUrl);
     });
   }
 
@@ -174,6 +175,13 @@ class AdminRepository {
       String orderId, OrderState newState) async {
     return executeTryAndCatchForRepository(() async {
       await adminRemoteDataSource.updateOrderState(orderId, newState);
+    });
+  }
+
+  Future<Either<Failure, void>> updateItemQuantities(
+      List<Map<String, dynamic>> itemUpdates) async {
+    return executeTryAndCatchForRepository(() async {
+      await adminRemoteDataSource.updateItemQuantities(itemUpdates);
     });
   }
 }

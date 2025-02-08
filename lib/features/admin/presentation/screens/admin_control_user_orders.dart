@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/admin/presentation/riverpods/admin_controll_user_orders/admin_controll_user_order_state.dart';
 import '../../../../core/comman/helpers/gap.dart';
+import '../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../orders/presentation/riverpods/user_orders_riverpod/user_orders_view_model.dart';
@@ -11,6 +12,19 @@ import '../widgets/admin_controll_user_orders/admin_order_card.dart';
 
 class AdminControlUserOrders extends ConsumerWidget {
   const AdminControlUserOrders({super.key});
+
+  final List<String> cairoRegions = const [
+    'Nasr City',
+    'Maadi',
+    'Heliopolis',
+    'Downtown',
+    'Zamalek',
+    '6th of October',
+    'New Cairo',
+    'Dokki',
+    'Mohandessin',
+    'Giza',
+  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,6 +35,8 @@ class AdminControlUserOrders extends ConsumerWidget {
         child: Column(
           children: [
             _buildHeader(),
+            Gap.h20,
+            _buildFilters(context, ref),
             Gap.h20,
             _buildSearchBar(ref),
             Gap.h20,
@@ -111,6 +127,77 @@ class AdminControlUserOrders extends ConsumerWidget {
                   style: TextStyles.Blinker16regularlightOrange,
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilters(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Row(
+        children: [
+          // Order State Filter
+          Expanded(
+            child: DropdownButtonFormField<OrderState>(
+              decoration: InputDecoration(
+                labelText: 'Order Status',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+              ),
+              items: OrderState.values.map((state) {
+                return DropdownMenuItem(
+                  value: state,
+                  child: Text(
+                    state.name,
+                    style: TextStyles.Blinker14regular,
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  ref
+                      .read(adminControlUserOrdersProvider.notifier)
+                      .filterByState(value);
+                }
+              },
+            ),
+          ),
+          Gap.w12,
+          // Location Filter
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Location',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+              ),
+              items: [
+                const DropdownMenuItem(
+                  value: '',
+                  child: Text('All Locations'),
+                ),
+                ...cairoRegions.map((region) {
+                  return DropdownMenuItem(
+                    value: region,
+                    child: Text(
+                      region,
+                      style: TextStyles.Blinker14regular,
+                    ),
+                  );
+                }),
+              ],
+              onChanged: (value) {
+                ref
+                    .read(adminControlUserOrdersProvider.notifier)
+                    .filterByLocation(value ?? '');
+              },
             ),
           ),
         ],

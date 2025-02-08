@@ -10,6 +10,7 @@ import '../../../data/model/item_model.dart';
 enum ItemListStateStatus {
   initial,
   loading,
+  successDeleteItem,
   success,
   failure,
 }
@@ -38,7 +39,7 @@ class ItemListState {
   bool isLoading() => status == ItemListStateStatus.loading;
   bool isSuccess() => status == ItemListStateStatus.success;
   bool isError() => status == ItemListStateStatus.failure;
-
+  bool isSuccessDeleteItem() => status == ItemListStateStatus.successDeleteItem;
   ItemListState copyWith({
     ItemListStateStatus? status,
     String? error,

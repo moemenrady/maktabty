@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-
 import 'package:flutter/foundation.dart';
 
+import '../../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../orders/data/models/user_order_model.dart';
 
 enum AdminControlUserOrderState {
@@ -10,6 +10,7 @@ enum AdminControlUserOrderState {
   loading,
   success,
   error,
+  successCancelOrder,
 }
 
 extension AdminControlUserOrderStateX on AdminControlUserOrderRiverpodState {
@@ -17,6 +18,8 @@ extension AdminControlUserOrderStateX on AdminControlUserOrderRiverpodState {
   bool isSuccess() => state == AdminControlUserOrderState.success;
   bool isError() => state == AdminControlUserOrderState.error;
   bool isInitial() => state == AdminControlUserOrderState.initial;
+  bool isSuccessCancelOrder() =>
+      state == AdminControlUserOrderState.successCancelOrder;
 }
 
 class AdminControlUserOrderRiverpodState {
@@ -24,11 +27,16 @@ class AdminControlUserOrderRiverpodState {
   final List<UserOrderModel> orders;
   final List<UserOrderModel> filteredOrders;
   final String? errorMessage;
+  final OrderState? selectedState;
+  final String selectedLocation;
+
   AdminControlUserOrderRiverpodState({
     required this.state,
     this.orders = const [],
     this.filteredOrders = const [],
     this.errorMessage = "un expected error",
+    this.selectedState,
+    this.selectedLocation = '',
   });
 
   AdminControlUserOrderRiverpodState copyWith({
@@ -36,12 +44,16 @@ class AdminControlUserOrderRiverpodState {
     List<UserOrderModel>? orders,
     List<UserOrderModel>? filteredOrders,
     String? errorMessage,
+    OrderState? selectedState,
+    String? selectedLocation,
   }) {
     return AdminControlUserOrderRiverpodState(
       state: state ?? this.state,
       orders: orders ?? this.orders,
       filteredOrders: filteredOrders ?? this.filteredOrders,
       errorMessage: errorMessage ?? this.errorMessage,
+      selectedState: selectedState ?? this.selectedState,
+      selectedLocation: selectedLocation ?? this.selectedLocation,
     );
   }
 

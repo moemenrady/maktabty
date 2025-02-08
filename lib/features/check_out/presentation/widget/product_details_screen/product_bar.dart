@@ -18,12 +18,20 @@ class ProductBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    void checkQuantity() {
+      if (item.quantity <= 0) {
+        showSnackBar(context, "Item is out of stock");
+      } else {
+        ref.read(checkOutRiverpodProvider.notifier).addItemToCart(
+            item.id, ref.read(appUserRiverpodProvider).user!.id!);
+      }
+    }
+
     void checkGuest() {
       if (ref.read(appUserRiverpodProvider).user?.name == "Guest") {
         showSnackBar(context, "Please login to add to cart");
       } else {
-        ref.read(checkOutRiverpodProvider.notifier).addItemToCart(
-            item.id, ref.read(appUserRiverpodProvider).user!.id!);
+        checkQuantity();
       }
     }
 
@@ -48,7 +56,7 @@ class ProductBar extends ConsumerWidget {
                 ? const Center(child: CircularProgressIndicator())
                 : Expanded(
                     child: ElevatedButton(
-                    onPressed: () => checkGuest(),
+                    onPressed: () => checkQuantity(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF68B3B),
                       shape: RoundedRectangleBorder(

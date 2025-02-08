@@ -31,7 +31,7 @@ class AddNewItemPage extends ConsumerWidget {
                       viewModel.retailPriceController.text.trim()) ??
                   0.0,
               imageUrl:
-                  'https://gwzvpnetxlpqpjsemttw.supabase.co/storage/v1/object/public/item_images/philip-oroni-VfOGf5RWkeg-unsplash.jpg',
+                  'https://gwzvpnetxlpqpjsemttw.supabase.co/storage/v1/object/public/item_images//slider3.jpg',
               createdAt: DateTime.now().toIso8601String(),
               description: viewModel.contentController.text.trim(),
             ),

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mktabte/features/admin/presentation/riverpods/admin_controll_user_orders/admin_controll_user_order_state.dart';
 import '../../../../core/comman/helpers/gap.dart';
 import '../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/theme/text_style.dart';
+import '../../../../core/utils/show_snack_bar.dart';
 import '../../../orders/data/models/user_order_model.dart';
 import '../riverpods/admin_controll_user_orders/admin_controll_user_orders_riverpod.dart';
 
@@ -16,6 +18,19 @@ class AdminOrderDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(adminControlUserOrdersProvider, (previous, next) {
+      if (next.isSuccessCancelOrder()) {
+        showSnackBar(
+            context, "Order cancelled successfully and inventory updated");
+        Navigator.pop(context);
+      } else if (next.isSuccess()) {
+        showSnackBar(context, "Order status updated successfully");
+      } else if (next.isError()) {
+        showSnackBar(
+            context, next.errorMessage ?? "An unexpected error occurred");
+      }
+    });
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -203,10 +218,45 @@ class AdminOrderDetailsScreen extends ConsumerWidget {
           ],
         ),
       ),
-      onSelected: (OrderState newState) {
-        ref
-            .read(adminControlUserOrdersProvider.notifier)
-            .updateOrderState(order.orderId, newState);
+      onSelected: (OrderState newState) async {
+        if (newState == OrderState.cancelled) {
+          // Show confirmation dialog
+          final shouldCancel = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Cancel Order'),
+              content:
+                  const Text('Are you sure you want to cancel this order?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('Yes'),
+                ),
+              ],
+            ),
+          );
+
+          if (shouldCancel == true) {
+            final itemUpdates = order.items.map((item) {
+              return {
+                'item_id': item.itemId,
+                'new_quantity': item.quantity + item.itemCurrentQuantity,
+              };
+            }).toList();
+
+            ref
+                .read(adminControlUserOrdersProvider.notifier)
+                .cancelOrder(order, itemUpdates);
+          }
+        } else {
+          ref
+              .read(adminControlUserOrdersProvider.notifier)
+              .updateOrderState(order.orderId, newState);
+        }
         Navigator.pop(context);
       },
       itemBuilder: (context) => OrderState.values.map((state) {
@@ -295,7 +345,8 @@ class AdminOrderDetailsScreen extends ConsumerWidget {
                                 '#${item.itemId}',
                                 style: TextStyles.Blinker14regular.copyWith(
                                   color: AppPallete.lightGrey,
-                                ),overflow: TextOverflow.ellipsis,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             Gap.w4,

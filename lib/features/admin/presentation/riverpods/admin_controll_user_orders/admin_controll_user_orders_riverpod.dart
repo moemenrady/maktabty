@@ -85,6 +85,8 @@ class AdminControlUserOrdersRiverpod
   }
 
   Future<void> updateOrderState(String orderId, OrderState newState) async {
+    state = state.copyWith(state: AdminControlUserOrderState.loading);
+
     final result = await repository.updateOrderState(orderId, newState);
 
     result.fold(
@@ -92,7 +94,8 @@ class AdminControlUserOrdersRiverpod
         state: AdminControlUserOrderState.error,
         errorMessage: failure.message,
       ),
-      (orders) {
+      (_) async {
+        // Update the local state
         final updatedOrders = state.orders.map((order) {
           if (order.orderId == orderId) {
             return order.copyWith(orderState: newState.name);
@@ -100,7 +103,11 @@ class AdminControlUserOrdersRiverpod
           return order;
         }).toList();
 
+        // Fetch fresh data to ensure sync
+        await getUserOrders();
+
         state = state.copyWith(
+          state: AdminControlUserOrderState.success,
           orders: updatedOrders,
           filteredOrders: updatedOrders,
         );
@@ -108,15 +115,114 @@ class AdminControlUserOrdersRiverpod
     );
   }
 
+  Future<void> cancelOrder(
+      UserOrderModel order, List<Map<String, dynamic>> itemUpdates) async {
+    state = state.copyWith(state: AdminControlUserOrderState.loading);
+
+    // First update the order state
+    final orderUpdateResult = await repository.updateOrderState(
+      order.orderId,
+      OrderState.cancelled,
+    );
+
+    await orderUpdateResult.fold(
+      (failure) async {
+        state = state.copyWith(
+          state: AdminControlUserOrderState.error,
+          errorMessage: failure.message,
+        );
+      },
+      (_) async {
+        // Then update the item quantities
+        final quantityUpdateResult =
+            await repository.updateItemQuantities(itemUpdates);
+
+        await quantityUpdateResult.fold(
+          (failure) async {
+            // If quantity update fails, rollback order state
+            final rollbackResult = await repository.updateOrderState(
+              order.orderId,
+              OrderState.preparing,
+            );
+
+            rollbackResult.fold(
+              (rollbackFailure) {
+                state = state.copyWith(
+                  state: AdminControlUserOrderState.error,
+                  errorMessage:
+                      'Critical error: Failed to rollback order state. Please contact support.',
+                );
+              },
+              (_) {
+                state = state.copyWith(
+                  state: AdminControlUserOrderState.error,
+                  errorMessage:
+                      'Failed to update item quantities. Order cancellation reversed.',
+                );
+              },
+            );
+          },
+          (_) async {
+            // Both updates successful
+            await getUserOrders();
+            state = state.copyWith(
+              state: AdminControlUserOrderState.successCancelOrder,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void applyFilters() {
+    var filtered = state.orders;
+
+    // Apply state filter
+    if (state.selectedState != null) {
+      filtered = filtered
+          .where(
+              (order) => order.orderState.toOrderState() == state.selectedState)
+          .toList();
+    }
+
+    // Apply location filter
+    if (state.selectedLocation.isNotEmpty) {
+      filtered = filtered
+          .where((order) => order.region == state.selectedLocation)
+          .toList();
+    }
+
+    state = state.copyWith(filteredOrders: filtered);
+  }
+
+  void filterByState(OrderState orderState) {
+    state = state.copyWith(selectedState: orderState);
+    applyFilters();
+  }
+
+  void filterByLocation(String location) {
+    state = state.copyWith(selectedLocation: location);
+    applyFilters();
+  }
+
   void filterOrders(String query) {
     if (query.isEmpty) {
-      state = state.copyWith(filteredOrders: state.orders);
+      applyFilters();
       return;
     }
 
     final filtered = state.orders.where((order) {
-      return order.itemName.toLowerCase().contains(query.toLowerCase()) ||
-          order.orderId.toLowerCase().contains(query.toLowerCase());
+      final matchesQuery =
+          order.itemName.toLowerCase().contains(query.toLowerCase()) ||
+              order.orderId.toLowerCase().contains(query.toLowerCase());
+
+      final matchesState = state.selectedState == null ||
+          order.orderState.toOrderState() == state.selectedState;
+
+      final matchesLocation = state.selectedLocation.isEmpty ||
+          order.region == state.selectedLocation;
+
+      return matchesQuery && matchesState && matchesLocation;
     }).toList();
 
     state = state.copyWith(filteredOrders: filtered);

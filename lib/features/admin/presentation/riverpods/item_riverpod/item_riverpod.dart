@@ -61,16 +61,20 @@ class ItemListController extends StateNotifier<ItemListState> {
     );
   }
 
-  Future<void> deleteItem(String itemId) async {
-    state = state.copyWith(isDeleting: true);
-    final result = await repository.deleteItem(itemId);
+  Future<void> deleteItem(String itemId, String imageUrl) async {
+    state = state.copyWith(status: ItemListStateStatus.loading);
+    final result = await repository.deleteItem(itemId, imageUrl);
     result.fold(
-      (failure) => state = state.copyWith(
-        status: ItemListStateStatus.failure,
-        error: failure.message,
-      ),
-      (_) => fetchItems(),
-    );
+        (failure) => state = state.copyWith(
+              status: ItemListStateStatus.failure,
+              error: failure.message,
+            ), (_) {
+      state = state.copyWith(
+        status: ItemListStateStatus.successDeleteItem,
+        isDeleting: false,
+      );
+      fetchItems();
+    });
   }
 
   Future<void> updateItem(ItemModel updatedItem, {String? oldImageUrl}) async {
