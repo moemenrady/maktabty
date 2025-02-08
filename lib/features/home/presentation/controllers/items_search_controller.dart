@@ -101,7 +101,7 @@ class ItemsSearchController extends ChangeNotifier {
     try {
       final model = GenerativeModel(
         model: 'gemini-1.5-flash-latest',
-        apiKey: "AIzaSyDpiw6E_n4qNBqO0VP9wIyMbmxiqkmCVxo",
+        apiKey: "",
       );
 
       final prompt = '''
