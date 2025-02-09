@@ -160,7 +160,7 @@ class ProductDetailsScreen extends ConsumerWidget {
                         ],
                       ),
                       SizedBox(height: 24.h),
-
+//
                       Text(
                         "Description",
                         style: TextStyles.Blinker20semiBoldBlack,
