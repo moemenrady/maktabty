@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mktabte/features/check_out/presentation/riverpods/check_out/check_out_state.dart';
 import 'package:mktabte/features/check_out/presentation/screen/update_user_phone.dart';
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
+import '../../../../core/theme/text_style.dart';
 import '../../../../core/utils/show_snack_bar.dart';
 import '../../model/cart_items_model.dart';
 import '../riverpods/check_out/check_out_riverpod.dart';
@@ -20,6 +21,40 @@ class CheckOutScreen extends ConsumerWidget {
     ref.listen(checkOutRiverpodProvider, (previous, next) {
       if (next.isSuccessCheckOut()) {
         showCheckoutSuccessDialog(context);
+      } else if (next.isError()) {
+        // Show error dialog for out of stock items
+        if (next.errorMessage.contains('exceed available stock') ?? false) {
+          showDialog(
+            context: context,
+            barrierDismissible: false, // User must take action
+            builder: (context) => AlertDialog(
+              title: Text(
+                'Insufficient Stock',
+                style: TextStyles.Blinker16regularlightBlack.copyWith(
+                  color: Colors.red,
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: Text(
+                  next.errorMessage,
+                  style: TextStyles.Blinker14regular,
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close dialog
+                    Navigator.pop(context); // Return to cart
+                  },
+                  child: const Text('Return to Cart'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          showSnackBar(
+              context, next.errorMessage ?? "An unexpected error occurred");
+        }
       }
     });
 

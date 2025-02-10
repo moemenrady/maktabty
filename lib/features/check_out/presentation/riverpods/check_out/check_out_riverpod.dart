@@ -132,6 +132,27 @@ class CheckOutRiverpod extends StateNotifier<CheckOutState> {
   ) async {
     state = state.copyWith(status: CheckOutStateStatus.loading);
 
+    // First check if all items are in stock
+    final outOfStockItems = <String>[];
+
+    for (var cartItem in state.cartItems) {
+      // If cart quantity is greater than available stock
+      if (cartItem.itemCount > cartItem.itemQuantity) {
+        outOfStockItems.add(
+            '${cartItem.itemName} (Requested: ${cartItem.itemQuantity}, Available: ${cartItem.itemCount})');
+      }
+    }
+
+    // If any items are out of stock, return with error
+    if (outOfStockItems.isNotEmpty) {
+      state = state.copyWith(
+        status: CheckOutStateStatus.error,
+        errorMessage:
+            'Some items exceed available stock:\n${outOfStockItems.join('\n')}',
+      );
+      return;
+    }
+
     // Convert the order items to ensure integer prices
     final convertedOrderItems = orderItems.map((item) {
       return {
@@ -151,14 +172,12 @@ class CheckOutRiverpod extends StateNotifier<CheckOutState> {
 
     result.fold(
       (failure) {
-        print(failure.message);
         state = state.copyWith(
           status: CheckOutStateStatus.error,
           errorMessage: failure.message,
         );
       },
       (success) {
-        print("success");
         state = state.copyWith(status: CheckOutStateStatus.successCheckOut);
       },
     );
