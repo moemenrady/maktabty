@@ -6,6 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/theme/text_style.dart';
+import '../../../../core/utils/biometric_helper.dart';
+import '../../../../core/utils/show_snack_bar.dart';
 import '../../../admin/presentation/screens/admin_control_user_orders.dart';
 import '../../../admin/presentation/screens/category_page.dart';
 import '../../../admin/presentation/screens/item_page.dart';
@@ -24,6 +26,18 @@ class UserProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     void logOut() {
       ref.read(appUserRiverpodProvider.notifier).clearUserData();
+    }
+
+    void checkBiometric(void Function() onSuccess) async {
+      final authResult = await BiometricHelper.authenticate();
+      authResult.fold(
+        (error) => showSnackBar(context, error),
+        (authenticated) {
+          if (authenticated) {
+            onSuccess();
+          }
+        },
+      );
     }
 
     final userName =
@@ -79,11 +93,13 @@ class UserProfileScreen extends ConsumerWidget {
                   SizedBox(height: 18.h),
                   CustomProfileOption(
                     OntapFN: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const ViewOrdersSummaryScreen()));
+                      checkBiometric(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ViewOrdersSummaryScreen()));
+                      });
                     },
                     iconPath: "assets/images/setting_icon.png",
                     title: "View Orders",
@@ -92,11 +108,13 @@ class UserProfileScreen extends ConsumerWidget {
                   SizedBox(height: 18.h),
                   CustomProfileOption(
                     OntapFN: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const AdminControlUserOrders()));
+                      checkBiometric(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AdminControlUserOrders()));
+                      });
                     },
                     iconPath: "assets/images/setting_icon.png",
                     title: "Control User Orders",
@@ -114,8 +132,9 @@ class UserProfileScreen extends ConsumerWidget {
                   SizedBox(height: 18.h),
                   CustomProfileOption(
                     OntapFN: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserInfoScreen()));
-                      },
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const UserInfoScreen()));
+                    },
                     iconPath: "assets/images/Info_icon.png",
                     title: "Account Information",
                     textStyle: TextStyles.Inter15regularBlack,
