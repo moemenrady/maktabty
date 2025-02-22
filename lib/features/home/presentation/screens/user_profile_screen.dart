@@ -11,6 +11,7 @@ import '../../../admin/presentation/screens/category_page.dart';
 import '../../../admin/presentation/screens/item_page.dart';
 import '../../../admin/presentation/screens/view_orders_summary.dart';
 
+import '../../../user/presentation/screens/user_info_screen.dart';
 import '../../../orders/presentation/screens/user_orders_screen.dart';
 import '../widgets/custom_profile_option.dart';
 
@@ -110,13 +111,15 @@ class UserProfileScreen extends ConsumerWidget {
                   //   textStyle: TextStyles.Inter15regularBlack,
                   // ),
 
-                  // SizedBox(height: 18.h),
-                  // CustomProfileOption(
-                  //   OntapFN: () {},
-                  //   iconPath: "assets/images/Info_icon.png",
-                  //   title: "Account Information",
-                  //   textStyle: TextStyles.Inter15regularBlack,
-                  // ),
+                  SizedBox(height: 18.h),
+                  CustomProfileOption(
+                    OntapFN: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserInfoScreen()));
+                      },
+                    iconPath: "assets/images/Info_icon.png",
+                    title: "Account Information",
+                    textStyle: TextStyles.Inter15regularBlack,
+                  ),
 
                   SizedBox(height: 18.h),
                   CustomProfileOption(

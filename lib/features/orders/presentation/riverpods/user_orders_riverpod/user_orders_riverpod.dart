@@ -7,8 +7,8 @@ import 'user_orders_state.dart';
 final userOrdersProvider = StateNotifierProvider.autoDispose<UserOrdersRiverpod,
     UserOrdersRiverpodState>(
   (ref) => UserOrdersRiverpod(
-    repository: ref.watch(ordersRepositoryProvider),
-  )..getUserOrders(ref.watch(appUserRiverpodProvider).user!.id),
+    repository: ref.read(ordersRepositoryProvider),
+  ),
 );
 
 class UserOrdersRiverpod extends StateNotifier<UserOrdersRiverpodState> {
@@ -17,7 +17,7 @@ class UserOrdersRiverpod extends StateNotifier<UserOrdersRiverpodState> {
   UserOrdersRiverpod({required this.repository})
       : super(UserOrdersRiverpodState(state: UserOrdersState.initial));
 
-  List<UserOrderModel> _mergeOrders(List<UserOrderModel> orders) {
+  List<UserOrderModel> _mergeOrders(List<UserOrderModel> orders) {                                           
     final Map<String, List<UserOrderModel>> groupedOrders = {};
 
     for (var order in orders) {
