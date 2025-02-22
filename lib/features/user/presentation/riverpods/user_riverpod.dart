@@ -12,27 +12,26 @@ final userProvider = StateNotifierProvider.autoDispose<UserRiverpod,
 
 class UserRiverpod extends StateNotifier<UserRiverpodState> {
   final UserRepository repository;
-  UserRiverpod({required this.repository}):super(UserRiverpodState(state: userState.loading));
+  UserRiverpod({required this.repository}):super(UserRiverpodState(state: userState.initial));
 
-  Future<void> updateName(String userId, String newName) async {
+  Future<void> updateUser(String userId, String newName,String newPhone) async {
     state = state.copyWith(state: userState.loading);
-    final result = await repository.updateName(userId, newName);
+    final result = await repository.updateUser(userId, newName,newPhone);
     result.fold((failure) => state = state.copyWith(state: userState.error,errorMessage: failure.message),
         (success) {
           final newname = newName;
-          state = state.copyWith(state: userState.success, username: newname);
-          //final newname = state.username!.replaceRange(0, state.username!.length, newName);
-          //state = state.copyWith(state: userState.success)
+          final newphone = newPhone;
+          state = state.copyWith(state: userState.success, username: newname , userphone: newphone);
         });
   }
-
-  Future<void> updatePhone(String userId, String newPhone) async {
+  Future<void> getUserInfo(String userId) async {
     state = state.copyWith(state: userState.loading);
-    final result = await repository.updatePhone(userId, newPhone);
+    final result = await repository.getUserInfo(userId);
     result.fold((failure) => state = state.copyWith(state: userState.error,errorMessage: failure.message),
         (success) {
-          final newphone = newPhone;
-          state = state.copyWith(state: userState.success, userphone: newphone);
+          final newname = success.name;
+          final newphone = success.phone;
+          state = state.copyWith(state: userState.success, username: newname , userphone: newphone);
         });
-  }  
+  }
 }

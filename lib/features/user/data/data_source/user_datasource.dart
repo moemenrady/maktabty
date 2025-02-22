@@ -13,8 +13,8 @@ final UserDataSourceProvider =
 
 
 abstract class UserDataSource {
-  Future<void> updateName(String userId, String newName);
-  Future<void> updatePhone(String userId, String newPhone);
+  Future<void> updateUser(String userId, String newName,String newPhone);
+  Future<Map<String, dynamic>> getUserInfo(String userId);
 }
 
 class UserDataSourceImpl implements UserDataSource {
@@ -23,21 +23,22 @@ class UserDataSourceImpl implements UserDataSource {
   UserDataSourceImpl({required this.supabaseClient});
   
   @override
-  Future<void> updateName(String userId, String newName) {
+  Future<void> updateUser(String userId, String newName,String newPhone) {
      return executeTryAndCatchForDataLayer(() async {
       await supabaseClient
           .from('users')
-          .update({'name': newName}).eq('id', userId);
+          .update({'name': newName,'phone': newPhone}).eq('id', userId);
     });
   }
-  
-  @override
-  Future<void> updatePhone(String userId, String newPhone) {
-    return executeTryAndCatchForDataLayer(() async {
-      await supabaseClient
-          .from('users')
-          .update({'phone': newPhone}).eq('id', userId);
-    });
-  }
+Future<Map<String, dynamic>> getUserInfo(String userId) async {
+  return executeTryAndCatchForDataLayer(() async {
+    final user = await supabaseClient
+        .from('users')
+        .select()
+        .eq('id', userId)
+        .single();
 
-  }
+    return user as Map<String, dynamic>;
+  });
+}
+}

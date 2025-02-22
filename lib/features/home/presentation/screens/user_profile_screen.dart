@@ -114,7 +114,7 @@ class UserProfileScreen extends ConsumerWidget {
                   SizedBox(height: 18.h),
                   CustomProfileOption(
                     OntapFN: () {
-                      //Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserInfoScreen()));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserInfoScreen()));
                       },
                     iconPath: "assets/images/Info_icon.png",
                     title: "Account Information",

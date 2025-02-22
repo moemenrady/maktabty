@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import '../../../../core/erorr/failure.dart';
 import '../../../../core/utils/try_and_catch.dart';
 import '../data_source/user_datasource.dart';
+import '../model/user_model_test.dart';
 
 
 // final UpdateUserInfoDataSourceProvider =
@@ -23,15 +24,16 @@ class UserRepository {
   UserRepository({required this.updateUserInfoDataSource});
 
 
-  Future<Either<Failure, void>> updateName(String userId, String newName) async {
+  Future<Either<Failure, void>> updateUser(String userId, String newName,String newPhone) async {
     return executeTryAndCatchForRepository(() async {
-      await updateUserInfoDataSource.updateName(userId, newName);
+      await updateUserInfoDataSource.updateUser(userId, newName,newPhone);
   });
 }
+Future<Either<Failure, userModelTest>> getUserInfo(String userId) async {
+  return executeTryAndCatchForRepository(() async {
+  final user = await updateUserInfoDataSource.getUserInfo(userId);
+  return userModelTest.fromMap(user);
 
-Future<Either<Failure, void>> updatePhone(String userId, String newPhone) async {
-    return executeTryAndCatchForRepository(() async {
-      await updateUserInfoDataSource.updatePhone(userId, newPhone);
   });
 }
 
