@@ -8,9 +8,10 @@ import '../models/user_order_model.dart';
 
 final ordersRepositoryProvider = Provider.autoDispose<OrdersRepository>((ref) {
   return OrdersRepository(
-    ordersRemoteDataSource: ref.watch(ordersRemoteDataSourceProvider),
+    ordersRemoteDataSource: ref.read(ordersRemoteDataSourceProvider),
   );
 });
+
 
 class OrdersRepository {
   final OrdersRemoteDataSource ordersRemoteDataSource;

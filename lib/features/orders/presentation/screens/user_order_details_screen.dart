@@ -9,6 +9,7 @@ import '../../data/models/user_order_model.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../features/orders/presentation/riverpods/user_orders_riverpod/user_orders_riverpod.dart';
+import '../../../../core/utils/biometric_helper.dart';
 
 class UserOrderDetailsScreen extends ConsumerWidget {
   final UserOrderModel order;
@@ -82,9 +83,29 @@ class UserOrderDetailsScreen extends ConsumerWidget {
             child: const Text('No'),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ref.read(userOrdersProvider.notifier).cancelOrder(order);
+            onPressed: () async {
+              Navigator.pop(context); // Close the confirmation dialog
+
+              // Request biometric authentication
+              final authResult = await BiometricHelper.authenticate();
+
+              authResult.fold(
+                (error) => showSnackBar(
+                  context,
+                  error,
+                ),
+                (authenticated) {
+                  if (authenticated) {
+                    // Proceed with order cancellation
+                    ref.read(userOrdersProvider.notifier).cancelOrder(order);
+                  } else {
+                    showSnackBar(
+                      context,
+                      "Authentication failed. Please try again.",
+                    );
+                  }
+                },
+              );
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Yes, Cancel Order'),
