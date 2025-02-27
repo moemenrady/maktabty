@@ -97,14 +97,13 @@ class ItemsSearchController extends ChangeNotifier {
     }
   }
 
-  Future<void> _getAISuggestions() async {
-    try {
-      final model = GenerativeModel(
-        model: 'gemini-1.5-flash-latest',
-        apiKey: "AIzaSyDpiw6E_n4qNBqO0VP9wIyMbmxiqkmCVxo",
-      );
+  Future<String> _getAIResponse() async {
+    final model = GenerativeModel(
+      model: 'gemini-1.5-flash-latest',
+      apiKey: "AIzaSyDpiw6E_n4qNBqO0VP9wIyMbmxiqkmCVxo",
+    );
 
-      final prompt = '''
+    final prompt = '''
         User searched for: "${_searchQuery}"
         Available items: ${_items.map((e) => e.name).join(', ')}
         
@@ -119,48 +118,48 @@ class ItemsSearchController extends ChangeNotifier {
         Important: relatedItems MUST be exact matches of names from the available items list.
       ''';
 
-      final content = [Content.text(prompt)];
-      final response = await model.generateContent(content);
+    final content = [Content.text(prompt)];
+    final response = await model.generateContent(content);
+    return response.text ?? '';
+  }
 
-      if (response.text != null) {
-        try {
-          final cleanedText = response.text!
-              .replaceAll("```json", "")
-              .replaceAll("```", "")
-              .replaceAll("\n", "")
-              .trim();
+  void _parseAIResponse(String response) {
+    final cleanedText = response
+        .replaceAll("```json", "")
+        .replaceAll("```", "")
+        .replaceAll("\n", "")
+        .trim();
 
-          final result = json.decode(cleanedText);
-          print('AI Response: $result'); // Debug print
+    final result = json.decode(cleanedText);
+    print('AI Response: $result'); // Debug print
 
-          aiSuggestion = result['itemGuess']?.toString();
+    aiSuggestion = result['itemGuess']?.toString();
 
-          if (result['relatedItems'] is List) {
-            // Get all item names in lowercase for case-insensitive comparison
-            final availableItemNames =
-                _items.map((e) => e.name.toLowerCase()).toSet();
+    if (result['relatedItems'] is List) {
+      // Get all item names in lowercase for case-insensitive comparison
+      final availableItemNames =
+          _items.map((e) => e.name.toLowerCase()).toSet();
 
-            // Filter related items that exist in our inventory
-            relatedItems = (result['relatedItems'] as List)
-                .map((item) => item.toString())
-                .where((suggested) =>
-                    availableItemNames.contains(suggested.toLowerCase()))
-                .toList();
+      // Filter related items that exist in our inventory
+      relatedItems = (result['relatedItems'] as List)
+          .map((item) => item.toString())
+          .where((suggested) =>
+              availableItemNames.contains(suggested.toLowerCase()))
+          .toList();
 
-            // If no exact matches found, take first 3 items as fallback
-            if (relatedItems!.isEmpty && _items.isNotEmpty) {
-              relatedItems = _items.take(3).map((e) => e.name).toList();
-            }
-          }
+      // If no exact matches found, take first 3 items as fallback
+      if (relatedItems!.isEmpty && _items.isNotEmpty) {
+        relatedItems = _items.take(3).map((e) => e.name).toList();
+      }
+    }
+  }
 
-          print('AI Suggestion: $aiSuggestion'); // Debug print
-          print('Related Items: $relatedItems'); // Debug print
-
-          notifyListeners();
-        } catch (e) {
-          print('Error parsing AI response: $e');
-          print('Raw response: ${response.text}');
-        }
+  Future<void> _getAISuggestions() async {
+    try {
+      final response = await _getAIResponse();
+      if (response.isNotEmpty) {
+        _parseAIResponse(response);
+        notifyListeners();
       }
     } catch (e) {
       print('Error in AI search: $e');

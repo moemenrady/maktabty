@@ -8,7 +8,7 @@ final userOrdersProvider = StateNotifierProvider.autoDispose<UserOrdersRiverpod,
     UserOrdersRiverpodState>(
   (ref) => UserOrdersRiverpod(
     repository: ref.watch(ordersRepositoryProvider),
-  )..getUserOrders(ref.watch(appUserRiverpodProvider).user!.id),
+  )..getUserOrders(ref.read(appUserRiverpodProvider).user!.id),
 );
 
 class UserOrdersRiverpod extends StateNotifier<UserOrdersRiverpodState> {
