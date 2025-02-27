@@ -99,7 +99,8 @@ class _MyAppState extends ConsumerState<MyApp> {
                 )
               : state.isNotInstalled()
                   ? const Onboard()
-                  : state.isGettedDataFromLocalStorage()
+                  : state.isGettedDataFromLocalStorage() ||
+                          state.isUpdateUserData()
                       ? const MainBar()
                       : const LoginPage(),
         );

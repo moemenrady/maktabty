@@ -40,7 +40,7 @@ class AppUserRiverpod extends StateNotifier<AppUserRiverpodState> {
     }
   }
 
-   Future<void> updateUserData(UserModel? user) async {
+  Future<void> updateUserData(UserModel? user) async {
     state = state.copyWith(state: AppUserStates.loading);
     if (user != null) {
       final res = await SecureStorageHelper.saveUserData(user);
@@ -51,6 +51,7 @@ class AppUserRiverpod extends StateNotifier<AppUserRiverpodState> {
         ),
         (r) {
           state = state.copyWith(
+            state: AppUserStates.updateUserData,
             user: user,
           );
         },

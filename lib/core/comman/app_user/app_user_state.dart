@@ -17,6 +17,7 @@ enum AppUserStates {
   notLoggedIn,
   loggedIn,
   signOut,
+  updateUserData,
 
   installed,
   notInstalled,
@@ -51,6 +52,7 @@ extension AppUserStateX on AppUserRiverpodState {
       state == AppUserStates.failureSaveUserDataInSupabase;
   bool isSaveDataInLocalStorage() =>
       state == AppUserStates.saveDataInLocalStorage;
+  bool isUpdateUserData() => state == AppUserStates.updateUserData;
 }
 
 class AppUserRiverpodState {
