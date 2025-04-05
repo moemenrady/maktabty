@@ -12,7 +12,8 @@ import '../../../admin/presentation/screens/admin_control_user_orders.dart';
 import '../../../admin/presentation/screens/category_page.dart';
 import '../../../admin/presentation/screens/item_page.dart';
 import '../../../admin/presentation/screens/view_orders_summary.dart';
-
+import '../../../service_provider/presentation/screens/become_service_provider_screen.dart';
+import '../../../service_provider/presentation/screens/service_provider_item_page.dart';
 import '../../../user/presentation/screens/user_info_screen.dart';
 import '../../../orders/presentation/screens/user_orders_screen.dart';
 import '../widgets/custom_profile_option.dart';
@@ -40,8 +41,10 @@ class UserProfileScreen extends ConsumerWidget {
       );
     }
 
-    final userName =
-        ref.read(appUserRiverpodProvider).user?.name; // Get user's name
+    final user = ref.read(appUserRiverpodProvider).user;
+    final userName = user?.name;
+    final userState = user?.state ?? 0;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(40.0),
@@ -57,7 +60,35 @@ class UserProfileScreen extends ConsumerWidget {
                   height: 52.h,
                 ),
                 SizedBox(width: 10.w),
-                Text(userName!, style: TextStyles.Inter17mediumBlack),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(userName ?? 'User',
+                        style: TextStyles.Inter17mediumBlack),
+                    if (userState == 2)
+                      Container(
+                        margin: EdgeInsets.only(top: 4.h),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8.w, vertical: 2.h),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFF96AD).withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(
+                            color: const Color(0xFFFF96AD),
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          'Service Provider',
+                          style: TextStyle(
+                            color: const Color(0xFFF83758),
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ],
             ),
             SizedBox(height: 30.h),
@@ -121,14 +152,62 @@ class UserProfileScreen extends ConsumerWidget {
                     textStyle: TextStyles.Inter15regularBlack,
                   ),
                   SizedBox(height: 18.h),
-                  //for user
-                  // CustomProfileOption(
-                  //   OntapFN: () {},
-                  //   iconPath: "assets/images/dark_light_mode_icon.png",
-                  //   title: "Dark Mode",
-                  //   textStyle: TextStyles.Inter15regularBlack,
-                  // ),
 
+                  // Service Provider Section
+                  if (userState == 2) ...[
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 8.h),
+                      padding: EdgeInsets.all(8.w),
+                      decoration: BoxDecoration(
+                        color: Colors.pink.shade50,
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.w),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.workspace_premium,
+                                  color: const Color(0xFFF83758),
+                                  size: 20.w,
+                                ),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  'Service Provider Panel',
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          CustomProfileOption(
+                            OntapFN: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ServiceProviderItemPage(),
+                                ),
+                              );
+                            },
+                            iconPath: "assets/images/bag_icon.png",
+                            title: "Manage My Products",
+                            textStyle: TextStyles.Inter15regularBlack,
+                          ),
+                          SizedBox(height: 5.h),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 18.h),
+                  ],
+
+                  //for user
                   SizedBox(height: 18.h),
                   CustomProfileOption(
                     OntapFN: () {
@@ -153,13 +232,7 @@ class UserProfileScreen extends ConsumerWidget {
                     title: "Order",
                     textStyle: TextStyles.Inter15regularBlack,
                   ),
-                  // SizedBox(height: 18.h),
-                  // CustomProfileOption(
-                  //   OntapFN: () {},
-                  //   iconPath: "assets/images/wallet_icon.png",
-                  //   title: "My Cards",
-                  //   textStyle: TextStyles.Inter15regularBlack,
-                  // ),
+
                   SizedBox(height: 18.h),
                   CustomProfileOption(
                     OntapFN: () {
@@ -174,13 +247,24 @@ class UserProfileScreen extends ConsumerWidget {
                     textStyle: TextStyles.Inter15regularBlack,
                   ),
 
-                  // SizedBox(height: 18.h),
-                  // CustomProfileOption(
-                  //   OntapFN: () {},
-                  //   iconPath: "assets/images/setting_icon.png",
-                  //   title: "Settings",
-                  //   textStyle: TextStyles.Inter15regularBlack,
-                  // ),
+                  // Show Service Provider option only for regular users
+                  if (userState != 2) ...[
+                    SizedBox(height: 18.h),
+                    CustomProfileOption(
+                      OntapFN: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const BecomeServiceProviderScreen(),
+                          ),
+                        );
+                      },
+                      iconPath: "assets/images/Star Rating.png",
+                      title: "Become a Service Provider",
+                      textStyle: TextStyles.Inter15regularBlack,
+                    ),
+                  ],
                 ],
               ),
             ),
