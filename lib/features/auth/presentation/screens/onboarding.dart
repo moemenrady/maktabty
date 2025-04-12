@@ -56,7 +56,7 @@ class _OnboardState extends ConsumerState<Onboard> {
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      String? model = androidInfo.model;
+      final model = androidInfo;
       print('Running on $model'); // e.g. "Moto G (4)"
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;

@@ -34,12 +34,12 @@ void main() async {
   final checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
   final isDevMode = await JailbreakRootDetection.instance.isDevMode;
 
-  print(isNotTrust);
-  print(isJailBroken);
-  print(isRealDevice);
-  print(isOnExternalStorage);
-  print(checkForIssues);
-  print(isDevMode);
+  print("isNotTrust: $isNotTrust");
+  print("isJailBroken: $isJailBroken");
+  print("isRealDevice: $isRealDevice");
+  print("isOnExternalStorage: $isOnExternalStorage");
+  print("checkForIssues: $checkForIssues");
+  print("isDevMode: $isDevMode");
 
   await ScreenUtil.ensureScreenSize();
 
