@@ -1,14 +1,17 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mktabte/features/auth/presentation/riverpod/login_riverpod.dart';
 import 'package:mktabte/features/auth/presentation/screens/signup_screen.dart';
 import 'package:mktabte/features/home/presentation/widgets/custom_txt_btn.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../../../core/comman/entitys/user_model.dart';
 import '../../../../core/theme/text_style.dart';
 import '../../../../core/utils/show_snack_bar.dart';
+import 'dart:io';
 
 List imgs = [
   "assets/images/onboard1.png",
@@ -18,12 +21,12 @@ List imgs = [
 List titles = [
   "Welcome!",
   "Irrelevant results again?",
-  "And that’s the cherry on top!"
+  "And that's the cherry on top!"
 ];
 List subtitles = [
-  "It’s a pleasure to meet you. We are excited that you’re here so let’s get started!",
+  "It's a pleasure to meet you. We are excited that you're here so let's get started!",
   "No need to rummage through irrelevant items anymore, we got you covered. we send you relevant items based off of your habits and interests.",
-  "No fees, free shipping and amazing customer service. We’ll get you your package within 2 business days no questions asked!"
+  "No fees, free shipping and amazing customer service. We'll get you your package within 2 business days no questions asked!"
 ];
 
 class Onboard extends ConsumerStatefulWidget {
@@ -43,7 +46,31 @@ class _OnboardState extends ConsumerState<Onboard> {
   @override
   void initState() {
     _pageController = PageController(initialPage: 0);
+    getDeviceInfo();
+    print("Running on Pixel 4 API 33");
     super.initState();
+  }
+
+  void getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      String? model = androidInfo.model;
+      print('Running on $model'); // e.g. "Moto G (4)"
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      String? machine = iosInfo.utsname.machine;
+      print('Running on $machine'); // e.g. "iPod7,1"
+    } else if (kIsWeb) {
+      WebBrowserInfo webBrowserInfo = await deviceInfo.webBrowserInfo;
+      String? userAgent = webBrowserInfo.userAgent;
+      if (userAgent != null) {
+        print('Running on $userAgent'); // e.g. "Mozilla/5.0 ..."
+      } else {
+        print('User agent information is not available.');
+      }
+    } else {}
   }
 
   @override

@@ -154,7 +154,7 @@ class UserProfileScreen extends ConsumerWidget {
                   SizedBox(height: 18.h),
 
                   // Service Provider Section
-                  if (userState == 2) ...[
+                  if (userState != 2) ...[
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 8.h),
                       padding: EdgeInsets.all(8.w),

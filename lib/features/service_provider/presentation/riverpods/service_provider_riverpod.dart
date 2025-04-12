@@ -6,7 +6,7 @@ import '../../../../core/comman/app_user/app_user_riverpod.dart';
 import '../../data/repository/service_provider_repository.dart';
 import 'service_provider_state.dart';
 
-final serviceProviderRiverpodProvider = StateNotifierProvider<
+final serviceProviderRiverpodProvider = StateNotifierProvider.autoDispose<
     ServiceProviderRiverpod, ServiceProviderRiverpodState>(
   (ref) => ServiceProviderRiverpod(
     repository: ref.watch(serviceProviderRepositoryProvider),
