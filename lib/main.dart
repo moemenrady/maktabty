@@ -26,20 +26,20 @@ void main() async {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3enZwbmV0eGxwcXBqc2VtdHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE1NDMyNDMsImV4cCI6MjA0NzExOTI0M30.M_gXPVEvhH0z69l1VxMt7VwuybOZqQ2gAAnHC1ZMBn0',
   );
 
-  final isNotTrust = await JailbreakRootDetection.instance.isNotTrust;
-  final isJailBroken = await JailbreakRootDetection.instance.isJailBroken;
-  final isRealDevice = await JailbreakRootDetection.instance.isRealDevice;
-  final isOnExternalStorage =
-      await JailbreakRootDetection.instance.isOnExternalStorage;
-  final checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
-  final isDevMode = await JailbreakRootDetection.instance.isDevMode;
+  // final isNotTrust = await JailbreakRootDetection.instance.isNotTrust;
+  // final isJailBroken = await JailbreakRootDetection.instance.isJailBroken;
+  // final isRealDevice = await JailbreakRootDetection.instance.isRealDevice;
+  // final isOnExternalStorage =
+  //     await JailbreakRootDetection.instance.isOnExternalStorage;
+  // final checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
+  // final isDevMode = await JailbreakRootDetection.instance.isDevMode;
 
-  print("isNotTrust: $isNotTrust");
-  print("isJailBroken: $isJailBroken");
-  print("isRealDevice: $isRealDevice");
-  print("isOnExternalStorage: $isOnExternalStorage");
-  print("checkForIssues: $checkForIssues");
-  print("isDevMode: $isDevMode");
+  // print("isNotTrust: $isNotTrust");
+  // print("isJailBroken: $isJailBroken");
+  // print("isRealDevice: $isRealDevice");
+  // print("isOnExternalStorage: $isOnExternalStorage");
+  // print("checkForIssues: $checkForIssues");
+  // print("isDevMode: $isDevMode");
 
   await ScreenUtil.ensureScreenSize();
 

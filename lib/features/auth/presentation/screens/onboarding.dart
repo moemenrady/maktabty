@@ -46,7 +46,7 @@ class _OnboardState extends ConsumerState<Onboard> {
   @override
   void initState() {
     _pageController = PageController(initialPage: 0);
-    getDeviceInfo();
+    // getDeviceInfo();
     print("Running on Pixel 4 API 33");
     super.initState();
   }

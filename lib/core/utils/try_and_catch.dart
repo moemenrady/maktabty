@@ -1,18 +1,36 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:fpdart/fpdart.dart';
 import 'package:mktabte/core/erorr/failure.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../comman/entitys/rate_limit_response_model.dart';
 import 'netowrk_exception.dart';
+import 'rate_limiter.dart';
+
+// API Rate Limiting
+
 
 // Define a utility function to handle exceptions and return an Either type
 Future<Either<Failure, T>> executeTryAndCatchForRepository<T>(
     Future<T> Function() action) async {
   try {
+    // Check connectivity
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (!connectivityResult.contains(ConnectivityResult.mobile) &&
+        !connectivityResult.contains(ConnectivityResult.wifi)) {
+      return left(Failure('No internet connection.'));
+    }
+
+    final rateLimitResponse = await checkRateLimit();
+    if (rateLimitResponse.remaining <= 0) {
+      return left(Failure('API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.'));
+    }
+
     final result = await action();
     return right(result);
   } on FormatException catch (e) {
@@ -47,6 +65,11 @@ Future<T> executeTryAndCatchForDataLayer<T>(Future<T> Function() action) async {
   try {
     var check = await Connectivity().checkConnectivity();
 
+    final rateLimitResponse = await checkRateLimit();
+    if (rateLimitResponse.remaining <= 0) {
+      throw Exception('API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.');
+    }
+
     if (check.contains(ConnectivityResult.mobile) ||
         check.contains(ConnectivityResult.wifi)) {
       return await action();
@@ -68,4 +91,14 @@ Future<T> executeTryAndCatchForDataLayer<T>(Future<T> Function() action) async {
   } catch (e) {
     throw Exception('An unexpected error occurred: ${e.toString()}');
   }
+}
+
+// Convenience functions to easily use the rate limiting functionality from RateLimiter
+Future<Either<Failure, T>> executeWithRateLimit<T>(
+    Future<T> Function() action) {
+  return RateLimiter.executeWithRateLimit(action);
+}
+
+Future<T> executeWithRateLimitForDataLayer<T>(Future<T> Function() action) {
+  return RateLimiter.executeWithRateLimitForDataLayer(action);
 }

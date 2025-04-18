@@ -87,25 +87,8 @@ class UserOrderDetailsScreen extends ConsumerWidget {
               Navigator.pop(context); // Close the confirmation dialog
 
               // Request biometric authentication
-              final authResult = await BiometricHelper.authenticate();
 
-              authResult.fold(
-                (error) => showSnackBar(
-                  context,
-                  error,
-                ),
-                (authenticated) {
-                  if (authenticated) {
-                    // Proceed with order cancellation
-                    ref.read(userOrdersProvider.notifier).cancelOrder(order);
-                  } else {
-                    showSnackBar(
-                      context,
-                      "Authentication failed. Please try again.",
-                    );
-                  }
-                },
-              );
+              ref.read(userOrdersProvider.notifier).cancelOrder(order);
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
             child: const Text('Yes, Cancel Order'),

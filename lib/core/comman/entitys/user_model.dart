@@ -5,17 +5,19 @@ class UserModel {
   final int? id;
   final String name;
   final String email;
-  final String password;
+  final String? password;
   final int? phone;
   final int? state;
+  final String? userId;
 
   UserModel({
     this.id,
     required this.name,
     required this.email,
-    required this.password,
+    this.password = '',
     this.phone,
     this.state,
+    this.userId,
   });
 
   UserModel copyWith({
@@ -25,6 +27,7 @@ class UserModel {
     String? password,
     int? phone,
     int? state,
+    String? userId,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -33,6 +36,7 @@ class UserModel {
       password: password ?? this.password,
       phone: phone ?? this.phone,
       state: state ?? this.state,
+      userId: userId ?? this.userId,
     );
   }
 
@@ -40,12 +44,14 @@ class UserModel {
     final map = <String, dynamic>{
       'name': name,
       'email': email,
-      'password': password,
     };
 
     if (phone != null) map['phone'] = phone;
     if (id != null) map['id'] = id;
     if (state != null) map['state'] = state;
+    if (userId != null) map['user_id'] = userId;
+    // Only include password if it's not empty (for auth purposes, not DB storage)
+    if (password != null && password!.isNotEmpty) map['password'] = password;
 
     return map;
   }
@@ -58,6 +64,7 @@ class UserModel {
       password: map['password'] as String? ?? '',
       phone: map['phone'] as int? ?? 0,
       state: map['state'] as int? ?? 0,
+      userId: map['user_id'] as String? ?? '',
     );
   }
 
@@ -68,7 +75,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, password: $password, phone: $phone, state: $state)';
+    return 'UserModel(id: $id, name: $name, email: $email, password: $password, phone: $phone, state: $state, userId: $userId)';
   }
 
   @override
@@ -80,7 +87,8 @@ class UserModel {
         other.email == email &&
         other.password == password &&
         other.phone == phone &&
-        other.state == state;
+        other.state == state &&
+        other.userId == userId;
   }
 
   @override
@@ -90,6 +98,7 @@ class UserModel {
         email.hashCode ^
         password.hashCode ^
         phone.hashCode ^
-        state.hashCode;
+        state.hashCode ^
+        userId.hashCode;
   }
 }

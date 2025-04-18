@@ -49,13 +49,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String password,
   }) async {
     return executeTryAndCatchForDataLayer(() async {
-      await supabaseClient.auth.signUp(
+      final userAuth = await supabaseClient.auth.signUp(
         email: email,
         password: password,
         emailRedirectTo: "https://lockapp.site/redirect_page.html",
       );
-
+      print(userAuth.user?.id);
       return {
+        'user_id': userAuth.user?.id,
         'email': email,
         'name': name,
         'password': password,
@@ -68,10 +69,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required UserModel user,
   }) async {
     return executeTryAndCatchForDataLayer(() async {
+      // Use the userId from the UserModel if it exists, otherwise try to get it from the current user
+      String? userId = user.userId;
+
+      if (userId == null || userId.isEmpty) {
+        final userAuth = Supabase.instance.client.auth.currentUser;
+        userId = userAuth?.id;
+        print("Using auth user ID: ${userAuth?.id}");
+      } else {
+        print("Using UserModel userId: $userId");
+      }
+
+      if (userId == null || userId.isEmpty) {
+        throw Exception(
+            "Cannot create user profile: Authentication user ID is null");
+      }
+
       final userData = {
         'email': user.email,
         'name': user.name,
-        'password': user.password,
+        'user_id': userId,
       };
 
       await supabaseClient.from('users').insert(userData);

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../core/comman/helpers/order_state_enum.dart';
 import '../../../../core/erorr/failure.dart';
@@ -94,6 +95,7 @@ class AdminRepository {
 
   Future<Either<Failure, ItemModel>> updateItem(ItemModel item) async {
     return executeTryAndCatchForRepository(() async {
+      // item.copyWith(userId: Supabase.instance.client.auth.currentUser!.id);
       final updatedData = await adminRemoteDataSource.updateItem(item.toMap());
       return ItemModel.fromMap(updatedData);
     });
