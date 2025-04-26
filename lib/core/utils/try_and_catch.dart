@@ -14,12 +14,10 @@ import 'rate_limiter.dart';
 
 // API Rate Limiting
 
-
 // Define a utility function to handle exceptions and return an Either type
 Future<Either<Failure, T>> executeTryAndCatchForRepository<T>(
     Future<T> Function() action) async {
   try {
-    // Check connectivity
     var connectivityResult = await Connectivity().checkConnectivity();
     if (!connectivityResult.contains(ConnectivityResult.mobile) &&
         !connectivityResult.contains(ConnectivityResult.wifi)) {
@@ -28,7 +26,8 @@ Future<Either<Failure, T>> executeTryAndCatchForRepository<T>(
 
     final rateLimitResponse = await checkRateLimit();
     if (rateLimitResponse.remaining <= 0) {
-      return left(Failure('API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.'));
+      return left(Failure(
+          'API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.'));
     }
 
     final result = await action();
@@ -67,7 +66,8 @@ Future<T> executeTryAndCatchForDataLayer<T>(Future<T> Function() action) async {
 
     final rateLimitResponse = await checkRateLimit();
     if (rateLimitResponse.remaining <= 0) {
-      throw Exception('API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.');
+      throw Exception(
+          'API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.');
     }
 
     if (check.contains(ConnectivityResult.mobile) ||

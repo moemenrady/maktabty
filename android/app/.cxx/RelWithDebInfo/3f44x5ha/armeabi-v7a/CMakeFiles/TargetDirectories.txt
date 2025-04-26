@@ -1,0 +1,2 @@
+/Users/osama/Documents/flutterApps/maktabty/android/app/.cxx/RelWithDebInfo/3f44x5ha/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/osama/Documents/flutterApps/maktabty/android/app/.cxx/RelWithDebInfo/3f44x5ha/armeabi-v7a/CMakeFiles/rebuild_cache.dir

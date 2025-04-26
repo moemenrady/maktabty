@@ -8,13 +8,16 @@ customErorrScreen() {
         child: Column(
           children: [
             Image.asset("assets/images/arrow_down.png"),
-            Text(
-              details.exception.toString(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 10,
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text(
+                details.exception.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             )
           ],
         ),
