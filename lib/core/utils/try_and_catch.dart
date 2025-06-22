@@ -24,12 +24,6 @@ Future<Either<Failure, T>> executeTryAndCatchForRepository<T>(
       return left(Failure('No internet connection.'));
     }
 
-    final rateLimitResponse = await checkRateLimit();
-    if (rateLimitResponse.remaining <= 0) {
-      return left(Failure(
-          'API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.'));
-    }
-
     final result = await action();
     return right(result);
   } on FormatException catch (e) {
@@ -65,6 +59,7 @@ Future<T> executeTryAndCatchForDataLayer<T>(Future<T> Function() action) async {
     var check = await Connectivity().checkConnectivity();
 
     final rateLimitResponse = await checkRateLimit();
+    print('rateLimitResponse: $rateLimitResponse');
     if (rateLimitResponse.remaining <= 0) {
       throw Exception(
           'API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.');
@@ -89,7 +84,7 @@ Future<T> executeTryAndCatchForDataLayer<T>(Future<T> Function() action) async {
   } on FormatException catch (e) {
     throw FormatException('Error parsing data: ${e.message}');
   } catch (e) {
-    throw Exception('An unexpected error occurred: ${e.toString()}');
+    throw Exception(' ${e.toString()}');
   }
 }
 

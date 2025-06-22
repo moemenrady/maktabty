@@ -22,35 +22,35 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   PaintingBinding.instance.imageCache.maximumSize = 1000;
 
-  final context = SecurityContext(withTrustedRoots: false);
+  // final context = SecurityContext(withTrustedRoots: false);
 
-  final certData = await rootBundle.load('assets/images/supabase.co.pem');
-  context.setTrustedCertificatesBytes(certData.buffer.asUint8List());
+  // final certData = await rootBundle.load('assets/images/supabase.co.pem');
+  // context.setTrustedCertificatesBytes(certData.buffer.asUint8List());
 
-  final httpClient = HttpClient(context: context);
-  final ioClient = IOClient(httpClient);
+  // final httpClient = HttpClient(context: context);
+  // final ioClient = IOClient(httpClient);
 
   await Supabase.initialize(
     url: 'https://gwzvpnetxlpqpjsemttw.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3enZwbmV0eGxwcXBqc2VtdHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE1NDMyNDMsImV4cCI6MjA0NzExOTI0M30.M_gXPVEvhH0z69l1VxMt7VwuybOZqQ2gAAnHC1ZMBn0',
-    httpClient: ioClient,
+    // httpClient: ioClient,
   );
 
-  final isNotTrust = await JailbreakRootDetection.instance.isNotTrust;
-  final isJailBroken = await JailbreakRootDetection.instance.isJailBroken;
-  final isRealDevice = await JailbreakRootDetection.instance.isRealDevice;
-  final isOnExternalStorage =
-      await JailbreakRootDetection.instance.isOnExternalStorage;
-  final checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
-  final isDevMode = await JailbreakRootDetection.instance.isDevMode;
+  // final isNotTrust = await JailbreakRootDetection.instance.isNotTrust;
+  // final isJailBroken = await JailbreakRootDetection.instance.isJailBroken;
+  // final isRealDevice = await JailbreakRootDetection.instance.isRealDevice;
+  // final isOnExternalStorage =
+  //     await JailbreakRootDetection.instance.isOnExternalStorage;
+  // final checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
+  // final isDevMode = await JailbreakRootDetection.instance.isDevMode;
 
-  print("isNotTrust: $isNotTrust");
-  print("isJailBroken: $isJailBroken");
-  print("isRealDevice: $isRealDevice");
-  print("isOnExternalStorage: $isOnExternalStorage");
-  print("checkForIssues: $checkForIssues");
-  print("isDevMode: $isDevMode");
+  // print("isNotTrust: $isNotTrust");
+  // print("isJailBroken: $isJailBroken");
+  // print("isRealDevice: $isRealDevice");
+  // print("isOnExternalStorage: $isOnExternalStorage");
+  // print("checkForIssues: $checkForIssues");
+  // print("isDevMode: $isDevMode");
 
   await ScreenUtil.ensureScreenSize();
 
@@ -103,7 +103,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      _checkJailbreak();
+      // _checkJailbreak();
       ref.read(appUserRiverpodProvider.notifier).isFirstInstallation();
     });
   }
@@ -137,18 +137,21 @@ class _MyAppState extends ConsumerState<MyApp> {
             ),
             useMaterial3: true,
           ),
-          home: isNotTrust ||
-                  isJailBroken ||
-                  isRealDevice ||
-                  isOnExternalStorage ||
-                  checkForIssues.isNotEmpty ||
-                  isDevMode
-              ? const Scaffold(
-                  body: Center(
-                    child: Text('App Locked For Security Reasons'),
-                  ),
-                )
-              : state.isNotInstalled()
+          home:
+              //  isNotTrust ||
+              //         isJailBroken ||
+              //         isRealDevice ||
+              //         isOnExternalStorage ||
+              //         checkForIssues.isNotEmpty ||
+              //         isDevMode
+              //     ? const Scaffold(
+              //         body: Center(
+              //           child: Text('App Locked For Security Reasons'),
+              //         ),
+              //       )
+              //     :
+
+              state.isNotInstalled()
                   ? const Onboard()
                   : state.isGettedDataFromLocalStorage() ||
                           state.isUpdateUserData()

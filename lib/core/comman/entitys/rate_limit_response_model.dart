@@ -20,6 +20,11 @@ class RateLimitResponse {
       reset: json['reset'] ?? 60,
     );
   }
+
+  @override
+  String toString() {
+    return 'RateLimitResponse(limit: $limit, remaining: $remaining, reset: $reset)';
+  }
 }
 
 Future<RateLimitResponse> checkRateLimit() async {
@@ -28,14 +33,13 @@ Future<RateLimitResponse> checkRateLimit() async {
       Uri.parse(
           'https://gwzvpnetxlpqpjsemttw.supabase.co/functions/v1/hello-world'),
     );
+    print('response: ${response.statusCode}');
     if (response.statusCode == 200) {
       return RateLimitResponse.fromJson(json.decode(response.body));
     } else {
-      // If we can't check rate limit, assume we have 1 call remaining
-      return RateLimitResponse(limit: 5, remaining: 1, reset: 60);
+      throw Exception('Failed to check rate limit');
     }
   } catch (e) {
-    // If check fails, assume we have 1 call remaining
-    return RateLimitResponse(limit: 5, remaining: 1, reset: 60);
+    throw e;
   }
 }
