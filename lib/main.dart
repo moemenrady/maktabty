@@ -37,20 +37,63 @@ void main() async {
     // httpClient: ioClient,
   );
 
-  // final isNotTrust = await JailbreakRootDetection.instance.isNotTrust;
-  // final isJailBroken = await JailbreakRootDetection.instance.isJailBroken;
-  // final isRealDevice = await JailbreakRootDetection.instance.isRealDevice;
-  // final isOnExternalStorage =
-  //     await JailbreakRootDetection.instance.isOnExternalStorage;
-  // final checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
-  // final isDevMode = await JailbreakRootDetection.instance.isDevMode;
+  // Initialize security check variables with safe defaults
+  bool isNotTrust = false;
+  bool isJailBroken = false;
+  bool isRealDevice = true;
+  bool isOnExternalStorage = false;
+  List<JailbreakIssue> checkForIssues = [];
+  bool isDevMode = false;
 
-  // print("isNotTrust: $isNotTrust");
-  // print("isJailBroken: $isJailBroken");
-  // print("isRealDevice: $isRealDevice");
-  // print("isOnExternalStorage: $isOnExternalStorage");
-  // print("checkForIssues: $checkForIssues");
-  // print("isDevMode: $isDevMode");
+  // Handle each jailbreak detection method individually with try-catch
+  try {
+    isNotTrust = await JailbreakRootDetection.instance.isNotTrust;
+    print("isNotTrust: $isNotTrust");
+  } catch (e) {
+    print("isNotTrust not supported on this platform: $e");
+    isNotTrust = false;
+  }
+
+  try {
+    isJailBroken = await JailbreakRootDetection.instance.isJailBroken;
+    print("isJailBroken: $isJailBroken");
+  } catch (e) {
+    print("isJailBroken not supported on this platform: $e");
+    isJailBroken = false;
+  }
+
+  try {
+    isRealDevice = await JailbreakRootDetection.instance.isRealDevice;
+    print("isRealDevice: $isRealDevice");
+  } catch (e) {
+    print("isRealDevice not supported on this platform: $e");
+    isRealDevice = true;
+  }
+
+  try {
+    isOnExternalStorage =
+        await JailbreakRootDetection.instance.isOnExternalStorage;
+    print("isOnExternalStorage: $isOnExternalStorage");
+  } catch (e) {
+    print("isOnExternalStorage not supported on this platform: $e");
+    isOnExternalStorage = false;
+  }
+
+  try {
+    checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
+    print("checkForIssues: $checkForIssues");
+  } catch (e) {
+    print("checkForIssues not supported on this platform: $e");
+    checkForIssues = [];
+  }
+
+  try {
+    isDevMode = await JailbreakRootDetection.instance.isDevMode;
+    print("isDevMode: $isDevMode");
+  } catch (e) {
+    print("isDevMode not supported on this platform: $e");
+    isDevMode = false;
+  }
 
   await ScreenUtil.ensureScreenSize();
 
@@ -90,13 +133,49 @@ class _MyAppState extends ConsumerState<MyApp> {
   late bool isDevMode;
 
   Future<void> _checkJailbreak() async {
-    isNotTrust = await JailbreakRootDetection.instance.isNotTrust;
-    isJailBroken = await JailbreakRootDetection.instance.isJailBroken;
-    isRealDevice = await JailbreakRootDetection.instance.isRealDevice;
-    isOnExternalStorage =
-        await JailbreakRootDetection.instance.isOnExternalStorage;
-    checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
-    isDevMode = await JailbreakRootDetection.instance.isDevMode;
+    // Handle each jailbreak detection method individually with try-catch
+    try {
+      isNotTrust = await JailbreakRootDetection.instance.isNotTrust;
+    } catch (e) {
+      print("isNotTrust not supported on this platform: $e");
+      isNotTrust = false;
+    }
+
+    try {
+      isJailBroken = await JailbreakRootDetection.instance.isJailBroken;
+    } catch (e) {
+      print("isJailBroken not supported on this platform: $e");
+      isJailBroken = false;
+    }
+
+    try {
+      isRealDevice = await JailbreakRootDetection.instance.isRealDevice;
+    } catch (e) {
+      print("isRealDevice not supported on this platform: $e");
+      isRealDevice = true;
+    }
+
+    try {
+      isOnExternalStorage =
+          await JailbreakRootDetection.instance.isOnExternalStorage;
+    } catch (e) {
+      print("isOnExternalStorage not supported on this platform: $e");
+      isOnExternalStorage = false;
+    }
+
+    try {
+      checkForIssues = await JailbreakRootDetection.instance.checkForIssues;
+    } catch (e) {
+      print("checkForIssues not supported on this platform: $e");
+      checkForIssues = [];
+    }
+
+    try {
+      isDevMode = await JailbreakRootDetection.instance.isDevMode;
+    } catch (e) {
+      print("isDevMode not supported on this platform: $e");
+      isDevMode = false;
+    }
   }
 
   @override

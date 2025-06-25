@@ -58,12 +58,12 @@ Future<T> executeTryAndCatchForDataLayer<T>(Future<T> Function() action) async {
   try {
     var check = await Connectivity().checkConnectivity();
 
-    final rateLimitResponse = await checkRateLimit();
-    print('rateLimitResponse: $rateLimitResponse');
-    if (rateLimitResponse.remaining <= 0) {
-      throw Exception(
-          'API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.');
-    }
+    // final rateLimitResponse = await checkRateLimit();
+    // print('rateLimitResponse: $rateLimitResponse');
+    // if (false) {
+    //   throw Exception(
+    //       'API rate limit exceeded. Please try again in ${rateLimitResponse.reset} seconds.');
+    // }
 
     if (check.contains(ConnectivityResult.mobile) ||
         check.contains(ConnectivityResult.wifi)) {
