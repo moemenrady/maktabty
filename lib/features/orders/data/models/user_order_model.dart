@@ -15,6 +15,7 @@ class UserOrderModel {
   final double itemPrice;
   final double totalPrice;
   final String orderState;
+  final int serviceProviderId;
   final List<UserOrderModel> items;
   UserOrderModel({
     this.orderId = '',
@@ -34,6 +35,7 @@ class UserOrderModel {
     this.itemPrice = 0.0,
     this.orderState = '',
     this.items = const [],
+    this.serviceProviderId = 0,
   }) : orderCreatedAt = orderCreatedAt ?? DateTime.now();
 
   /// Factory constructor to create an instance from a map
@@ -55,6 +57,7 @@ class UserOrderModel {
       imageUrl: map['image_url'] ?? '',
       itemPrice: (map['item_price'] as num?)?.toDouble() ?? 0.0,
       orderState: map['state'] ?? '',
+      serviceProviderId: map['service_provider_id'] ?? 0,
       items: map['items'] ?? [],
     );
   }
@@ -77,6 +80,7 @@ class UserOrderModel {
       'quantity': quantity,
       'state': orderState,
       'items': items,
+      'service_provider_id': serviceProviderId,
     };
   }
 
@@ -99,6 +103,7 @@ class UserOrderModel {
     double? totalPrice,
     String? orderState,
     List<UserOrderModel>? items,
+    int? serviceProviderId,
   }) {
     return UserOrderModel(
       orderId: orderId ?? this.orderId,
@@ -118,6 +123,7 @@ class UserOrderModel {
       totalPrice: totalPrice ?? this.totalPrice,
       orderState: orderState ?? this.orderState,
       items: items ?? this.items,
+      serviceProviderId: serviceProviderId ?? this.serviceProviderId,
     );
   }
 
@@ -138,6 +144,7 @@ class UserOrderModel {
     List<UserOrderModel>? items,
     int? quantity,
     double? totalPrice,
+    int? serviceProviderId,
   }) {
     return (orderId == null || this.orderId == orderId) &&
         (userId == null || this.userId == userId) &&
@@ -154,7 +161,9 @@ class UserOrderModel {
         (orderState == null || this.orderState == orderState) &&
         (quantity == null || this.quantity == quantity) &&
         (totalPrice == null || this.totalPrice == totalPrice) &&
-        (items == null || this.items == items);
+        (items == null || this.items == items) &&
+        (serviceProviderId == null ||
+            this.serviceProviderId == serviceProviderId);
   }
 
   /// String representation of the object
@@ -163,6 +172,6 @@ class UserOrderModel {
     return 'OrderSummary(orderId: $orderId, userId: $userId, address: $address, region: $region, '
         'userName: $userName, addressId: $addressId, orderCreatedAt: $orderCreatedAt, itemId: $itemId, '
         'itemName: $itemName, imageUrl: $imageUrl, itemPrice: $itemPrice, quantity: $quantity, '
-        'itemCurrentQuantity: $itemCurrentQuantity, totalPrice: $totalPrice, totalQuantity: $totalQuantity, orderState: $orderState, items: $items)';
+        'itemCurrentQuantity: $itemCurrentQuantity, totalPrice: $totalPrice, totalQuantity: $totalQuantity, orderState: $orderState, items: $items, serviceProviderId: $serviceProviderId)';
   }
 }

@@ -7,12 +7,15 @@ class UserModel {
   final String email;
   final String password;
   final int? phone;
+  final int? state;
+
   UserModel({
     this.id,
     required this.name,
     required this.email,
     required this.password,
     this.phone,
+    this.state,
   });
 
   UserModel copyWith({
@@ -21,6 +24,7 @@ class UserModel {
     String? email,
     String? password,
     int? phone,
+    int? state,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -28,6 +32,7 @@ class UserModel {
       email: email ?? this.email,
       password: password ?? this.password,
       phone: phone ?? this.phone,
+      state: state ?? this.state,
     );
   }
 
@@ -40,6 +45,7 @@ class UserModel {
 
     if (phone != null) map['phone'] = phone;
     if (id != null) map['id'] = id;
+    if (state != null) map['state'] = state;
 
     return map;
   }
@@ -51,6 +57,7 @@ class UserModel {
       email: map['email'] as String? ?? '',
       password: map['password'] as String? ?? '',
       phone: map['phone'] as int? ?? 0,
+      state: map['state'] as int? ?? 0,
     );
   }
 
@@ -61,7 +68,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, password: $password, phone: $phone)';
+    return 'UserModel(id: $id, name: $name, email: $email, password: $password, phone: $phone, state: $state)';
   }
 
   @override
@@ -72,7 +79,8 @@ class UserModel {
         other.name == name &&
         other.email == email &&
         other.password == password &&
-        other.phone == phone;
+        other.phone == phone &&
+        other.state == state;
   }
 
   @override
@@ -81,6 +89,7 @@ class UserModel {
         name.hashCode ^
         email.hashCode ^
         password.hashCode ^
-        phone.hashCode;
+        phone.hashCode ^
+        state.hashCode;
   }
 }
