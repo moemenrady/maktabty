@@ -1,0 +1,2 @@
+D:/my_git_hub/projects/maktabty/android/app/.cxx/Debug/66d4f223/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/my_git_hub/projects/maktabty/android/app/.cxx/Debug/66d4f223/arm64-v8a/CMakeFiles/rebuild_cache.dir
